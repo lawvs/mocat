@@ -1,0 +1,31 @@
+{
+  "name": "rabbit-mock",
+  "version": "0.0.1",
+  "description": "mocking for ajax requests",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --ext .ts src",
+    "lint:fix": "eslint --fix --ext .ts src",
+    "beforepublish": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mock",
+    "mockAjax"
+  ],
+  "author": "",
+  "dependencies": {
+    "@types/fetch-mock": "^7.3.0",
+    "fetch-mock": "^7.3.3",
+    "xhr-mock": "^2.4.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^1.9.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "prettier": "^1.17.1",
+    "typescript": "^3.5.1"
+  }
+}
