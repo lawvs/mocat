@@ -29,7 +29,7 @@ class Rabbit {
     if ((<any>window).XMLHttpRequest) {
       this.originalXhr = (<any>window).XMLHttpRequest
     }
-    this.originalFetch = window.fetch
+    this.originalFetch = window.fetch.bind(window)
   }
 
   setup() {
