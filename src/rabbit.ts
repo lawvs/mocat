@@ -2,9 +2,18 @@
 import XHRMock from 'xhr-mock'
 // http://www.wheresrhys.co.uk/fetch-mock/
 import FetchMock from 'fetch-mock'
+import { formatURL } from 'xhr-mock/lib/MockURL'
 
 interface Options {
   readonly debug?: boolean
+}
+
+interface RabbitRequest {
+  id: number
+  type: 'FETCH' | 'XHR'
+  request: Request
+  resolve: (data: object | Response) => void
+  reject: (err: Error) => void
 }
 
 const DEFAULT_RABBIT_OPTIONS: Options = {
@@ -18,6 +27,7 @@ class Rabbit {
   fetchMock = FetchMock.sandbox()
   xhrMock = XHRMock
   status = false
+  queue: RabbitRequest[] = []
 
   constructor(options?: Options) {
     this.options = {
@@ -33,6 +43,10 @@ class Rabbit {
   }
 
   setup() {
+    if (this.status) {
+      console.warn('RabbitMock has been setup!')
+      return
+    }
     if ((<any>window).XMLHttpRequest) {
       this.setUpXhr()
       // ;(<any>window).XMLHttpRequest = this.xhrMock
@@ -42,23 +56,57 @@ class Rabbit {
     return true
   }
 
-  setUpXhr(): void {
+  setUpXhr() {
     this.xhrMock.setup()
-    this.xhrMock.use((req, res) => res.status(200).body('{"hello": "xhrMock"}'))
+    this.xhrMock.use(
+      (req, res) =>
+        new Promise((resolve, reject) => {
+          const resolveData = (data: any) => resolve(res.status(200).body(data))
+          const request = new Request(formatURL(req.url()), {
+            method: req.method(),
+            headers: req.headers(),
+            body: req.body(),
+          })
+          this.queue.push({
+            id: new Date().getTime(),
+            type: 'XHR',
+            request,
+            resolve: resolveData,
+            reject,
+          })
+        }),
+    )
   }
 
-  setUpFetch(): void {
+  setUpFetch() {
     this.fetchMock.config.overwriteRoutes = true
-
-    this.fetchMock.get('*', { hello: 'fetchMock' })
+    this.fetchMock.mock(
+      '*',
+      (url, opts) =>
+        new Promise((resolve, reject) => {
+          const request = new Request(url, opts)
+          this.queue.push({
+            id: new Date().getTime(),
+            type: 'FETCH',
+            request,
+            resolve,
+            reject,
+          })
+        }),
+    )
     window.fetch = this.fetchMock as typeof window.fetch
   }
 
   teardown() {
+    if (!this.status) {
+      console.warn('RabbitMock has been teardown!')
+      return
+    }
     this.xhrMock.teardown()
     this.fetchMock.reset()
     this.fetchMock.resetBehavior()
     window.fetch = this.originalFetch
+    this.queue = [] // clear
     this.status = false
   }
 }
