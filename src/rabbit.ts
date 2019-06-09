@@ -14,6 +14,7 @@ interface RabbitRequest {
   request: Request
   resolve: (data: object | Response) => void
   reject: (err: Error) => void
+  pass: () => void
 }
 
 const DEFAULT_RABBIT_OPTIONS: Options = {
@@ -73,6 +74,11 @@ class Rabbit {
             request,
             resolve: resolveData,
             reject,
+            pass: async () => {
+              const resp = await this.originalFetch(request)
+              const text = await resp.text
+              resolve(res.status(resp.status).body(text))
+            },
           })
         }),
     )
@@ -91,6 +97,10 @@ class Rabbit {
             request,
             resolve,
             reject,
+            pass: async () => {
+              const resp = await this.originalFetch(request)
+              resolve(resp)
+            },
           })
         }),
     )
