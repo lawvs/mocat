@@ -30,7 +30,7 @@ class Rabbit {
   originalFetch: typeof window.fetch
   fetchMock = FetchMock.sandbox()
   xhrMock = XHRMock
-  status = false
+  status = false // TODO fix status incorrect
 
   constructor(options?: Options) {
     if (!instance) {
@@ -120,12 +120,23 @@ class Rabbit {
       console.warn('RabbitMock has been teardown!')
       return
     }
+
+    if ((<any>window).XMLHttpRequest) {
+      this.teardownXhr()
+    }
+    this.teardownFetch()
+    this.status = false
+  }
+
+  teardownXhr() {
     this.xhrMock.teardown()
+  }
+
+  teardownFetch() {
     this.fetchMock.reset()
     this.fetchMock.resetBehavior()
     window.fetch = this.originalFetch
     this.queue = [] // clear
-    this.status = false
   }
 }
 
