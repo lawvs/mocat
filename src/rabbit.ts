@@ -5,7 +5,8 @@ import FetchMock from 'fetch-mock'
 import { formatURL } from 'xhr-mock/lib/MockURL'
 
 interface Options {
-  readonly debug?: boolean
+  debug?: boolean
+  eventPrefix: string
 }
 
 interface RabbitRequest {
@@ -19,6 +20,7 @@ interface RabbitRequest {
 
 const DEFAULT_RABBIT_OPTIONS: Options = {
   debug: false,
+  eventPrefix: 'rabbit',
 }
 
 // Single instance
@@ -58,7 +60,6 @@ class Rabbit {
     }
     if ((<any>window).XMLHttpRequest) {
       this.setUpXhr()
-      // ;(<any>window).XMLHttpRequest = this.xhrMock
     }
     this.setUpFetch()
     this.status = true
@@ -70,24 +71,48 @@ class Rabbit {
     this.xhrMock.use(
       (req, res) =>
         new Promise((resolve, reject) => {
-          const resolveData = (data: any) => resolve(res.status(200).body(data))
+          const resolveResponse = (resp: object | Response) => {
+            if (!(resp instanceof Response)) {
+              resolve(res.status(200).body(resp))
+              return
+            }
+            resolve(
+              res
+                .status(resp.status)
+                .reason(resp.statusText)
+                .headers(
+                  // TODO fix type
+                  [...(<any>resp.headers).entries()].reduce(
+                    (pre, cur) => ({ ...pre, [cur[0]]: cur[1] }),
+                    {},
+                  ),
+                )
+                .body(resp.text),
+            )
+          }
           const request = new Request(formatURL(req.url()), {
             method: req.method(),
             headers: req.headers(),
             body: req.body(),
           })
-          this.queue.push({
+          const detail: RabbitRequest = {
             id: new Date().getTime(),
             type: 'XHR',
             request,
-            resolve: resolveData,
+            resolve: resolveResponse,
             reject,
             pass: async () => {
               const resp = await this.originalFetch(request)
               const text = await resp.text
               resolve(res.status(resp.status).body(text))
             },
+          }
+          const event = new CustomEvent(`${this.options.eventPrefix}.request`, {
+            bubbles: true,
+            cancelable: true,
+            detail,
           })
+          window.dispatchEvent(event)
         }),
     )
   }
@@ -99,17 +124,23 @@ class Rabbit {
       (url, opts) =>
         new Promise((resolve, reject) => {
           const request = new Request(url, opts)
-          this.queue.push({
+          const detail: RabbitRequest = {
             id: new Date().getTime(),
             type: 'FETCH',
             request,
             resolve,
-            reject,
+            reject: () => reject(new TypeError('Failed to fetch')),
             pass: async () => {
               const resp = await this.originalFetch(request)
               resolve(resp)
             },
+          }
+          const event = new CustomEvent(`${this.options.eventPrefix}.request`, {
+            bubbles: true,
+            cancelable: true,
+            detail,
           })
+          window.dispatchEvent(event)
         }),
     )
     window.fetch = this.fetchMock as typeof window.fetch
@@ -136,7 +167,6 @@ class Rabbit {
     this.fetchMock.reset()
     this.fetchMock.resetBehavior()
     window.fetch = this.originalFetch
-    this.queue = [] // clear
   }
 }
 
