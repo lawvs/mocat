@@ -21,6 +21,9 @@ const DEFAULT_RABBIT_OPTIONS: Options = {
   debug: false,
 }
 
+// Single instance
+let instance: Rabbit | null = null
+
 class Rabbit {
   options: Options
   originalXhr: any
@@ -28,9 +31,13 @@ class Rabbit {
   fetchMock = FetchMock.sandbox()
   xhrMock = XHRMock
   status = false
-  queue: RabbitRequest[] = []
 
   constructor(options?: Options) {
+    if (!instance) {
+      instance = this
+    } else {
+      console.warn('RabbitMock instance existed!')
+    }
     this.options = {
       ...DEFAULT_RABBIT_OPTIONS,
       ...options,
@@ -41,6 +48,7 @@ class Rabbit {
       this.originalXhr = (<any>window).XMLHttpRequest
     }
     this.originalFetch = window.fetch.bind(window)
+    return instance
   }
 
   setup() {
