@@ -100,12 +100,8 @@ class Rabbit {
             type: 'XHR',
             request,
             resolve: resolveResponse,
-            reject,
-            pass: async () => {
-              const resp = await this.originalFetch(request)
-              const text = await resp.text
-              resolve(res.status(resp.status).body(text))
-            },
+            reject, // TODO reject xhr
+            pass: this.passRequest(request, resolveResponse, reject),
           }
           const event = new CustomEvent(`${this.options.eventPrefix}.request`, {
             bubbles: true,
@@ -130,10 +126,7 @@ class Rabbit {
             request,
             resolve,
             reject: () => reject(new TypeError('Failed to fetch')),
-            pass: async () => {
-              const resp = await this.originalFetch(request)
-              resolve(resp)
-            },
+            pass: this.passRequest(request, resolve, reject),
           }
           const event = new CustomEvent(`${this.options.eventPrefix}.request`, {
             bubbles: true,
@@ -167,6 +160,46 @@ class Rabbit {
     this.fetchMock.reset()
     this.fetchMock.resetBehavior()
     window.fetch = this.originalFetch
+  }
+
+  passRequest(
+    request: Request,
+    resolve: (response: Response) => void,
+    reject: (error: Error) => void,
+  ) {
+    return async (intercept = false) => {
+      let response: Response | undefined
+      let error: Error | undefined
+      try {
+        response = await this.originalFetch(request)
+      } catch (e) {
+        error = e
+      }
+
+      if (!intercept) {
+        response && resolve(response)
+        error && reject(error) // TODO fix error type
+        return
+      }
+      const detail = {
+        id: new Date().getTime(),
+        request,
+        response,
+        error,
+        resolve,
+        reject,
+        pass: () => {
+          response && resolve(response)
+          error && reject(error)
+        },
+      }
+      const event = new CustomEvent(`${this.options.eventPrefix}.response`, {
+        bubbles: true,
+        cancelable: true,
+        detail,
+      })
+      window.dispatchEvent(event)
+    }
   }
 }
 
