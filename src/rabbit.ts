@@ -71,7 +71,7 @@ class Rabbit {
     this.xhrMock.use(
       (req, res) =>
         new Promise((resolve, reject) => {
-          const resolveResponse = (resp: object | Response) => {
+          const resolveResponse = async (resp: object | Response) => {
             if (!(resp instanceof Response)) {
               resolve(res.status(200).body(resp))
               return
@@ -87,7 +87,7 @@ class Rabbit {
                     {},
                   ),
                 )
-                .body(resp.text),
+                .body(await resp.text()),
             )
           }
           const request = new Request(formatURL(req.url()), {
