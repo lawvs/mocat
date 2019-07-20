@@ -1,3 +1,3 @@
-import RabbitMock from './rabbit'
+import RabbitMock from './core'
 
 export default RabbitMock
