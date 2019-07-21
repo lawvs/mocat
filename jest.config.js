@@ -1,5 +1,4 @@
 module.exports = {
-  // preset: 'jest-puppeteer',
   clearMocks: true,
   browser: true,
   coverageDirectory: 'coverage',

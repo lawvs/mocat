@@ -1,4 +1,4 @@
-import Rabbit from '../'
+import Rabbit from '..'
 
 const xhrRequest = (method: string, url: string): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -30,16 +30,30 @@ describe('rabbit Mock run normal', () => {
     window.removeEventListener('rabbit.request', handleRequest)
   })
 
-  it('can mock xhr correctly', async () => {
+  it('should mock xhr correctly', async () => {
     const data = await xhrRequest('GET', '')
     expect(data).toBe(MOCK_DATA)
   })
 
-  it('can mock fetch correctly', async () => {
+  it('should mock fetch correctly', async () => {
     const resp = await fetch('')
     const data = await resp.text()
 
     expect(resp.status).toEqual(200)
     expect(data).toBe(MOCK_DATA)
+  })
+})
+
+describe('misc', () => {
+  it('should single instance', () => {
+    const consoleWarn = console.warn
+    console.warn = jest.fn()
+
+    const rabbit1 = new Rabbit()
+    const rabbit2 = new Rabbit()
+
+    expect(rabbit1).toBe(rabbit2)
+    expect(console.warn).toHaveBeenCalled()
+    console.warn = consoleWarn
   })
 })
