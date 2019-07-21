@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "description": "mocking for ajax requests",
   "main": "dist/index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "build": "tsc && webpack dist/index.js --mode=production --output-library RabbitMock --progress --color",
     "lint": "eslint --ext .ts src",
     "lint:fix": "eslint --fix --ext .ts src",
-    "beforepublish": "npm run build",
-    "clean": "rm -rf dist/",
-    "test": "jest"
+    "beforepublish": "npm run build && npm run types",
+    "clean": "rm -rf dist/ types/",
+    "test": "jest",
+    "types": "tsc -d --declarationDir types"
   },
   "keywords": [
     "mock",
