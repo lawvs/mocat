@@ -13,7 +13,7 @@ const xhrRequest = (method: string, url: string): Promise<string> =>
     xhr.send()
   })
 
-describe('rabbit Mock run normal', () => {
+describe('rabbit Mock can resolve data', () => {
   const rabbit = new Rabbit()
   const MOCK_DATA = 'Hello Rabbit Mock!' // mock data
   const handleRequest = ({ detail }: any) => {
@@ -41,6 +41,63 @@ describe('rabbit Mock run normal', () => {
 
     expect(resp.status).toEqual(200)
     expect(data).toBe(MOCK_DATA)
+  })
+})
+
+describe('rabbit Mock can resolve Response', () => {
+  const rabbit = new Rabbit()
+  const MOCK_DATA = 'Hello Rabbit Mock!' // mock data
+  const handleRequest = ({ detail }: any) => {
+    detail.resolve(new Response(MOCK_DATA, { status: 200 }))
+  }
+
+  beforeEach(() => {
+    window.addEventListener('rabbit.request', handleRequest)
+    rabbit.setup()
+  })
+
+  afterEach(() => {
+    rabbit.teardown()
+    window.removeEventListener('rabbit.request', handleRequest)
+  })
+
+  it('should xhr mock accept Response correctly', async () => {
+    const data = await xhrRequest('GET', '')
+    expect(data).toBe(MOCK_DATA)
+  })
+
+  it('should fetch mock accept Response correctly', async () => {
+    const resp = await fetch('')
+    const data = await resp.text()
+
+    expect(resp.status).toEqual(200)
+    expect(data).toBe(MOCK_DATA)
+  })
+})
+
+describe('rabbit Mock can resolve json', () => {
+  const rabbit = new Rabbit()
+  const MOCK_DATA = '{ "data":"Hello Rabbit Mock!"}' // mock data
+  const handleRequest = ({ detail }: any) => {
+    detail.resolve(new Response(MOCK_DATA, { status: 200 }))
+  }
+
+  beforeEach(() => {
+    window.addEventListener('rabbit.request', handleRequest)
+    rabbit.setup()
+  })
+
+  afterEach(() => {
+    rabbit.teardown()
+    window.removeEventListener('rabbit.request', handleRequest)
+  })
+
+  it('should fetch mock can resolve json correctly', async () => {
+    const resp = await fetch('')
+    const data = await resp.json()
+
+    expect(resp.status).toEqual(200)
+    expect(data).toEqual(JSON.parse(MOCK_DATA))
   })
 })
 
