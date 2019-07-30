@@ -6,7 +6,7 @@ import { formatURL } from 'xhr-mock/lib/MockURL'
 
 interface Options {
   debug?: boolean
-  eventPrefix: string
+  eventPrefix?: string
 }
 
 interface RabbitRequest {
@@ -15,7 +15,12 @@ interface RabbitRequest {
   request: Request
   resolve: (data: object | Response) => void
   reject: (err: Error) => void
-  pass: () => void
+  pass: (option?: {
+    request?: Request
+    intercept?: boolean
+    // resolve?: (data: object | Response) => void
+    // reject?: (err: Error) => void
+  }) => void
 }
 
 const DEFAULT_RABBIT_OPTIONS: Options = {
@@ -37,8 +42,6 @@ class Rabbit {
   constructor(options?: Options) {
     if (!instance) {
       instance = this
-    } else {
-      console.warn('RabbitMock instance existed!')
     }
     this.options = {
       ...DEFAULT_RABBIT_OPTIONS,
@@ -101,7 +104,8 @@ class Rabbit {
             request,
             resolve: resolveResponse,
             reject, // TODO reject xhr
-            pass: this.passRequest(request, resolveResponse, reject),
+            pass: options =>
+              this.passRequest({ request, resolve: resolveResponse, reject, ...options }),
           }
           const event = new CustomEvent(`${this.options.eventPrefix}.request`, {
             bubbles: true,
@@ -126,7 +130,7 @@ class Rabbit {
             request,
             resolve,
             reject: () => reject(new TypeError('Failed to fetch')),
-            pass: this.passRequest(request, resolve, reject),
+            pass: options => this.passRequest({ request, resolve, reject, ...options }),
           }
           const event = new CustomEvent(`${this.options.eventPrefix}.request`, {
             bubbles: true,
@@ -162,44 +166,48 @@ class Rabbit {
     window.fetch = this.originalFetch
   }
 
-  passRequest(
-    request: Request,
-    resolve: (response: Response) => void,
-    reject: (error: Error) => void,
-  ) {
-    return async (intercept = false) => {
-      let response: Response | undefined
-      let error: Error | undefined
-      try {
-        response = await this.originalFetch(request)
-      } catch (e) {
-        error = e
-      }
-
-      if (!intercept) {
-        response && resolve(response)
-        error && reject(error) // TODO fix error type
-        return
-      }
-      const detail = {
-        id: new Date().getTime(),
-        request,
-        response,
-        error,
-        resolve,
-        reject,
-        pass: () => {
-          response && resolve(response)
-          error && reject(error)
-        },
-      }
-      const event = new CustomEvent(`${this.options.eventPrefix}.response`, {
-        bubbles: true,
-        cancelable: true,
-        detail,
-      })
-      window.dispatchEvent(event)
+  async passRequest({
+    request,
+    resolve,
+    reject,
+    intercept = false,
+  }: {
+    request: Request
+    resolve: (response: Response) => void
+    reject: (error: Error) => void
+    intercept?: boolean
+  }) {
+    let response: Response | undefined
+    let error: Error | undefined
+    try {
+      response = await this.originalFetch(request)
+    } catch (e) {
+      error = e
     }
+
+    if (!intercept) {
+      response && resolve(response)
+      error && reject(error) // TODO fix error type
+      return
+    }
+    const detail = {
+      id: new Date().getTime(),
+      request,
+      response,
+      error,
+      resolve,
+      reject,
+      pass: () => {
+        response && resolve(response)
+        error && reject(error)
+      },
+    }
+    const event = new CustomEvent(`${this.options.eventPrefix}.response`, {
+      bubbles: true,
+      cancelable: true,
+      detail,
+    })
+    window.dispatchEvent(event)
   }
 }
 
