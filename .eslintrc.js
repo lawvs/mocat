@@ -11,7 +11,7 @@ module.exports = {
     browser: true,
     jest: true,
   },
-  extends: ['eslint:recommended', 'prettier'],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier', 'prettier/react'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2018,
@@ -26,6 +26,7 @@ module.exports = {
     // 'semi': ['error', 'never'],
     // 'quotes': ['error', 'single'],
     // 'indent': ["error", 2],
+    // 'comma-dangle': ['error', 'always-multiline'],
     'linebreak-style': ['error', 'unix'],
     'no-var': 'error',
     'prefer-const': 'error',
@@ -33,8 +34,11 @@ module.exports = {
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-trailing-spaces': 'error',
     'no-irregular-whitespace': 'error',
-    // 'comma-dangle': ['error', 'always-multiline'],
     'prettier/prettier': 'warn',
-    // 'react/prop-types': 'off',
+  },
+  settings: {
+    react: {
+      version: require('react').version,
+    },
   },
 }
