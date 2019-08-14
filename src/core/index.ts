@@ -4,12 +4,7 @@ import XHRMock from 'xhr-mock'
 import FetchMock from 'fetch-mock'
 import { formatURL } from 'xhr-mock/lib/MockURL'
 
-interface Options {
-  debug?: boolean
-  eventPrefix?: string
-}
-
-interface RabbitRequest {
+export interface RabbitRequest {
   id: number
   type: 'FETCH' | 'XHR'
   request: Request
@@ -21,6 +16,21 @@ interface RabbitRequest {
     // resolve?: (data: object | Response) => void
     // reject?: (err: Error) => void
   }) => void
+}
+
+export interface RabbitResponse {
+  id: number
+  request: Request
+  response: Response | undefined
+  error: Error | undefined
+  resolve: (data: Response) => void
+  reject: (err: Error) => void
+  pass: () => void
+}
+
+interface Options {
+  debug?: boolean
+  eventPrefix?: string
 }
 
 const DEFAULT_RABBIT_OPTIONS: Options = {
@@ -190,7 +200,7 @@ class Rabbit {
       error && reject(error) // TODO fix error type
       return
     }
-    const detail = {
+    const detail: RabbitResponse = {
       id: new Date().getTime(),
       request,
       response,
