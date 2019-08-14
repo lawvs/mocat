@@ -31,11 +31,13 @@
     "fetch-mock": "^7.3.7",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "redux": "^4.0.4",
     "xhr-mock": "^2.5.0"
   },
   "devDependencies": {
     "@types/fetch-mock": "^7.3.1",
     "@types/jest": "^24.0.13",
+    "@types/node": "^12.7.1",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.4",
     "@typescript-eslint/parser": "^1.12.0",
