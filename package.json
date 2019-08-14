@@ -17,7 +17,16 @@
     "mock",
     "mockAjax"
   ],
-  "author": "",
+  "author": "lawvs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lawvs/rabbit-mock"
+  },
+  "bugs": {
+    "url": "https://github.com/lawvs/rabbit-mock/issues"
+  },
+  "homepage": "https://github.com/lawvs/rabbit-mock#readme",
   "dependencies": {
     "fetch-mock": "^7.3.7",
     "react": "^16.8.6",
