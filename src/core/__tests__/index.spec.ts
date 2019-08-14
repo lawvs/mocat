@@ -103,14 +103,9 @@ describe('rabbit Mock can resolve json', () => {
 
 describe('misc', () => {
   it('should single instance', () => {
-    const consoleWarn = console.warn
-    console.warn = jest.fn()
-
     const rabbit1 = new Rabbit()
     const rabbit2 = new Rabbit()
 
     expect(rabbit1).toBe(rabbit2)
-    expect(console.warn).toHaveBeenCalled()
-    console.warn = consoleWarn
   })
 })
