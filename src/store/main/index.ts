@@ -1,5 +1,13 @@
 import { RabbitRequest, RabbitResponse } from '../../core'
 
+/**
+ * Actions
+ */
+const ADD_REQUEST = 'ADD_REQUEST'
+const ADD_RESPONSE = 'ADD_RESPONSE'
+
+type ActionTypes = { type: string; payload: any }
+
 // main state
 export interface MainState {
   readonly reqQueue: RabbitRequest[]
@@ -11,10 +19,10 @@ const initState: MainState = {
   respQueue: [],
 }
 
-const ADD_REQUEST = 'ADD_REQUEST'
-const ADD_RESPONSE = 'ADD_RESPONSE'
-
-export default (state = initState, action: any): MainState => {
+/**
+ * Reducer
+ */
+export default (state = initState, action: ActionTypes): MainState => {
   switch (action.type) {
     case ADD_REQUEST: {
       const {
@@ -37,3 +45,21 @@ export default (state = initState, action: any): MainState => {
   }
   return state
 }
+
+/**
+ * Action Creators
+ */
+
+export const addRequest = (request: RabbitRequest): ActionTypes => ({
+  type: ADD_REQUEST,
+  payload: {
+    request,
+  },
+})
+
+export const addResponse = (response: RabbitResponse): ActionTypes => ({
+  type: ADD_REQUEST,
+  payload: {
+    response,
+  },
+})

@@ -1,9 +1,13 @@
 import { combineReducers, Reducer } from 'redux'
 
 import mainState from './main'
+import { type } from 'os'
 // import configState from './config'
 
-const reducer: Reducer<any, any> = combineReducers({
+type GlobalState = any
+type GlobalActionTypes = any
+
+const reducer: Reducer<GlobalState, GlobalActionTypes> = combineReducers({
   mainState,
   // configState,
 })
