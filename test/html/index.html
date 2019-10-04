@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Rabbit Mock</title>
+  </head>
+  <body></body>
+  <script src="main.min.js"></script>
+  <script>
+    const rabbitMock = new RabbitMock()
+    rabbitMock.options.debug = true
+    // rabbitMock.setup()
+    const handleRequest = ({ detail }) => {
+      detail.resolve('Rabbit Mock!') // mock data
+    }
+    window.addEventListener('rabbit.request', handleRequest)
+
+    // window.addEventListener('rabbit.response', e => console.log('response', e))
+    const xhrRequest = (method, url) =>
+      new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState == XMLHttpRequest.DONE) {
+            resolve(xhr.responseText)
+          }
+        }
+        xhr.onerror = e => reject(e)
+        xhr.open(method, url, true)
+        xhr.send()
+      })
+
+    xhrRequest('GET', '').then(t => console.log('xhr', t))
+    fetch('')
+      .then(r => r.text())
+      .then(t => console.log('fetch', t))
+
+    // window.removeEventListener('rabbit.request', handleRequest)
+    // rabbitMock.teardown()
+  </script>
+</html>
