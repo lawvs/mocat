@@ -2,16 +2,19 @@
   "name": "rabbit-mock",
   "version": "0.0.1",
   "description": "mocking for ajax requests",
-  "main": "dist/index.js",
+  "main": "dist/main.min.js",
   "types": "types/index.d.ts",
   "scripts": {
-    "build": "tsc && webpack dist/index.js --mode=production --output-library RabbitMock --progress --color",
-    "lint": "eslint --ext .ts src",
-    "lint:fix": "eslint --fix --ext .ts src",
+    "start": "npm run dev",
+    "dev": "webpack-dev-server --config scripts/webpack.config.js --mode=development --colors --watch --hot",
+    "build": "webpack --config scripts/webpack.config.js --mode=production  --progress --color",
     "beforepublish": "npm run build && npm run types",
+    "lint": "eslint --ext .ts,.tsx,.json src",
+    "lint:fix": "eslint --fix --ext .ts,.tsx,.json src",
+    "typecheck": "tsc --noEmit --project .",
+    "types": "tsc -d --declarationDir types",
     "clean": "rm -rf dist/ types/",
-    "test": "jest",
-    "types": "tsc -d --declarationDir types"
+    "test": "jest"
   },
   "keywords": [
     "mock",
@@ -32,6 +35,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "redux": "^4.0.4",
+    "styled-components": "^4.4.0",
     "xhr-mock": "^2.5.0"
   },
   "devDependencies": {
@@ -40,8 +44,10 @@
     "@types/node": "^12.7.1",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.4",
-    "@typescript-eslint/parser": "^1.12.0",
-    "eslint": "^6.1.0",
+    "@types/styled-components": "^4.1.19",
+    "@typescript-eslint/parser": "^2.3.2",
+    "awesome-typescript-loader": "^5.2.1",
+    "eslint": "^6.5.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
@@ -49,8 +55,9 @@
     "jest": "^24.8.0",
     "prettier": "^1.18.2",
     "ts-jest": "^24.0.2",
-    "typescript": "^3.5.3",
+    "typescript": "^3.6.3",
     "webpack": "^4.36.1",
-    "webpack-cli": "^3.3.6"
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.8.2"
   }
 }
