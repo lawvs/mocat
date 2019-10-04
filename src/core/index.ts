@@ -67,6 +67,8 @@ class Rabbit {
   }
 
   setup() {
+    // eslint-disable-next-line no-console
+    this.options.debug && console.log('[DEBUG] Rabbit Setup!')
     if (this.status) {
       console.warn('RabbitMock has been setup!')
       return
@@ -117,12 +119,8 @@ class Rabbit {
             pass: options =>
               this.passRequest({ request, resolve: resolveResponse, reject, ...options }),
           }
-          const event = new CustomEvent(`${this.options.eventPrefix}.request`, {
-            bubbles: true,
-            cancelable: true,
-            detail,
-          })
-          window.dispatchEvent(event)
+
+          this.emit(`${this.options.eventPrefix}.request`, detail)
         }),
     )
   }
@@ -142,12 +140,7 @@ class Rabbit {
             reject: () => reject(new TypeError('Failed to fetch')),
             pass: options => this.passRequest({ request, resolve, reject, ...options }),
           }
-          const event = new CustomEvent(`${this.options.eventPrefix}.request`, {
-            bubbles: true,
-            cancelable: true,
-            detail,
-          })
-          window.dispatchEvent(event)
+          this.emit(`${this.options.eventPrefix}.request`, detail)
         }),
     )
     window.fetch = this.fetchMock as typeof window.fetch
@@ -212,12 +205,18 @@ class Rabbit {
         error && reject(error)
       },
     }
-    const event = new CustomEvent(`${this.options.eventPrefix}.response`, {
+    this.emit(`${this.options.eventPrefix}.response`, detail)
+  }
+
+  emit(eventName: string, detail: RabbitRequest | RabbitResponse) {
+    const event = new CustomEvent(eventName, {
       bubbles: true,
       cancelable: true,
       detail,
     })
     window.dispatchEvent(event)
+    // eslint-disable-next-line no-console
+    this.options.debug && console.log('[DEBUG]', eventName, detail)
   }
 }
 
