@@ -59,8 +59,8 @@ class Rabbit {
     }
 
     // backup
-    if ((<any>window).XMLHttpRequest) {
-      this.originalXhr = (<any>window).XMLHttpRequest
+    if ((window as any).XMLHttpRequest) {
+      this.originalXhr = (window as any).XMLHttpRequest
     }
     this.originalFetch = window.fetch.bind(window)
     return instance
@@ -73,7 +73,7 @@ class Rabbit {
       console.warn('RabbitMock has been setup!')
       return
     }
-    if ((<any>window).XMLHttpRequest) {
+    if (((window as any) as any).XMLHttpRequest) {
       this.setUpXhr()
     }
     this.setUpFetch()
@@ -97,7 +97,7 @@ class Rabbit {
                 .reason(resp.statusText)
                 .headers(
                   // TODO fix type
-                  [...(<any>resp.headers).entries()].reduce(
+                  [...(resp.headers as any).entries()].reduce(
                     (pre, cur) => ({ ...pre, [cur[0]]: cur[1] }),
                     {},
                   ),
@@ -152,7 +152,7 @@ class Rabbit {
       return
     }
 
-    if ((<any>window).XMLHttpRequest) {
+    if ((window as any).XMLHttpRequest) {
       this.teardownXhr()
     }
     this.teardownFetch()
