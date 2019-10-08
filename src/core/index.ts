@@ -28,7 +28,9 @@ export interface RabbitResponse {
   pass: () => void
 }
 
-interface Options {
+export type Rabbit = RabbitRequest | RabbitResponse
+
+export interface Options {
   debug?: boolean
   eventPrefix?: string
 }
@@ -39,9 +41,9 @@ const DEFAULT_RABBIT_OPTIONS: Options = {
 }
 
 // Single instance
-let instance: Rabbit | null = null
+let instance: RabbitMock | null = null
 
-class Rabbit {
+class RabbitMock {
   options: Options
   originalXhr: any
   originalFetch: typeof window.fetch
@@ -151,6 +153,8 @@ class Rabbit {
       console.warn('RabbitMock has been teardown!')
       return
     }
+    // eslint-disable-next-line no-console
+    this.options.debug && console.log('[DEBUG] Rabbit Teardown!')
 
     if ((window as any).XMLHttpRequest) {
       this.teardownXhr()
@@ -208,7 +212,7 @@ class Rabbit {
     this.emit(`${this.options.eventPrefix}.response`, detail)
   }
 
-  emit(eventName: string, detail: RabbitRequest | RabbitResponse) {
+  emit(eventName: string, detail: Rabbit) {
     const event = new CustomEvent(eventName, {
       bubbles: true,
       cancelable: true,
@@ -220,4 +224,4 @@ class Rabbit {
   }
 }
 
-export default Rabbit
+export default RabbitMock
