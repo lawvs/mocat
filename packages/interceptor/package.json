@@ -1,0 +1,15 @@
+{
+  "name": "@rabbit-mock/interceptor",
+  "version": "0.0.1",
+  "description": "Interceptor for RabbitMock",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "eventemitter2": "^6.4.3",
+    "fetch-mock": "^9.10.4",
+    "xhr-mock": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/fetch-mock": "^7.3.2"
+  }
+}
