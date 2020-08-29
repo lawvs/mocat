@@ -1,3 +1,5 @@
+import { type } from 'os'
+
 /**
  * Hack literal union
  *
@@ -15,7 +17,8 @@ interface Comment {
 
 export interface FnScene extends Comment {
   pass?: boolean
-  return?: unknown
+  return?: any
+  error?: any
   // implementation?: (...args: any[]) => any
 }
 
@@ -27,7 +30,7 @@ export interface NetworkScene extends Comment {
   headers?: Record<string, string>
   // cookie?: string
   /** Response body */
-  response?: unknown
+  response?: any
 }
 
 // Mock Register
@@ -95,7 +98,7 @@ interface AsyncFnAfterCommon {
   target: (...args: any) => any
   resolve: (value: any) => void
   reject: (error: any) => void
-  // pass: () => void
+  pass: () => void
 }
 
 interface AsyncFnSuccessEvent extends AsyncFnAfterCommon {
@@ -119,6 +122,13 @@ interface SyncFnFailureEvent {
 }
 
 export type SyncFnEvent = SyncFnSuccessEvent | SyncFnFailureEvent
+
+export type RunEvent =
+  | NetworkBeforeEvent
+  | NetworkAfterEvent
+  | AsyncFnBeforeEvent
+  | AsyncFnAfterEvent
+  | SyncFnEvent
 
 export type MockEventName = (
   | // Register

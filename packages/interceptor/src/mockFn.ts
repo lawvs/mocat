@@ -1,21 +1,33 @@
-import { emit } from './eventEmitter'
+import { registerMock, onRun } from './eventEmitter'
+import type {
+  AsyncFnAfterEvent,
+  AsyncFnBeforeEvent,
+  AsyncFnRegister,
+} from './types'
 
-export const mockAsync = (...actions: object[]) => (
-  mockFn: (...args: any[]) => Promise<any>
-) => {
-  // registerMock({ target: mockFn, actions })
+export const mockAsyncFn = (
+  mock: Omit<AsyncFnRegister, 'type' | 'target'> = {}
+) => <T extends (...args: unknown[]) => Promise<unknown>>(targetFn: T): T => {
+  const rule: AsyncFnRegister = {
+    ...mock,
+    type: 'Register/asyncFn',
+    target: targetFn,
+  }
+  registerMock(rule)
 
-  return async (...args: any) =>
+  return ((...args: Parameters<T>) =>
     new Promise((resolve, reject) => {
-      emit('mockAsync.before', {
-        target: mockFn,
+      const beforeEvent: AsyncFnBeforeEvent = {
+        type: 'Run/asyncFn/before',
+        target: targetFn,
+        rule,
         resolve,
         reject,
         pass: async (interceptReturn = false) => {
-          let originResult: any
+          let originResult: unknown
           let error: Error | undefined = undefined
           try {
-            originResult = await mockFn(...args)
+            originResult = await targetFn(...args)
           } catch (e) {
             error = e
           }
@@ -32,15 +44,21 @@ export const mockAsync = (...actions: object[]) => (
             return
           }
 
-          emit('mockAsync.after', {
-            target: mockFn,
-            originResult,
+          const afterEvent: AsyncFnAfterEvent = {
+            type: 'Run/asyncFn/after',
+            target: targetFn,
+            rule,
+            result: originResult,
             error,
             resolve,
             reject,
             pass: passReturn,
-          })
+          }
+
+          onRun(afterEvent)
         },
-      })
-    })
+      }
+
+      onRun(beforeEvent)
+    })) as T
 }
