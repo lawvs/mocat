@@ -25,4 +25,35 @@ describe('mockAsync should works', () => {
       await asyncFn().catch((i) => i)
     )
   })
+
+  test('event match snapshot', async () => {
+    const listener = jest.fn((...args) => expect(args).toMatchSnapshot())
+    eventEmitter.on('Register/asyncFn', listener)
+    eventEmitter.on('Run/asyncFn/before', listener)
+
+    const asyncFn = () => Promise.resolve(1)
+    const mockFn = mockAsyncFn({
+      name: 'login api',
+      desc: 'it is a mock api',
+      scenes: [
+        {
+          name: 'scene 1',
+          desc: 'login success',
+          return: {
+            code: 0,
+            data: {
+              username: 'admin',
+            },
+          },
+        },
+        {
+          name: 'scene 2',
+          desc: 'login failure',
+          error: { code: 1, message: 'password incorrect' },
+        },
+      ],
+    })(asyncFn)
+    expect(await mockFn()).toEqual(await asyncFn())
+    expect(listener).toBeCalledTimes(2)
+  })
 })

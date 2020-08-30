@@ -1,5 +1,3 @@
-import { type } from 'os'
-
 /**
  * Hack literal union
  *
@@ -35,10 +33,10 @@ export interface NetworkScene extends Comment {
 
 // Mock Register
 
-interface NetWorkRegister extends Comment {
+export interface NetWorkRegister extends Comment {
   type: 'Register/networkRoute'
   /** String or RegExp url to match against request urls */
-  url: string | RegExp
+  url: string | RegExp | ((url: string) => boolean)
   method: LiteralUnion<
     'GET' | 'POST' | 'OPTIONS' | 'PUT' | 'DELETE' | 'HEAD' | 'TRACE' | 'CONNECT'
   >
@@ -71,9 +69,10 @@ export type MockRegister = NetWorkRegister | FnRegister
 export interface NetworkBeforeEvent {
   type: 'Run/network/before'
   requestType: 'xhr' | 'fetch'
-  url: string
-  method: string
   request: Request
+  resolve: () => void
+  reject: () => void
+  pass: (interceptReturn: boolean) => void
 }
 
 export interface NetworkAfterEvent {
@@ -81,6 +80,9 @@ export interface NetworkAfterEvent {
   requestType: 'xhr' | 'fetch'
   request: Request
   response: Response
+  resolve: () => void
+  reject: () => void
+  pass: () => void
 }
 
 export interface AsyncFnBeforeEvent {
