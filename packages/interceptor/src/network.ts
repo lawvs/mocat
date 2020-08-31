@@ -3,17 +3,18 @@ import XHRMock from 'xhr-mock'
 // http://www.wheresrhys.co.uk/fetch-mock/
 import FetchMock from 'fetch-mock'
 import { formatURL } from 'xhr-mock/lib/MockURL'
+import type { MockHeaders } from 'xhr-mock/lib/types'
 
 export interface RabbitRequest {
   id: number
   type: 'FETCH' | 'XHR'
   request: Request
-  resolve: (data: object | Response) => void
+  resolve: (data: Record<string, unknown> | Response) => void
   reject: (err: Error) => void
   pass: (option?: {
     request?: Request
     intercept?: boolean
-    // resolve?: (data: object | Response) => void
+    // resolve?: (data: Record<string, unknown> | Response) => void
     // reject?: (err: Error) => void
   }) => void
 }
@@ -88,23 +89,23 @@ class RabbitMock {
     this.xhrMock.use(
       (req, res) =>
         new Promise((resolve, reject) => {
-          const resolveResponse = async (resp: object | Response) => {
+          const resolveResponse = async (
+            resp: Record<string, unknown> | Response
+          ) => {
             if (!(resp instanceof Response)) {
               resolve(res.status(200).body(resp))
               return
             }
+            const headers: MockHeaders = {}
+            resp.headers.forEach(
+              (value: string, key: string) => (headers[key] = value)
+            )
             resolve(
               res
                 .status(resp.status)
                 .reason(resp.statusText)
-                .headers(
-                  // TODO fix type
-                  [...(resp.headers as any).entries()].reduce(
-                    (pre, cur) => ({ ...pre, [cur[0]]: cur[1] }),
-                    {},
-                  ),
-                )
-                .body(await resp.text()),
+                .headers(headers)
+                .body(await resp.text())
             )
           }
           const request = new Request(formatURL(req.url()), {
@@ -118,12 +119,17 @@ class RabbitMock {
             request,
             resolve: resolveResponse,
             reject, // TODO reject xhr
-            pass: options =>
-              this.passRequest({ request, resolve: resolveResponse, reject, ...options }),
+            pass: (options) =>
+              this.passRequest({
+                request,
+                resolve: resolveResponse,
+                reject,
+                ...options,
+              }),
           }
 
           this.emit(`${this.options.eventPrefix}.request`, detail)
-        }),
+        })
     )
   }
 
@@ -140,10 +146,11 @@ class RabbitMock {
             request,
             resolve,
             reject: () => reject(new TypeError('Failed to fetch')),
-            pass: options => this.passRequest({ request, resolve, reject, ...options }),
+            pass: (options) =>
+              this.passRequest({ request, resolve, reject, ...options }),
           }
           this.emit(`${this.options.eventPrefix}.request`, detail)
-        }),
+        })
     )
     window.fetch = this.fetchMock as typeof window.fetch
   }

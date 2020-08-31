@@ -1,4 +1,6 @@
-import Rabbit from '..'
+// polyfill jest fetch
+import 'isomorphic-fetch'
+import Rabbit from '../network'
 
 const xhrRequest = (method: string, url: string): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -8,7 +10,7 @@ const xhrRequest = (method: string, url: string): Promise<string> =>
         resolve(xhr.responseText)
       }
     }
-    xhr.onerror = e => reject(e)
+    xhr.onerror = (e) => reject(e)
     xhr.open(method, url)
     xhr.send()
   })
