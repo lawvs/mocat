@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot test should network before event match snapshot 1`] = `
+Object {
+  "method": "*",
+  "type": "Register/networkRoute",
+  "url": "/",
+}
+`;
+
+exports[`snapshot test should network before event match snapshot 2`] = `
+Object {
+  "pass": [Function],
+  "reject": [Function],
+  "request": Body {
+    "_abort": false,
+    "_raw": Array [],
+    "agent": undefined,
+    "auth": null,
+    "body": undefined,
+    "bodyUsed": false,
+    "compress": true,
+    "counter": 0,
+    "follow": 20,
+    "headers": Headers {
+      "_headers": Object {},
+    },
+    "hostname": null,
+    "method": "GET",
+    "path": "/",
+    "port": null,
+    "protocol": null,
+    "redirect": "follow",
+    "size": 0,
+    "timeout": 0,
+    "url": "/",
+  },
+  "requestType": "fetch",
+  "resolve": [Function],
+  "rule": Object {
+    "method": "*",
+    "type": "Register/networkRoute",
+    "url": "/",
+  },
+  "type": "Run/network/before",
+}
+`;
+
+exports[`snapshot test should register route match snapshot 1`] = `
+Object {
+  "desc": "login api",
+  "method": "*",
+  "name": "login",
+  "scenes": Array [
+    Object {
+      "name": "login success",
+      "response": Object {
+        "code": 0,
+        "username": "admin",
+      },
+    },
+    Object {
+      "desc": "password incorrect",
+      "name": "login failure",
+      "response": Object {
+        "code": 1,
+        "message": "password incorrect",
+      },
+      "status": 400,
+    },
+  ],
+  "type": "Register/networkRoute",
+  "url": "/api/login",
+}
+`;

@@ -2,7 +2,9 @@ import { mockAsyncFn } from '../mockFn'
 import { eventEmitter } from '../eventEmitter'
 
 describe('mockAsync should works', () => {
-  eventEmitter.onAny((_, payload) => payload.pass?.())
+  beforeAll(() => {
+    eventEmitter.on('Run/asyncFn/before', (payload) => payload.pass())
+  })
 
   test('should register fn correct', async () => {
     const asyncFn = () => Promise.resolve(1)
@@ -24,6 +26,21 @@ describe('mockAsync should works', () => {
     expect(await mockFn().catch((i) => i)).toEqual(
       await asyncFn().catch((i) => i)
     )
+  })
+})
+
+describe('mock test', () => {
+  test('mockAsync should works with resolve', async () => {
+    eventEmitter.on('Run/asyncFn/before', (payload) => payload.resolve(2))
+    const asyncFn = () => Promise.resolve(1)
+    const mockFn = mockAsyncFn()(asyncFn)
+    expect(await mockFn()).toEqual(2)
+  })
+})
+
+describe('snapshot test', () => {
+  beforeAll(() => {
+    eventEmitter.onAny((_, payload) => payload.pass?.())
   })
 
   test('event match snapshot', async () => {
@@ -53,7 +70,8 @@ describe('mockAsync should works', () => {
         },
       ],
     })(asyncFn)
-    expect(await mockFn()).toEqual(await asyncFn())
+
+    await mockFn()
     expect(listener).toBeCalledTimes(2)
   })
 })

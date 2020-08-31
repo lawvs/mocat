@@ -1,0 +1,86 @@
+// polyfill jest fetch
+import 'isomorphic-fetch'
+import { setUpFetch, registerNetworkRoute } from '../fetch'
+import { eventEmitter } from '../eventEmitter'
+
+beforeAll(() => {
+  setUpFetch()
+})
+
+describe('registerNetworkRoute', () => {
+  test('should register correct', () => {
+    const listener = jest.fn()
+    eventEmitter.once('Register/networkRoute', listener)
+    registerNetworkRoute({ url: '/' })
+    expect(listener).toBeCalledTimes(1)
+  })
+})
+
+describe('fetch', () => {
+  beforeAll(() => {
+    registerNetworkRoute({ url: '/' })
+  })
+
+  test('should fetch works', async () => {
+    const listener = jest.fn((payload) =>
+      payload.resolve(new Response('1', { status: 200 }))
+    )
+    eventEmitter.once('Run/network/before', listener)
+
+    expect((await fetch('/')).text()).resolves.toEqual('1')
+    expect(listener).toBeCalledTimes(1)
+  })
+
+  test('should fetch works with json', async () => {
+    const data = { code: 1, msg: 'success' }
+    const listener = jest.fn((payload) =>
+      payload.resolve(new Response(JSON.stringify(data), { status: 200 }))
+    )
+    eventEmitter.once('Run/network/before', listener)
+
+    expect((await fetch('/')).json()).resolves.toEqual(data)
+    expect(listener).toBeCalledTimes(1)
+  })
+
+  test('should fetch works when reject', async () => {
+    const listener = jest.fn((payload) => payload.reject())
+    eventEmitter.once('Run/network/before', listener)
+
+    expect(() => fetch('/')).rejects.toThrowError('Failed to fetch')
+    expect(listener).toBeCalledTimes(1)
+  })
+})
+
+describe('snapshot test', () => {
+  test('should register route match snapshot', () => {
+    const listener = jest.fn((payload) => expect(payload).toMatchSnapshot())
+    eventEmitter.on('Register/networkRoute', listener)
+    registerNetworkRoute({
+      name: 'login',
+      desc: 'login api',
+      url: '/api/login',
+      scenes: [
+        {
+          name: 'login success',
+          response: { code: 0, username: 'admin' },
+        },
+        {
+          name: 'login failure',
+          desc: 'password incorrect',
+          status: 400,
+          response: { code: 1, message: 'password incorrect' },
+        },
+      ],
+    })
+    expect(listener).toBeCalledTimes(1)
+  })
+
+  test('should network before event match snapshot', async () => {
+    registerNetworkRoute({ url: '/' })
+    const listener = jest.fn((payload) => expect(payload).toMatchSnapshot())
+    eventEmitter.on('Run/network/before', listener)
+
+    fetch('/')
+    expect(listener).toBeCalledTimes(1)
+  })
+})
