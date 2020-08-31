@@ -29,6 +29,7 @@ export interface NetworkScene extends Comment {
   // cookie?: string
   /** Response body */
   response?: any
+  error?: any
 }
 
 // Mock Register
@@ -69,28 +70,37 @@ export type MockRegister = NetWorkRegister | FnRegister
 export interface NetworkBeforeEvent {
   type: 'Run/network/before'
   requestType: 'xhr' | 'fetch'
+  rule: NetWorkRegister
   request: Request
-  resolve: () => void
-  reject: () => void
+  resolve: (result: any) => void
+  reject: (error?: any) => void
   pass: (interceptReturn: boolean) => void
 }
 
-export interface NetworkAfterEvent {
+interface NetworkAfterCommon {
   type: 'Run/network/after'
   requestType: 'xhr' | 'fetch'
+  rule: NetWorkRegister
   request: Request
-  response: Response
-  resolve: () => void
-  reject: () => void
+  resolve: (result: any) => void
+  reject: (error?: any) => void
   pass: () => void
 }
+interface NetworkSuccessEvent extends NetworkAfterCommon {
+  response: Response
+}
+interface NetworkFailureEvent extends NetworkAfterCommon {
+  error: unknown
+}
+
+export type NetworkAfterEvent = NetworkSuccessEvent | NetworkFailureEvent
 
 export interface AsyncFnBeforeEvent {
   type: 'Run/asyncFn/before'
   rule: AsyncFnRegister
   target: (...args: any) => any
-  resolve: () => void
-  reject: () => void
+  resolve: (result: any) => void
+  reject: (error: any) => void
   pass: (interceptReturn: boolean) => void
 }
 
@@ -98,7 +108,7 @@ interface AsyncFnAfterCommon {
   type: 'Run/asyncFn/after'
   rule: AsyncFnRegister
   target: (...args: any) => any
-  resolve: (value: any) => void
+  resolve: (result: any) => void
   reject: (error: any) => void
   pass: () => void
 }
