@@ -1,6 +1,12 @@
-// polyfill jest fetch
-import 'isomorphic-fetch'
+import * as nodeFetch from 'node-fetch'
 import Rabbit from '../network'
+
+if (!globalThis.fetch) {
+  ;(globalThis as any).fetch = nodeFetch
+  ;(globalThis as any).Response = nodeFetch.Response
+  ;(globalThis as any).Headers = nodeFetch.Headers
+  ;(globalThis as any).Request = nodeFetch.Request
+}
 
 const xhrRequest = (method: string, url: string): Promise<string> =>
   new Promise((resolve, reject) => {
