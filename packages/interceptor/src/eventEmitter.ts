@@ -1,9 +1,31 @@
 // See https://github.com/EventEmitter2/EventEmitter2
 import { EventEmitter2 } from 'eventemitter2'
 import type { EventAndListener } from 'eventemitter2'
-import type { MockRegister, RunEvent } from './types'
+import type { MockEventMap, RegisterEvent, RunEvent } from './types'
 
-export const eventEmitter = new EventEmitter2()
+interface MockEventEmitter {
+  emit<T extends keyof MockEventMap>(event: T, value: MockEventMap[T]): boolean
+
+  on<T extends keyof MockEventMap>(
+    event: T,
+    listener: (value: MockEventMap[T]) => void
+  ): void
+  once<T extends keyof MockEventMap>(
+    event: T,
+    listener: (value: MockEventMap[T]) => void
+  ): void
+  onAny<T extends keyof MockEventMap>(
+    listener: (event: T, value: MockEventMap[T]) => void
+  ): void
+  off<T extends keyof MockEventMap>(
+    event: T,
+    listener: (...values: any[]) => void
+  ): this
+  offAny(listener: (value: any[]) => void): this
+}
+
+// @ts-ignore
+export const eventEmitter: MockEventEmitter = new EventEmitter2()
 
 export const debug = () => {
   const log: EventAndListener = (event, ...payload) =>
@@ -23,7 +45,7 @@ export const debug = () => {
 
 // const mockMap = new Map<any, any>()
 
-export const registerMock = (rule: MockRegister) => {
+export const registerMock = (rule: RegisterEvent) => {
   // mockMap.set(target, { desc, scenes })
   eventEmitter.emit(rule.type, rule)
 }

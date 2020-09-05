@@ -40,7 +40,7 @@ describe('mock test', () => {
 
 describe('snapshot test', () => {
   beforeAll(() => {
-    eventEmitter.onAny((_, payload) => payload.pass?.())
+    eventEmitter.onAny((_, payload) => 'pass' in payload && payload.pass())
   })
 
   test('event match snapshot', async () => {

@@ -1,7 +1,7 @@
 /**
- * Hack literal union
+ * Create a union type by combining primitive types and literal types without sacrificing auto-completion in IDEs for the literal type part of the union.
+ * Workaround for [Microsoft/TypeScript#29729](https://github.com/microsoft/typescript/issues/29729).
  *
- * See https://github.com/microsoft/typescript/issues/29729
  * See https://github.com/sindresorhus/type-fest/blob/master/source/literal-union.d.ts
  */
 export type LiteralUnion<T extends U, U = string> = T | (U & { _?: never })
@@ -32,7 +32,7 @@ export interface NetworkScene extends Comment {
   error?: any
 }
 
-// Mock Register
+//#region Register Event
 
 export interface NetWorkRegister extends Comment {
   type: 'Register/networkRoute'
@@ -63,9 +63,10 @@ export interface SyncFnRegister extends Comment {
 
 type FnRegister = AsyncFnRegister | SyncFnRegister
 
-export type MockRegister = NetWorkRegister | FnRegister
+export type RegisterEvent = NetWorkRegister | FnRegister
+//#endregion
 
-// Run Event
+//#region Run Event
 
 export interface NetworkBeforeEvent {
   type: 'Run/network/before'
@@ -74,7 +75,7 @@ export interface NetworkBeforeEvent {
   request: Request
   resolve: (result: NetworkScene) => void
   reject: (error?: any) => void
-  pass: (interceptReturn: boolean) => void
+  pass: (interceptReturn?: boolean) => void
 }
 
 interface NetworkAfterCommon {
@@ -101,7 +102,7 @@ export interface AsyncFnBeforeEvent {
   target: (...args: any) => any
   resolve: (result: any) => void
   reject: (error: any) => void
-  pass: (interceptReturn: boolean) => void
+  pass: (interceptReturn?: boolean) => void
 }
 
 interface AsyncFnAfterCommon {
@@ -142,15 +143,19 @@ export type RunEvent =
   | AsyncFnAfterEvent
   | SyncFnEvent
 
-export type MockEventName = (
-  | // Register
-  NetWorkRegister
-  | AsyncFnRegister
-  | SyncFnRegister
-  // Run
-  | NetworkBeforeEvent
-  | NetworkAfterEvent
-  | AsyncFnBeforeEvent
-  | AsyncFnAfterEvent
-  | SyncFnEvent
-)['type']
+//#endregion
+
+export type MockEvent = RegisterEvent | RunEvent
+
+// https://stackoverflow.com/questions/50125893/typescript-derive-map-from-discriminated-union
+type DiscriminateUnion<T, K extends keyof T, V extends T[K]> = T extends Record<
+  K,
+  V
+>
+  ? T
+  : never
+
+type MapDiscriminatedUnion<T extends Record<K, string>, K extends keyof T> = {
+  [V in T[K]]: DiscriminateUnion<T, K, V>
+}
+export type MockEventMap = MapDiscriminatedUnion<MockEvent, 'type'>
