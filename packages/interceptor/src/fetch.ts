@@ -8,7 +8,7 @@ import type {
   NetworkScene,
 } from './types'
 
-const originalFetch = window.fetch.bind(window)
+let originalFetch: typeof globalThis.fetch | null = null
 
 const networkRules: NetWorkRegister[] = []
 
@@ -68,7 +68,7 @@ const passRequest = async ({
   }
 
   try {
-    const response = await originalFetch(request)
+    const response = await originalFetch!(request)
     if (!intercept) {
       resolve(response)
       return
@@ -90,8 +90,11 @@ const passRequest = async ({
 }
 
 export const setUpFetch = () => {
+  if (!originalFetch) {
+    originalFetch = window.fetch.bind(window)
+  }
   const fetchMock = FetchMock.sandbox()
-  window.fetch = fetchMock as typeof window.fetch
+  globalThis.fetch = fetchMock as typeof globalThis.fetch
 
   fetchMock.config.overwriteRoutes = true
   fetchMock.mock(
@@ -102,7 +105,7 @@ export const setUpFetch = () => {
 
         const matchedRule = matchNetworkRule(url, opts)
         if (!matchedRule) {
-          originalFetch(request).then((resp) => resolve(resp))
+          originalFetch!(request).then((resp) => resolve(resp))
           return
         }
 
@@ -127,10 +130,15 @@ export const setUpFetch = () => {
         onRun(detail)
       })
   )
+  return () => resetFetch()
 }
 
 export const resetFetch = () => {
-  window.fetch = originalFetch
+  if (!originalFetch) {
+    throw new Error('please setup first')
+  }
+  globalThis.fetch = originalFetch
+  originalFetch = null
 }
 
 const defaultRoute: NetWorkRegister = {

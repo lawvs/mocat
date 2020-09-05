@@ -1,9 +1,18 @@
 // polyfill jest fetch
-import 'isomorphic-fetch'
+// https://github.com/node-fetch/node-fetch
+import * as nodeFetch from 'node-fetch'
+
 import { setUpFetch, registerNetworkRoute } from '../fetch'
 import { eventEmitter } from '../eventEmitter'
 
 beforeAll(() => {
+  if (!globalThis.fetch) {
+    ;(globalThis as any).fetch = nodeFetch
+    ;(globalThis as any).Response = nodeFetch.Response
+    ;(globalThis as any).Headers = nodeFetch.Headers
+    ;(globalThis as any).Request = nodeFetch.Request
+  }
+
   setUpFetch()
 })
 
@@ -52,9 +61,8 @@ describe('fetch', () => {
     expect(listener).toBeCalledTimes(1)
   })
 
-  // Pending https://github.com/node-fetch/node-fetch/pull/903
-  test.skip('should fetch works with empty response', async () => {
-    const listener = jest.fn((payload) => payload.resolve({ status: 400 }))
+  test('should fetch works with empty response', async () => {
+    const listener = jest.fn((payload) => payload.resolve({}))
     eventEmitter.once('Run/network/before', listener)
     const resp = await fetch('/')
     const data = await resp.text()
