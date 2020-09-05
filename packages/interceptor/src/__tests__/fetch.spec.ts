@@ -22,20 +22,51 @@ describe('fetch', () => {
   })
 
   test('should fetch works', async () => {
+    const listener = jest.fn((payload) => payload.resolve({ response: 1 }))
+    eventEmitter.once('Run/network/before', listener)
+    const resp = await fetch('/')
+    const data = await resp.text()
+
+    expect(resp.status).toEqual(200)
+    expect(data).toEqual('1')
+    expect(listener).toBeCalledTimes(1)
+  })
+
+  test('should fetch works with status', async () => {
+    const listener = jest.fn((payload) => payload.resolve({ status: 400 }))
+    eventEmitter.once('Run/network/before', listener)
+    const resp = await fetch('/')
+
+    expect(resp.status).toEqual(400)
+    expect(listener).toBeCalledTimes(1)
+  })
+
+  test('should fetch works with header', async () => {
     const listener = jest.fn((payload) =>
-      payload.resolve(new Response('1', { status: 200 }))
+      payload.resolve({ headers: { status: 204 } })
     )
     eventEmitter.once('Run/network/before', listener)
+    const resp = await fetch('/')
 
-    expect((await fetch('/')).text()).resolves.toEqual('1')
+    expect(resp.headers.get('status')).toEqual('204')
+    expect(listener).toBeCalledTimes(1)
+  })
+
+  // Pending https://github.com/node-fetch/node-fetch/pull/903
+  test.skip('should fetch works with empty response', async () => {
+    const listener = jest.fn((payload) => payload.resolve({ status: 400 }))
+    eventEmitter.once('Run/network/before', listener)
+    const resp = await fetch('/')
+    const data = await resp.text()
+
+    expect(data).toEqual('')
     expect(listener).toBeCalledTimes(1)
   })
 
   test('should fetch works with json', async () => {
     const data = { code: 1, msg: 'success' }
-    const listener = jest.fn((payload) =>
-      payload.resolve(new Response(JSON.stringify(data), { status: 200 }))
-    )
+    const listener = jest.fn((payload) => payload.resolve({ response: data }))
+
     eventEmitter.once('Run/network/before', listener)
 
     expect((await fetch('/')).json()).resolves.toEqual(data)
@@ -46,7 +77,7 @@ describe('fetch', () => {
     const listener = jest.fn((payload) => payload.reject())
     eventEmitter.once('Run/network/before', listener)
 
-    expect(() => fetch('/')).rejects.toThrowError('Failed to fetch')
+    expect(fetch('/')).rejects.toThrowError('Failed to fetch')
     expect(listener).toBeCalledTimes(1)
   })
 })

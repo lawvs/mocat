@@ -72,7 +72,7 @@ export interface NetworkBeforeEvent {
   requestType: 'xhr' | 'fetch'
   rule: NetWorkRegister
   request: Request
-  resolve: (result: any) => void
+  resolve: (result: NetworkScene) => void
   reject: (error?: any) => void
   pass: (interceptReturn: boolean) => void
 }
@@ -82,7 +82,7 @@ interface NetworkAfterCommon {
   requestType: 'xhr' | 'fetch'
   rule: NetWorkRegister
   request: Request
-  resolve: (result: any) => void
+  resolve: (result: NetworkScene) => void
   reject: (error?: any) => void
   pass: () => void
 }

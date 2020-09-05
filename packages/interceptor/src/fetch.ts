@@ -5,17 +5,33 @@ import type {
   NetworkBeforeEvent,
   NetWorkRegister,
   NetworkAfterEvent,
+  NetworkScene,
 } from './types'
 
 const originalFetch = window.fetch.bind(window)
 
 const networkRules: NetWorkRegister[] = []
 
+const withResolveScene = (resolve: (response: Response) => void) => (
+  scene: NetworkScene
+) => {
+  // TODO enhance type
+  const data =
+    typeof scene.response === 'object' || typeof scene.response === 'number'
+      ? JSON.stringify(scene.response)
+      : scene.response
+  const resp = new Response(data, {
+    status: scene.status,
+    headers: scene.headers,
+  })
+  resolve(resp)
+}
+
 const matchNetworkRule = (
   targetUrl: string,
   opts: FetchMock.MockRequest
-): NetWorkRegister | undefined => {
-  return networkRules.find(({ url, method }) => {
+): NetWorkRegister | undefined =>
+  networkRules.find(({ url, method }) => {
     if (method !== '*' && opts.method !== method) {
       return
     }
@@ -27,7 +43,6 @@ const matchNetworkRule = (
     }
     return url.test(targetUrl)
   })
-}
 
 const passRequest = async ({
   request,
@@ -42,34 +57,32 @@ const passRequest = async ({
   rule: NetWorkRegister
   intercept?: boolean
 }) => {
+  const baseEvent = {
+    // id: new Date().getTime(),
+    type: 'Run/network/after' as const,
+    requestType: 'fetch' as const,
+    rule,
+    request,
+    resolve: withResolveScene(resolve),
+    reject,
+  }
+
   try {
     const response = await originalFetch(request)
     if (!intercept) {
-      response && resolve(response)
+      resolve(response)
       return
     }
     const detail: NetworkAfterEvent = {
-      // id: new Date().getTime(),
-      type: 'Run/network/after',
-      requestType: 'fetch',
-      rule,
-      request,
+      ...baseEvent,
       response,
-      resolve,
-      reject,
       pass: () => resolve(response),
     }
     onRun(detail)
   } catch (error) {
     const detail: NetworkAfterEvent = {
-      // id: new Date().getTime(),
-      type: 'Run/network/after',
-      requestType: 'fetch',
-      rule,
-      request,
+      ...baseEvent,
       error,
-      resolve,
-      reject,
       pass: () => reject(error),
     }
     onRun(detail)
@@ -84,12 +97,12 @@ export const setUpFetch = () => {
   fetchMock.mock(
     '*',
     (url, opts) =>
-      new Promise((resolve, reject) => {
+      new Promise((resolve: (result: Response) => void, reject) => {
         const request = new Request(url, opts)
 
         const matchedRule = matchNetworkRule(url, opts)
         if (!matchedRule) {
-          resolve(originalFetch(request))
+          originalFetch(request).then((resp) => resolve(resp))
           return
         }
 
@@ -99,7 +112,7 @@ export const setUpFetch = () => {
           type: 'Run/network/before',
           rule: matchedRule,
           request,
-          resolve,
+          resolve: withResolveScene(resolve),
           reject: (error = new TypeError('Failed to fetch')) => reject(error),
           pass: (intercept = false) =>
             passRequest({
@@ -114,6 +127,10 @@ export const setUpFetch = () => {
         onRun(detail)
       })
   )
+}
+
+export const resetFetch = () => {
+  window.fetch = originalFetch
 }
 
 const defaultRoute: NetWorkRegister = {
