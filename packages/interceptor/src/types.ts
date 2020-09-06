@@ -6,21 +6,20 @@
  */
 export type LiteralUnion<T extends U, U = string> = T | (U & { _?: never })
 
-interface Comment {
-  name?: string
-  desc?: string
-}
-
 // Scene
 
-export interface FnScene extends Comment {
+export interface FnScene {
+  name: string
+  desc?: string
   pass?: boolean
   return?: any
   error?: any
   // implementation?: (...args: any[]) => any
 }
 
-export interface NetworkScene extends Comment {
+export interface NetworkScene {
+  name: string
+  desc?: string
   /**
    * @default 200
    */
@@ -32,7 +31,14 @@ export interface NetworkScene extends Comment {
   error?: any
 }
 
+export type Scene = NetworkScene | FnScene
+
 //#region Register Event
+
+interface Comment {
+  name?: string
+  desc?: string
+}
 
 export interface NetWorkRegister extends Comment {
   type: 'Register/networkRoute'
@@ -101,7 +107,7 @@ export interface AsyncFnBeforeEvent {
   rule: AsyncFnRegister
   target: (...args: any) => any
   resolve: (result: any) => void
-  reject: (error: any) => void
+  reject: (error?: any) => void
   pass: (interceptReturn?: boolean) => void
 }
 
@@ -110,7 +116,7 @@ interface AsyncFnAfterCommon {
   rule: AsyncFnRegister
   target: (...args: any) => any
   resolve: (result: any) => void
-  reject: (error: any) => void
+  reject: (error?: any) => void
   pass: () => void
 }
 
