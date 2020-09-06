@@ -1,53 +1,21 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { useState, useEffect } from 'react'
+import { EventEmitter2 } from 'eventemitter2'
+import type { MockEventMap, MockEventEmitter } from '@rabbit-mock/interceptor'
 
-export interface EventHook {
-  emit: (event: string, ...payload: any[]) => void
-  on: (event: string, handler: Function) => void
-  // once: (event: string, handler: Function) => void
-  off: (event: string, handler: Function) => void
-}
+// @ts-ignore
+export const hook: MockEventEmitter = new EventEmitter2()
 
-const listeners: Record<string, Function[]> = {}
-
-export const hook: EventHook = {
-  emit: (event, data) => {
-    if (listeners[event]) {
-      listeners[event].map((fn) => fn(data))
-    }
-  },
-  on: (event, fn) => {
-    if (!listeners[event]) {
-      listeners[event] = []
-    }
-    listeners[event].push(fn)
-  },
-  // once: () => { /*noop*/ },
-  off: (event, fn) => {
-    if (!listeners[event]) {
-      return
-    }
-    const index = listeners[event].indexOf(fn)
-    if (index !== -1) {
-      listeners[event].splice(index, 1)
-    }
-    if (!listeners[event].length) {
-      delete listeners[event]
-    }
-  },
-}
-
-export const useEventState = (eventName: string) => {
-  const [state, setState] = useState<any[]>([])
+const useEventState = <T extends keyof MockEventMap>(eventName: T) => {
+  const [state, setState] = useState<MockEventMap[T][]>([])
   useEffect(() => {
-    const handler = (e: any) => setState([...state, e])
+    const handler = (e: MockEventMap[T]) => setState([...state, e])
+
     hook.on(eventName, handler)
-    return () => hook.off(eventName, handler)
+    return () => {
+      hook.off(eventName, handler)
+    }
   }, [state])
   return [state, setState] as const
 }
 
-if (process.env.NODE_ENV === 'development') {
-  ;(hook as any).listeners = listeners
-  ;(globalThis as any).__RABBIT_UI_HOOK__ = hook
-}
+export const useMockState = () => useEventState('Run/network/before')
