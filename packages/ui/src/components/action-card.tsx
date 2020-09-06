@@ -1,88 +1,76 @@
 import React from 'react'
-import styled from 'styled-components'
+import {
+  makeStyles,
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+  Button,
+} from '@material-ui/core'
+import type { MockEvent } from '@rabbit-mock/interceptor'
+import { SceneButton } from './scene-button'
 
-const Card = styled.div`
-  display: flex;
-  flex-direction: column;
-  max-width: 300px;
-  overflow: hidden;
-  border-radius: 4px;
-  padding: 8px;
-  color: #fff;
-  background-color: #424242;
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+const useStyles = makeStyles({
+  root: {
+    // maxWidth: 345,
+  },
+})
 
-  & + & {
-    margin-top: 8px;
-  }
-`
+export const ActionCard: React.FC<{ event: MockEvent }> = ({ event }) => {
+  const classes = useStyles()
+  const title =
+    'name' in event
+      ? event.name ?? 'anonymous'
+      : 'rule' in event
+      ? event.rule.name ?? 'anonymous'
+      : 'anonymous'
+  const subTitle =
+    'desc' in event ? event.name : 'rule' in event && event.rule.desc
 
-const Button = styled.button<{ variant?: string }>`
-  color: rgba(232, 230, 227, 0.87);
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
-    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
-  background-color: rgb(42, 45, 47);
-  border: none;
-  min-width: 64px;
-  border-radius: 4px;
-  outline: 0;
-  cursor: pointer;
-  user-select: none;
-
-  &:hover {
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px,
-      rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
-    background-color: rgb(48, 52, 54);
-  }
-
-  &:active {
-    transform: translateY(2px);
-  }
-
-  & + & {
-    margin-left: 8px;
-  }
-`
-const ButtonGroup = styled.div`
-  display: flex;
-  margin: 8px 0;
-`
-const Name = styled.div``
-const Desc = styled.div``
-
-export interface ActionCardProps {
-  type?: string
-  name: string
-  desc?: string
-  actions?: {
-    variant: string
-    name: string
-    action: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
-  }[]
-}
-
-export const ActionCard: React.FC<ActionCardProps> = ({
-  name,
-  desc,
-  children,
-  actions,
-}) => {
   return (
-    <Card>
-      <Name>{name}</Name>
-      <Desc>{desc}</Desc>
-      {children}
+    <Card className={classes.root}>
+      <CardContent>
+        <Typography color="textSecondary">{event.type}</Typography>
+        <Typography variant="h5" component="h2">
+          {title}
+        </Typography>
+        <Typography color="textSecondary">{subTitle}</Typography>
+      </CardContent>
 
-      {actions && (
-        <ButtonGroup>
-          {actions.map((i) => (
-            <Button key={i.name} onClick={i.action}>
-              {i.name}
-            </Button>
-          ))}
-        </ButtonGroup>
-      )}
+      <CardActions>
+        {'rule' in event && event.rule.scenes && (
+          <SceneButton
+            scenes={event.rule.scenes}
+            onClick={(scene) => {
+              event.resolve(scene)
+            }}
+          ></SceneButton>
+        )}
+
+        {'pass' in event && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              event.pass()
+            }}
+          >
+            Pass
+          </Button>
+        )}
+
+        {'reject' in event && (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              event.reject()
+            }}
+          >
+            Reject
+          </Button>
+        )}
+      </CardActions>
     </Card>
   )
 }

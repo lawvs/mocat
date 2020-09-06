@@ -7,30 +7,39 @@ export default {
   title: 'ActionCard',
   component: ActionCard,
   args: {
-    name: 'name',
-    desc: 'desc',
-    children: 'content',
-    actions: [
-      {
-        name: 'pass',
-        action: action('pass'),
+    event: {
+      type: 'Run/network/before',
+      requestType: 'fetch',
+      rule: {
+        name: 'name',
+        desc: 'desc',
+        type: 'Register/networkRoute',
+        url: '/',
+        method: '*',
+        scenes: [
+          {
+            name: 'scene 1',
+            desc: 'desc',
+            status: 200,
+            response: { data: 'success' },
+          },
+          {
+            name: 'scene 2',
+            desc: 'desc',
+            status: 400,
+            response: { data: 'error' },
+          },
+        ],
       },
-      {
-        name: 'pass and intercept return',
-        action: action('pass and intercept return'),
-      },
-      {
-        name: 'mock',
-        action: action('mock'),
-      },
-      {
-        name: 'reject',
-        action: action('reject'),
-      },
-    ],
+
+      request: new Request(''),
+      resolve: action('resolve'),
+      reject: action('reject'),
+      pass: action('pass'),
+    },
   },
   argTypes: {
-    children: { control: { type: 'text' } },
+    // children: { control: { type: 'text' } },
   },
 }
 
