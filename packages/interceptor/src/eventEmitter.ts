@@ -3,7 +3,7 @@ import { EventEmitter2 } from 'eventemitter2'
 import type { EventAndListener } from 'eventemitter2'
 import type { MockEventMap, RegisterEvent, RunEvent } from './types'
 
-interface MockEventEmitter {
+export interface MockEventEmitter {
   emit<T extends keyof MockEventMap>(event: T, value: MockEventMap[T]): boolean
 
   on<T extends keyof MockEventMap>(
