@@ -1,51 +1,22 @@
+import React from 'react'
 import styled from 'styled-components'
-import React, { useEffect, useRef } from 'react'
-
-export function useFirstMountState(): boolean {
-  const isFirst = useRef(true)
-
-  if (isFirst.current) {
-    isFirst.current = false
-
-    return true
-  }
-
-  return isFirst.current
-}
-
-const useUpdateEffect: typeof useEffect = (effect, deps) => {
-  const isFirstMount = useFirstMountState()
-
-  useEffect(() => {
-    if (!isFirstMount) {
-      return effect()
-    }
-  }, deps)
-}
-
-const DrawerWrapper = styled.div<{ open: boolean }>`
-  top: 0;
-  left: auto;
-  right: 0;
-  transform: ${({ open }) => (open ? 'none' : 'translateX(100%)')};
-  transition: transform 225ms cubic-bezier(0, 0, 0.2, 1);
-
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  flex: 1 0 auto;
-  height: 100%;
-  outline: 0;
-  // https://stackoverflow.com/questions/491052/minimum-and-maximum-value-of-z-index
-  z-index: 2147483647;
-  color: #fff;
-  background-color: #333;
-`
+import {
+  makeStyles,
+  useTheme,
+  createStyles,
+  Drawer as MUIDrawer,
+  Divider,
+} from '@material-ui/core'
+import type { Theme } from '@material-ui/core/styles/createMuiTheme'
+import IconButton from '@material-ui/core/IconButton/IconButton'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 
 const ToggleButton = styled.button`
-  position: absolute;
+  position: fixed;
+  right: 0;
   top: 50%;
-  transform: translate(-100%, -50%);
+  transform: translate(0, -50%);
   border-radius: 8px 0 0 8px;
 
   background-color: #d4d4d4;
@@ -60,7 +31,7 @@ const ToggleButton = styled.button`
 
   &:active {
     transform-origin: right;
-    transform: translate(-100%, -50%) scale(1.1);
+    transform: translate(0, -50%) scale(1.1);
   }
 
   &:hover {
@@ -69,28 +40,45 @@ const ToggleButton = styled.button`
   }
 `
 
-export const Drawer: React.FC<{
-  onOpen?: () => void
-  onClose?: () => void
-}> = ({ onOpen, onClose, children }) => {
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    drawerHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      padding: theme.spacing(0, 1),
+      // necessary for content to be below app bar
+      ...theme.mixins.toolbar,
+      justifyContent: 'flex-start',
+    },
+  })
+)
+
+export const Drawer: React.FC = ({ children }) => {
   const [open, setOpen] = React.useState(false)
 
-  useUpdateEffect(() => {
-    if (open) {
-      onOpen?.()
-    } else {
-      onClose?.()
-    }
-  }, [open])
+  const classes = useStyles()
+  const theme = useTheme()
 
   const toggleDrawer = () => {
     setOpen(!open)
   }
 
   return (
-    <DrawerWrapper open={open}>
+    <>
       <ToggleButton onClick={toggleDrawer}></ToggleButton>
-      {children}
-    </DrawerWrapper>
+      <MUIDrawer open={open} anchor="right" variant="persistent">
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={toggleDrawer}>
+            {theme.direction !== 'ltr' ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </div>
+        <Divider />
+        {children}
+      </MUIDrawer>
+    </>
   )
 }
