@@ -4,6 +4,7 @@
   "description": "Interceptor for RabbitMock",
   "main": "src/index.ts",
   "license": "MIT",
+  "sideEffects": false,
   "dependencies": {
     "eventemitter2": "^6.4.3",
     "fetch-mock": "^9.10.4",

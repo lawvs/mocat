@@ -7,6 +7,8 @@ import {
   Typography,
   Button,
 } from '@material-ui/core'
+import SendIcon from '@material-ui/icons/Send'
+import DeleteIcon from '@material-ui/icons/Delete'
 import type { MockEvent } from '@rabbit-mock/interceptor'
 import { SceneButton } from './scene-button'
 
@@ -28,7 +30,7 @@ export const ActionCard: React.FC<{ event: MockEvent }> = ({ event }) => {
     'desc' in event ? event.name : 'rule' in event && event.rule.desc
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} variant="outlined">
       <CardContent>
         <Typography color="textSecondary">{event.type}</Typography>
         <Typography variant="h5" component="h2">
@@ -51,6 +53,7 @@ export const ActionCard: React.FC<{ event: MockEvent }> = ({ event }) => {
           <Button
             variant="contained"
             color="primary"
+            startIcon={<SendIcon />}
             onClick={() => {
               event.pass()
             }}
@@ -63,6 +66,7 @@ export const ActionCard: React.FC<{ event: MockEvent }> = ({ event }) => {
           <Button
             variant="contained"
             color="secondary"
+            startIcon={<DeleteIcon />}
             onClick={() => {
               event.reject()
             }}

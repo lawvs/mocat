@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { EventEmitter2 } from 'eventemitter2'
-import type { MockEventMap, MockEventEmitter } from '@rabbit-mock/interceptor'
+import { eventEmitter } from '@rabbit-mock/interceptor'
+import type { MockEventMap } from '@rabbit-mock/interceptor'
 
-// @ts-ignore
-export const hook: MockEventEmitter = new EventEmitter2()
+export const hook = eventEmitter
 
 const useEventState = <T extends keyof MockEventMap>(eventName: T) => {
   const [state, setState] = useState<MockEventMap[T][]>([])

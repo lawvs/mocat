@@ -27,8 +27,8 @@ export interface MockEventEmitter {
 // @ts-ignore
 export const eventEmitter: MockEventEmitter = new EventEmitter2()
 
-export const debug = () => {
-  const log: EventAndListener = (event, ...payload) =>
+export const log = () => {
+  const logListener: EventAndListener = (event, ...payload) =>
     // eslint-disable-next-line no-console
     console.log(
       `%cReceive%c %c${event.toString()}`,
@@ -37,8 +37,8 @@ export const debug = () => {
       'text-decoration: underline',
       payload
     )
-  eventEmitter.onAny(log)
-  return () => eventEmitter.offAny(log)
+  eventEmitter.onAny(logListener)
+  return () => eventEmitter.offAny(logListener)
 }
 
 // Register event
