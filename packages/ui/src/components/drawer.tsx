@@ -7,6 +7,7 @@ import {
   Drawer as MUIDrawer,
   Divider,
   ClickAwayListener,
+  Zoom,
 } from '@material-ui/core'
 import type { Theme } from '@material-ui/core/styles/createMuiTheme'
 import IconButton from '@material-ui/core/IconButton/IconButton'
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'fixed',
       bottom: theme.spacing(2),
       right: theme.spacing(2),
+      zIndex: 999999,
     },
     fabExtendedIcon: {
       marginRight: theme.spacing(1),
@@ -49,16 +51,18 @@ export const Drawer: React.FC = ({ children }) => {
     <ClickAwayListener onClickAway={handleClickAway}>
       <Box>
         {/* Floating action button */}
-        <Fab
-          className={classes.fab}
-          color="primary"
-          variant="extended"
-          aria-label="mock"
-          onClick={toggleDrawer}
-        >
-          <BuildIcon className={classes.fabExtendedIcon} />
-          Mock
-        </Fab>
+        <Zoom in={!open}>
+          <Fab
+            className={classes.fab}
+            color="primary"
+            variant="extended"
+            aria-label="mock"
+            onClick={toggleDrawer}
+          >
+            <BuildIcon className={classes.fabExtendedIcon} />
+            Mock
+          </Fab>
+        </Zoom>
 
         <MUIDrawer open={open} anchor="right" variant="persistent">
           <div className={classes.drawerHeader}>
