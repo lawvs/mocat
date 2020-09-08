@@ -30,13 +30,15 @@ export const ActionCard: React.FC<{ event: MockEvent }> = ({ event }) => {
     'desc' in event ? event.name : 'rule' in event && event.rule.desc
 
   return (
-    <Card className={classes.root} variant="outlined">
+    <Card className={classes.root} elevation={3}>
       <CardContent>
         <Typography color="textSecondary">{event.type}</Typography>
-        <Typography variant="h5" component="h2">
+        <Typography variant="h5" component="h2" noWrap>
           {title}
         </Typography>
-        <Typography color="textSecondary">{subTitle}</Typography>
+        <Typography color="textSecondary" noWrap>
+          {subTitle}
+        </Typography>
       </CardContent>
 
       <CardActions>

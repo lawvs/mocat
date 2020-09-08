@@ -1,42 +1,36 @@
 import React from 'react'
-import styled from 'styled-components'
+import { Box, Grid } from '@material-ui/core'
+
 import { Drawer } from './components/drawer'
-import { useEventState } from './hook'
+import { useMockState } from './hook'
 import { ActionCard } from './components/action-card'
+import { MaterialUI } from './theme'
 
-const MainWrapper = styled.div`
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-  padding: 8px;
-  overflow: auto;
-`
+const Mock = () => {
+  const [state] = useMockState()
 
-const ActionList = styled.div`
-  max-height: 100%;
-`
-
-const Main = () => {
-  const [state, setState] = useEventState('event')
   return (
-    <MainWrapper>
-      <ActionList>
-        {state.map((e) => (
-          <ActionCard key={e.name} name={e.name}>
-            {JSON.stringify(e)}
-          </ActionCard>
-        ))}
-      </ActionList>
-    </MainWrapper>
+    <Grid container direction="column" alignItems="stretch" spacing={2}>
+      {state.map((e) => (
+        // TODO fix key
+        <Grid item key={Math.random()} xs={12}>
+          <ActionCard event={e}></ActionCard>
+        </Grid>
+      ))}
+    </Grid>
   )
 }
 
 export const App = () => {
   return (
     <React.StrictMode>
-      <Drawer>
-        <Main />
-      </Drawer>
+      <MaterialUI>
+        <Drawer>
+          <Box display="flex" flexDirection="column" p={2} color="text.primary">
+            <Mock />
+          </Box>
+        </Drawer>
+      </MaterialUI>
     </React.StrictMode>
   )
 }

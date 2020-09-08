@@ -17,6 +17,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import BuildIcon from '@material-ui/icons/Build'
 import LockIcon from '@material-ui/icons/Lock'
 import LockOpenIcon from '@material-ui/icons/LockOpen'
+import DarkIcon from '@material-ui/icons/Brightness4'
+import LightIcon from '@material-ui/icons/Brightness7'
+
+import { useDispatch } from '../store'
+
+const drawerWidth = 400
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,6 +34,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     fabExtendedIcon: {
       marginRight: theme.spacing(1),
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+    drawerPaper: {
+      'overflow-x': 'hidden',
+      width: drawerWidth,
     },
     drawerHeader: {
       display: 'flex',
@@ -44,8 +58,10 @@ export const Drawer: React.FC = ({ children }) => {
   const [open, setOpen] = React.useState(false)
   const [pin, setPin] = React.useState(false)
 
+  const dispatch = useDispatch()
   const classes = useStyles()
   const theme = useTheme()
+  const themeType = theme.palette.type
 
   const toggleDrawer = () => !pin && setOpen(!open)
   const handleClickAway = () => !pin && setOpen(false)
@@ -68,7 +84,15 @@ export const Drawer: React.FC = ({ children }) => {
           </Fab>
         </Zoom>
 
-        <MUIDrawer open={open} anchor="right" variant="persistent">
+        <MUIDrawer
+          open={open}
+          anchor="right"
+          variant="persistent"
+          className={classes.drawer}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
           {/* Header */}
           <div className={classes.drawerHeader}>
             <IconButton onClick={toggleDrawer} disabled={pin}>
@@ -78,8 +102,20 @@ export const Drawer: React.FC = ({ children }) => {
                 <ChevronRightIcon />
               )}
             </IconButton>
+
             <IconButton onClick={togglePin}>
               {pin ? <LockIcon /> : <LockOpenIcon />}
+            </IconButton>
+
+            <IconButton
+              onClick={() =>
+                dispatch({
+                  type: 'UPDATE',
+                  payload: { theme: themeType === 'light' ? 'dark' : 'light' },
+                })
+              }
+            >
+              {themeType === 'light' ? <DarkIcon /> : <LightIcon />}
             </IconButton>
           </div>
 
