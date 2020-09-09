@@ -54,14 +54,56 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+const FloatingActionButton = ({
+  show,
+  onClick,
+}: {
+  show: boolean
+  onClick: () => void
+}) => {
+  const classes = useStyles()
+
+  return (
+    <Zoom in={show}>
+      <Fab
+        className={classes.fab}
+        color="primary"
+        variant="extended"
+        aria-label="mock"
+        onClick={onClick}
+      >
+        <BuildIcon className={classes.fabExtendedIcon} />
+        Mock
+      </Fab>
+    </Zoom>
+  )
+}
+
+const ThemeSwitch = () => {
+  const dispatch = useDispatch()
+  const theme = useTheme()
+  const themeType = theme.palette.type
+
+  return (
+    <IconButton
+      onClick={() =>
+        dispatch({
+          type: 'UPDATE',
+          payload: { theme: themeType === 'light' ? 'dark' : 'light' },
+        })
+      }
+    >
+      {themeType === 'light' ? <DarkIcon /> : <LightIcon />}
+    </IconButton>
+  )
+}
+
 export const Drawer: React.FC = ({ children }) => {
   const [open, setOpen] = React.useState(false)
   const [pin, setPin] = React.useState(false)
 
-  const dispatch = useDispatch()
-  const classes = useStyles()
   const theme = useTheme()
-  const themeType = theme.palette.type
+  const classes = useStyles()
 
   const toggleDrawer = () => !pin && setOpen(!open)
   const handleClickAway = () => !pin && setOpen(false)
@@ -70,19 +112,7 @@ export const Drawer: React.FC = ({ children }) => {
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <Box>
-        {/* Floating action button */}
-        <Zoom in={!open}>
-          <Fab
-            className={classes.fab}
-            color="primary"
-            variant="extended"
-            aria-label="mock"
-            onClick={toggleDrawer}
-          >
-            <BuildIcon className={classes.fabExtendedIcon} />
-            Mock
-          </Fab>
-        </Zoom>
+        <FloatingActionButton show={!open} onClick={toggleDrawer} />
 
         <MUIDrawer
           open={open}
@@ -107,16 +137,7 @@ export const Drawer: React.FC = ({ children }) => {
               {pin ? <LockIcon /> : <LockOpenIcon />}
             </IconButton>
 
-            <IconButton
-              onClick={() =>
-                dispatch({
-                  type: 'UPDATE',
-                  payload: { theme: themeType === 'light' ? 'dark' : 'light' },
-                })
-              }
-            >
-              {themeType === 'light' ? <DarkIcon /> : <LightIcon />}
-            </IconButton>
+            <ThemeSwitch />
           </div>
 
           <Divider />
