@@ -2,7 +2,7 @@
 // https://github.com/node-fetch/node-fetch
 import * as nodeFetch from 'node-fetch'
 
-import { setUpFetch, resetFetch } from '../fetch'
+import { setupFetch, resetFetch } from '../fetch'
 import { eventEmitter, registerNetworkRoute } from '../eventEmitter'
 
 beforeAll(() => {
@@ -13,7 +13,7 @@ beforeAll(() => {
     ;(globalThis as any).Request = nodeFetch.Request
   }
 
-  setUpFetch()
+  setupFetch()
 })
 
 afterAll(() => {

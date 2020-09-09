@@ -1,5 +1,6 @@
 // http://www.wheresrhys.co.uk/fetch-mock/
 import FetchMock from 'fetch-mock'
+
 import { onRun, matchNetworkRule } from './eventEmitter'
 import type {
   NetworkBeforeEvent,
@@ -7,23 +8,16 @@ import type {
   NetworkAfterEvent,
   NetworkScene,
 } from './types'
+import { networkSceneToResponse, NOOP } from './utils'
 
-let originalFetch: typeof globalThis.fetch | null = null
+let originalFetch: typeof fetch | null = null
+
+export const realFetch = (...args: Parameters<typeof fetch>) =>
+  (originalFetch || fetch)(...args)
 
 const withResolveScene = (resolve: (response: Response) => void) => (
   scene: NetworkScene
-) => {
-  // TODO enhance type
-  const data =
-    typeof scene.response === 'object' || typeof scene.response === 'number'
-      ? JSON.stringify(scene.response)
-      : scene.response
-  const resp = new Response(data, {
-    status: scene.status,
-    headers: scene.headers,
-  })
-  resolve(resp)
-}
+) => resolve(networkSceneToResponse(scene))
 
 const passRequest = async ({
   request,
@@ -49,7 +43,7 @@ const passRequest = async ({
   }
 
   try {
-    const response = await originalFetch!(request)
+    const response = await realFetch(request)
     if (!intercept) {
       resolve(response)
       return
@@ -66,19 +60,21 @@ const passRequest = async ({
       return
     }
 
-    const detail: NetworkAfterEvent = {
+    const errorDetail: NetworkAfterEvent = {
       ...baseEvent,
       error,
       pass: () => reject(error),
     }
-    onRun(detail)
+    onRun(errorDetail)
   }
 }
 
-export const setUpFetch = () => {
-  if (!originalFetch) {
-    originalFetch = globalThis.fetch.bind(window)
+export const setupFetch = () => {
+  if (originalFetch) {
+    console.warn('Already setup fetch！')
+    return NOOP
   }
+  originalFetch = globalThis.fetch.bind(window)
   const fetchMock = FetchMock.sandbox()
   globalThis.fetch = fetchMock as typeof globalThis.fetch
 
@@ -91,7 +87,7 @@ export const setUpFetch = () => {
 
         const matchedRule = matchNetworkRule(url, opts)
         if (!matchedRule) {
-          originalFetch!(request).then((resp) => resolve(resp))
+          realFetch(request).then((resp) => resolve(resp))
           return
         }
 
@@ -121,7 +117,8 @@ export const setUpFetch = () => {
 
 export const resetFetch = () => {
   if (!originalFetch) {
-    throw new Error('please setup first')
+    console.warn('please setupFetch before resetFetch.')
+    return
   }
   globalThis.fetch = originalFetch
   originalFetch = null

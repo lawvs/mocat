@@ -27,7 +27,7 @@ export interface NetworkScene {
   headers?: Record<string, string>
   // cookie?: string
   /** Response body */
-  response?: any
+  response?: ConstructorParameters<typeof Response>[0] | Record<string, any>
   error?: any
 }
 
