@@ -2,8 +2,8 @@
 // https://github.com/node-fetch/node-fetch
 import * as nodeFetch from 'node-fetch'
 
-import { setUpFetch, registerNetworkRoute } from '../fetch'
-import { eventEmitter } from '../eventEmitter'
+import { setUpFetch, resetFetch } from '../fetch'
+import { eventEmitter, registerNetworkRoute } from '../eventEmitter'
 
 beforeAll(() => {
   if (!globalThis.fetch) {
@@ -14,6 +14,10 @@ beforeAll(() => {
   }
 
   setUpFetch()
+})
+
+afterAll(() => {
+  resetFetch()
 })
 
 describe('registerNetworkRoute', () => {

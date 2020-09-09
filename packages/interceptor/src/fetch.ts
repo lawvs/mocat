@@ -1,6 +1,6 @@
 // http://www.wheresrhys.co.uk/fetch-mock/
 import FetchMock from 'fetch-mock'
-import { registerMock, onRun } from './eventEmitter'
+import { onRun, matchNetworkRule } from './eventEmitter'
 import type {
   NetworkBeforeEvent,
   NetWorkRegister,
@@ -9,8 +9,6 @@ import type {
 } from './types'
 
 let originalFetch: typeof globalThis.fetch | null = null
-
-const networkRules: NetWorkRegister[] = []
 
 const withResolveScene = (resolve: (response: Response) => void) => (
   scene: NetworkScene
@@ -26,23 +24,6 @@ const withResolveScene = (resolve: (response: Response) => void) => (
   })
   resolve(resp)
 }
-
-const matchNetworkRule = (
-  targetUrl: string,
-  opts: FetchMock.MockRequest
-): NetWorkRegister | undefined =>
-  networkRules.find(({ url, method }) => {
-    if (method !== '*' && opts.method !== method) {
-      return
-    }
-    if (typeof url === 'function') {
-      return url(targetUrl)
-    }
-    if (typeof url === 'string') {
-      return targetUrl.includes(url)
-    }
-    return url.test(targetUrl)
-  })
 
 const passRequest = async ({
   request,
@@ -96,7 +77,7 @@ const passRequest = async ({
 
 export const setUpFetch = () => {
   if (!originalFetch) {
-    originalFetch = window.fetch.bind(window)
+    originalFetch = globalThis.fetch.bind(window)
   }
   const fetchMock = FetchMock.sandbox()
   globalThis.fetch = fetchMock as typeof globalThis.fetch
@@ -144,26 +125,4 @@ export const resetFetch = () => {
   }
   globalThis.fetch = originalFetch
   originalFetch = null
-}
-
-const defaultRoute: NetWorkRegister = {
-  type: 'Register/networkRoute',
-  method: '*',
-  url: '*',
-}
-
-export const registerNetworkRoute = (
-  route: Omit<NetWorkRegister, 'type' | 'method'>
-) => {
-  const innerRoute: NetWorkRegister = {
-    ...defaultRoute,
-    ...route,
-    type: 'Register/networkRoute',
-  }
-  networkRules.unshift(innerRoute)
-  registerMock({
-    ...defaultRoute,
-    ...route,
-    method: innerRoute.method.toUpperCase(),
-  })
 }

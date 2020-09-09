@@ -1,5 +1,5 @@
-export { setUpFetch, registerNetworkRoute } from './fetch'
+export { setUpFetch } from './fetch'
 export { mockAsyncFn } from './mockFn'
-export { eventEmitter, log } from './eventEmitter'
+export { eventEmitter, log, registerNetworkRoute } from './eventEmitter'
 export type { MockEventEmitter } from './eventEmitter'
 export type { Scene, RunEvent, MockEvent, MockEventMap } from './types'

@@ -1,7 +1,12 @@
 // See https://github.com/EventEmitter2/EventEmitter2
 import { EventEmitter2 } from 'eventemitter2'
 import type { EventAndListener } from 'eventemitter2'
-import type { MockEventMap, RegisterEvent, RunEvent } from './types'
+import type {
+  MockEventMap,
+  RegisterEvent,
+  RunEvent,
+  NetWorkRegister,
+} from './types'
 
 export interface MockEventEmitter {
   emit<T extends keyof MockEventMap>(event: T, value: MockEventMap[T]): boolean
@@ -48,6 +53,47 @@ export const log = () => {
 export const registerMock = (rule: RegisterEvent) => {
   // mockMap.set(target, { desc, scenes })
   eventEmitter.emit(rule.type, rule)
+}
+
+const defaultRoute: NetWorkRegister = {
+  type: 'Register/networkRoute',
+  method: '*',
+  url: '*',
+}
+
+const networkRules: NetWorkRegister[] = []
+
+export const matchNetworkRule = (
+  targetUrl: string,
+  opts: { method?: string }
+): NetWorkRegister | undefined =>
+  networkRules.find(({ url, method }) => {
+    if (method !== '*' && opts.method !== method) {
+      return
+    }
+    if (typeof url === 'function') {
+      return url(targetUrl)
+    }
+    if (typeof url === 'string') {
+      return targetUrl.includes(url)
+    }
+    return url.test(targetUrl)
+  })
+
+export const registerNetworkRoute = (
+  route: Omit<NetWorkRegister, 'type' | 'method'>
+) => {
+  const innerRoute: NetWorkRegister = {
+    ...defaultRoute,
+    ...route,
+    type: 'Register/networkRoute',
+  }
+  networkRules.unshift(innerRoute)
+  registerMock({
+    ...defaultRoute,
+    ...route,
+    method: innerRoute.method.toUpperCase(),
+  })
 }
 
 // Run event
