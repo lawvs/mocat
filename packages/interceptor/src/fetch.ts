@@ -80,6 +80,11 @@ const passRequest = async ({
     }
     onRun(detail)
   } catch (error) {
+    if (!intercept) {
+      reject(error)
+      return
+    }
+
     const detail: NetworkAfterEvent = {
       ...baseEvent,
       error,
