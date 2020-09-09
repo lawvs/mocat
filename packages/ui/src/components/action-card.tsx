@@ -11,6 +11,7 @@ import SendIcon from '@material-ui/icons/Send'
 import DeleteIcon from '@material-ui/icons/Delete'
 import type { MockEvent } from '@rabbit-mock/interceptor'
 import { SceneButton } from './scene-button'
+import { NOOP } from '../utils'
 
 const useStyles = makeStyles({
   root: {
@@ -18,7 +19,10 @@ const useStyles = makeStyles({
   },
 })
 
-export const ActionCard: React.FC<{ event: MockEvent }> = ({ event }) => {
+export const ActionCard: React.FC<{
+  event: MockEvent
+  afterHandle?: () => void
+}> = ({ event, afterHandle = NOOP }) => {
   const classes = useStyles()
   const title =
     'name' in event
@@ -47,6 +51,7 @@ export const ActionCard: React.FC<{ event: MockEvent }> = ({ event }) => {
             scenes={event.rule.scenes}
             onClick={(scene) => {
               event.resolve(scene)
+              afterHandle()
             }}
           ></SceneButton>
         )}
@@ -58,6 +63,7 @@ export const ActionCard: React.FC<{ event: MockEvent }> = ({ event }) => {
             startIcon={<SendIcon />}
             onClick={() => {
               event.pass()
+              afterHandle()
             }}
           >
             Pass
@@ -71,6 +77,7 @@ export const ActionCard: React.FC<{ event: MockEvent }> = ({ event }) => {
             startIcon={<DeleteIcon />}
             onClick={() => {
               event.reject()
+              afterHandle()
             }}
           >
             Reject
