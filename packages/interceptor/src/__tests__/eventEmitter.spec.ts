@@ -1,4 +1,4 @@
-import { eventEmitter } from '../eventEmitter'
+import { eventEmitter, registerNetworkRoute } from '../eventEmitter'
 
 describe('emitter', () => {
   test('emitter should works', async () => {
@@ -22,5 +22,14 @@ describe('emitter', () => {
     eventEmitter.emit(event, payload)
     expect(listener).toBeCalledTimes(1)
     expect(listener).toBeCalledWith(payload)
+  })
+})
+
+describe('registerNetworkRoute', () => {
+  test('should register correct', () => {
+    const listener = jest.fn()
+    eventEmitter.once('Register/networkRoute', listener)
+    registerNetworkRoute({ url: '/' })
+    expect(listener).toBeCalledTimes(1)
   })
 })

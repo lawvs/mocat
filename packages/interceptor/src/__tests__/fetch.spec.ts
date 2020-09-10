@@ -20,15 +20,6 @@ afterAll(() => {
   resetFetch()
 })
 
-describe('registerNetworkRoute', () => {
-  test('should register correct', () => {
-    const listener = jest.fn()
-    eventEmitter.once('Register/networkRoute', listener)
-    registerNetworkRoute({ url: '/' })
-    expect(listener).toBeCalledTimes(1)
-  })
-})
-
 describe('fetch', () => {
   beforeAll(() => {
     registerNetworkRoute({ url: '/' })
