@@ -7,27 +7,46 @@ export default {
   title: 'App',
 }
 
-const app = create()
-
 export const Basic = () => {
-  let unmount = () => {
-    action('mount first please')()
-  }
+  const app = create()
+  const unmount = app.unmount
 
   const mount = () => {
-    action('mounted')()
-    unmount = app.mount()
+    action('mount')()
+    app.mount()
   }
 
   const dispatch = () => {
-    const e = { name: Math.random() }
-    action('dispatch')('event', e)
-    app.hook.emit('event', e)
+    const eventName = 'Run/network/before' as const
+    const e = {
+      type: 'Run/network/before',
+      requestType: 'fetch',
+      rule: {
+        type: 'Register/networkRoute',
+        url: '/',
+        method: '*',
+        scenes: [
+          {
+            name: 'name',
+            desc: 'desc',
+            status: 200,
+            response: { data: 'success' },
+          },
+        ],
+      },
+      request: new Request(''),
+      resolve: action('resolve'),
+      reject: action('reject'),
+      pass: action('pass'),
+    } as any
+
+    action('dispatch')(eventName, e)
+    app.hook.emit(eventName, e)
   }
 
   return (
     <>
-      <Button onClick={mount}>Mount</Button>
+      <Button onClick={mount}>Create</Button>
       <Button onClick={() => unmount()}>Unmount</Button>
       <Button onClick={() => dispatch()}>Dispatch</Button>
     </>
