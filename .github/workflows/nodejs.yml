@@ -35,6 +35,9 @@ jobs:
       - name: Install node modules
         run: yarn install --frozen-lockfile
 
+      - name: Build
+        run: yarn build
+
       - name: Lint
         run: yarn lint
 
@@ -42,6 +45,4 @@ jobs:
         run: yarn typecheck
 
       - name: Test
-        run: yarn test
-      # - name: Build
-      #   run: yarn build
+        run: yarn test:ci
