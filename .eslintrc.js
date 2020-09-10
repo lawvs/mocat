@@ -49,5 +49,5 @@ module.exports = {
       version: require('react').version,
     },
   },
-  ignorePatterns: ['*.js'],
+  ignorePatterns: ['*.js', 'packages/*/build/**/*.ts'],
 }

@@ -8,5 +8,5 @@ module.exports = {
   moduleFileExtensions: ['js', 'json', 'ts', 'tsx'],
   testMatch: ['**/__tests__/**/*.ts', '**/?(*.)+(spec|test).ts'],
   // setupFilesAfterEnv: ['./src/setupTests.ts'],
-  collectCoverageFrom: ['./src/**/*.ts'],
+  collectCoverageFrom: ['./packages/**/src/*.ts'],
 }

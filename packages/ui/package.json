@@ -7,7 +7,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf build",
+    "clean": "rm -rf build story-static",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },

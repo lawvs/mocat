@@ -3,8 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "description": "mocking for ajax requests",
-  "main": "dist/main.min.js",
-  "types": "types/index.d.ts",
   "workspaces": [
     "packages/*",
     "examples/*"
@@ -13,13 +11,12 @@
     "start": "yarn dev",
     "dev": "webpack-dev-server --config scripts/webpack.config.js --mode=development --colors --watch --hot",
     "build": "webpack --config scripts/webpack.config.js --mode=production  --progress --color",
-    "beforepublish": "yarn build && yarn types",
-    "lint": "eslint --ext .ts,.tsx .",
+    "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
-    "typecheck": "tsc --noEmit --project .",
-    "types": "tsc -d --declarationDir types",
-    "clean": "rm -rf dist/ types/",
-    "test": "jest"
+    "typecheck": "yarn workspaces run tsc --noEmit",
+    "clean": "rm -rf coverage && yarn workspaces run clean",
+    "test": "jest",
+    "testL:ci": "jest --coverage"
   },
   "keywords": [
     "mock",
