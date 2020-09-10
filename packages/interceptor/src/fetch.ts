@@ -2,12 +2,8 @@
 import FetchMock from 'fetch-mock'
 
 import { onRun, matchNetworkRule } from './eventEmitter'
-import type {
-  NetworkBeforeEvent,
-  NetworkAfterEvent,
-  NetworkScene,
-} from './types'
-import { networkSceneToResponse, NOOP } from './utils'
+import { networkSceneToResponse, NOOP, passRequest } from './utils'
+import type { NetworkBeforeEvent, NetworkScene } from './types'
 
 let originalFetch: typeof fetch | null = null
 
@@ -17,43 +13,6 @@ export const realFetch = (...args: Parameters<typeof fetch>) =>
 const withResolveScene = (resolve: (response: Response) => void) => (
   scene: NetworkScene
 ) => resolve(networkSceneToResponse(scene))
-
-const passRequest = async (
-  partialEvent: Omit<NetworkAfterEvent, 'pass' | 'error'>,
-  {
-    intercept,
-    resolveResponse,
-  }: {
-    intercept: boolean
-    resolveResponse: (result: Response) => void
-  }
-) => {
-  try {
-    const response = await realFetch(partialEvent.request)
-    if (!intercept) {
-      resolveResponse(response)
-      return
-    }
-    const detail: NetworkAfterEvent = {
-      ...partialEvent,
-      response,
-      pass: () => resolveResponse(response),
-    }
-    onRun(detail)
-  } catch (error) {
-    if (!intercept) {
-      partialEvent.reject(error)
-      return
-    }
-
-    const errorDetail: NetworkAfterEvent = {
-      ...partialEvent,
-      error,
-      pass: () => partialEvent.reject(error),
-    }
-    onRun(errorDetail)
-  }
-}
 
 export const setupFetch = () => {
   if (originalFetch) {

@@ -1,4 +1,6 @@
-import type { NetworkScene } from './types'
+import type { NetworkScene, NetworkAfterEvent } from './types'
+import { realFetch } from './fetch'
+import { onRun } from './eventEmitter'
 
 export const NOOP = () => {
   /*noop*/
@@ -20,4 +22,41 @@ export const networkSceneToResponse = (scene: NetworkScene): Response => {
     status: scene.status,
     headers: scene.headers,
   })
+}
+
+export const passRequest = async (
+  partialEvent: Omit<NetworkAfterEvent, 'pass' | 'error'>,
+  {
+    intercept,
+    resolveResponse,
+  }: {
+    intercept: boolean
+    resolveResponse: (result: Response) => void
+  }
+) => {
+  try {
+    const response = await realFetch(partialEvent.request)
+    if (!intercept) {
+      resolveResponse(response)
+      return
+    }
+    const detail: NetworkAfterEvent = {
+      ...partialEvent,
+      response,
+      pass: () => resolveResponse(response),
+    }
+    onRun(detail)
+  } catch (error) {
+    if (!intercept) {
+      partialEvent.reject(error)
+      return
+    }
+
+    const errorDetail: NetworkAfterEvent = {
+      ...partialEvent,
+      error,
+      pass: () => partialEvent.reject(error),
+    }
+    onRun(errorDetail)
+  }
 }
