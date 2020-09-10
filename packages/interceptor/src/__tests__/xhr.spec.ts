@@ -25,7 +25,9 @@ const xhrRequest = (url: string, method = 'GET'): Promise<XMLHttpRequest> =>
     const xhr = new XMLHttpRequest()
     xhr.onreadystatechange = () => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
-        resolve(xhr)
+        if (xhr.status) {
+          resolve(xhr)
+        }
       }
     }
 
@@ -46,7 +48,7 @@ describe('xhr', () => {
 
     expect(xhr.status).toEqual(200)
     expect(xhr.statusText).toEqual('OK')
-    expect(xhr.responseText).toEqual('1')
+    expect(xhr.response).toEqual('1')
     expect(listener).toBeCalledTimes(1)
   })
 
@@ -75,19 +77,20 @@ describe('xhr', () => {
     eventEmitter.once('Run/network/before', listener)
     const xhr = await xhrRequest('/')
 
-    expect(xhr.responseText).toEqual('')
+    expect(xhr.response).toEqual('')
     expect(listener).toBeCalledTimes(1)
   })
 
   test('should fetch works when reject', async () => {
     const listener = jest.fn((payload) => payload.reject())
     eventEmitter.once('Run/network/before', listener)
-    const xhr = await xhrRequest('/')
+    try {
+      await xhrRequest('/')
+      fail('Unreachable')
+    } catch (error) {
+      expect(error).toMatchObject({ type: 'error' })
+    }
 
-    expect(xhr.readyState).toEqual(XMLHttpRequest.DONE)
-    expect(xhr.status).toEqual(0)
-    expect(xhr.statusText).toEqual('')
-    expect(xhr.responseText).toEqual('')
     expect(listener).toBeCalledTimes(1)
   })
 })

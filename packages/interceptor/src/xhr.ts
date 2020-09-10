@@ -61,7 +61,7 @@ export const setupXHR = () => {
           rule: matchedRule,
           request,
           resolve: withResolveScene(resolve, resp),
-          reject: () => resolve(resp),
+          reject: () => reject(),
         }
 
         const detail: NetworkBeforeEvent = {
