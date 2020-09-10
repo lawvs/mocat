@@ -74,12 +74,14 @@ export type RegisterEvent = NetWorkRegister | FnRegister
 
 //#region Run Event
 
+type ResolveScene = (result: NetworkScene) => void
 export interface NetworkBeforeEvent {
   type: 'Run/network/before'
   requestType: 'xhr' | 'fetch'
   rule: NetWorkRegister
   request: Request
-  resolve: (result: NetworkScene) => void
+  // TODO rename to resolveScene?
+  resolve: ResolveScene
   reject: (error?: any) => void
   pass: (interceptReturn?: boolean) => void
 }
@@ -89,7 +91,7 @@ interface NetworkAfterCommon {
   requestType: 'xhr' | 'fetch'
   rule: NetWorkRegister
   request: Request
-  resolve: (result: NetworkScene) => void
+  resolve: ResolveScene
   reject: (error?: any) => void
   pass: () => void
 }

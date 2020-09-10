@@ -4,7 +4,6 @@ import FetchMock from 'fetch-mock'
 import { onRun, matchNetworkRule } from './eventEmitter'
 import type {
   NetworkBeforeEvent,
-  NetWorkRegister,
   NetworkAfterEvent,
   NetworkScene,
 } from './types'
@@ -19,51 +18,38 @@ const withResolveScene = (resolve: (response: Response) => void) => (
   scene: NetworkScene
 ) => resolve(networkSceneToResponse(scene))
 
-const passRequest = async ({
-  request,
-  resolve,
-  reject,
-  rule,
-  intercept,
-}: {
-  request: Request
-  resolve: (response: Response) => void
-  reject: (error: Error) => void
-  rule: NetWorkRegister
-  intercept?: boolean
-}) => {
-  const baseEvent = {
-    // id: new Date().getTime(),
-    type: 'Run/network/after' as const,
-    requestType: 'fetch' as const,
-    rule,
-    request,
-    resolve: withResolveScene(resolve),
-    reject,
+const passRequest = async (
+  partialEvent: Omit<NetworkAfterEvent, 'pass' | 'error'>,
+  {
+    intercept,
+    resolveResponse,
+  }: {
+    intercept: boolean
+    resolveResponse: (result: Response) => void
   }
-
+) => {
   try {
-    const response = await realFetch(request)
+    const response = await realFetch(partialEvent.request)
     if (!intercept) {
-      resolve(response)
+      resolveResponse(response)
       return
     }
     const detail: NetworkAfterEvent = {
-      ...baseEvent,
+      ...partialEvent,
       response,
-      pass: () => resolve(response),
+      pass: () => resolveResponse(response),
     }
     onRun(detail)
   } catch (error) {
     if (!intercept) {
-      reject(error)
+      partialEvent.reject(error)
       return
     }
 
     const errorDetail: NetworkAfterEvent = {
-      ...baseEvent,
+      ...partialEvent,
       error,
-      pass: () => reject(error),
+      pass: () => partialEvent.reject(error),
     }
     onRun(errorDetail)
   }
@@ -91,23 +77,30 @@ export const setupFetch = () => {
           return
         }
 
-        const detail: NetworkBeforeEvent = {
-          // id: new Date().getTime(),
-          requestType: 'fetch',
-          type: 'Run/network/before',
+        const baseDetail = {
+          requestType: 'fetch' as const,
           rule: matchedRule,
           request,
           resolve: withResolveScene(resolve),
-          reject: (error = new TypeError('Failed to fetch')) => reject(error),
-          pass: (intercept = false) =>
-            passRequest({
-              request,
-              resolve,
-              reject: (error = new TypeError('Failed to fetch')) =>
-                reject(error),
-              rule: matchedRule,
-              intercept,
-            }),
+          reject: (error: any = new TypeError('Failed to fetch')) =>
+            reject(error),
+        }
+        const detail: NetworkBeforeEvent = {
+          // id: new Date().getTime(),
+          ...baseDetail,
+          type: 'Run/network/before',
+          pass: (intercept = false) => {
+            passRequest(
+              {
+                ...baseDetail,
+                type: 'Run/network/after',
+              },
+              {
+                resolveResponse: resolve,
+                intercept,
+              }
+            )
+          },
         }
         onRun(detail)
       })
