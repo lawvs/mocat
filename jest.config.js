@@ -1,12 +1,12 @@
 module.exports = {
+  preset: 'ts-jest',
   clearMocks: true,
-  browser: true,
   coverageDirectory: 'coverage',
   transform: {
     '^.+\\.(ts)$': 'ts-jest',
   },
-  moduleFileExtensions: ['js', 'json', 'ts', 'tsx', 'node'],
+  moduleFileExtensions: ['js', 'json', 'ts', 'tsx'],
   testMatch: ['**/__tests__/**/*.ts', '**/?(*.)+(spec|test).ts'],
-  setupFilesAfterEnv: ['./src/setupTests.ts'],
-  collectCoverageFrom: ['./src/**/*.ts'],
+  // setupFilesAfterEnv: ['./src/setupTests.ts'],
+  collectCoverageFrom: ['./packages/**/src/*.ts'],
 }

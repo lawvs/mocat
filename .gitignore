@@ -80,5 +80,6 @@ typings/
 .dynamodb/
 
 # Generated files
+build
 dist
-types
+storybook-static

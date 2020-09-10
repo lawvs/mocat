@@ -1,0 +1,32 @@
+{
+  "name": "@rabbit-mock/ui",
+  "version": "0.0.1",
+  "description": "User Interface for RabbitMock",
+  "main": "build/index.js",
+  "license": "MIT",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf build story-static",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "react": "^ 16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@storybook/addon-actions": "^6.0.12",
+    "@storybook/addon-controls": "^6.0.12",
+    "@storybook/addon-docs": "^6.0.12",
+    "@storybook/addon-links": "^6.0.12",
+    "@storybook/addon-toolbars": "^6.0.17",
+    "@storybook/addons": "^6.0.12",
+    "@storybook/react": "^6.0.12",
+    "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8"
+  }
+}

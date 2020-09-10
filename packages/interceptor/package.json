@@ -1,0 +1,17 @@
+{
+  "name": "@rabbit-mock/interceptor",
+  "version": "0.0.1",
+  "description": "Interceptor for RabbitMock",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "sideEffects": false,
+  "dependencies": {
+    "eventemitter2": "^6.4.3",
+    "fetch-mock": "^9.10.4",
+    "xhr-mock": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/fetch-mock": "^7.3.2",
+    "node-fetch": "^2.6.0"
+  }
+}
