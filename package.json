@@ -14,7 +14,7 @@
     "typecheck": "lerna exec --parallel -- tsc --noEmit",
     "clean": "rm -rf coverage && lerna run --parallel clean",
     "test": "jest",
-    "testL:ci": "jest --coverage"
+    "test:ci": "jest --coverage"
   },
   "keywords": [
     "mock",
