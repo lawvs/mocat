@@ -1,12 +1,12 @@
 {
   "name": "rabbit-mock",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The RabbitMock",
   "main": "src/index.ts",
   "license": "MIT",
   "sideEffects": false,
   "dependencies": {
-    "@rabbit-mock/interceptor": "0.0.1",
-    "@rabbit-mock/ui": "0.0.1"
+    "@rabbit-mock/interceptor": "^0.1.0",
+    "@rabbit-mock/ui": "^0.1.0"
   }
 }
