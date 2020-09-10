@@ -4,7 +4,6 @@ import { NOOP } from './utils'
 export const initialState = {
   unmount: NOOP,
   theme: 'auto' as 'light' | 'dark' | 'auto',
-  prefersDarkMode: false,
 }
 
 export type State = typeof initialState
@@ -15,7 +14,7 @@ export type Action =
 export const rootReducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'UNMOUNT':
-      setTimeout(state.unmount(), 0)
+      setTimeout(() => state.unmount(), 0)
       return { ...state, unmount: NOOP }
     case 'UPDATE':
       return { ...state, ...action.payload }
