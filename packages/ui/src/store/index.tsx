@@ -1,9 +1,10 @@
+import { useTheme } from '@material-ui/core'
 import React, { createContext, useReducer, useContext, Reducer } from 'react'
-import { NOOP } from './utils'
+import { NOOP } from '../utils'
 
 export const initialState = {
-  unmount: NOOP,
   theme: 'auto' as 'light' | 'dark' | 'auto',
+  drawer: 'auto' as 'auto' | 'pin' | 'silent',
 }
 
 export type State = typeof initialState
@@ -13,9 +14,6 @@ export type Action =
 
 export const rootReducer = (state: State, action: Action) => {
   switch (action.type) {
-    case 'UNMOUNT':
-      setTimeout(() => state.unmount(), 0)
-      return { ...state, unmount: NOOP }
     case 'UPDATE':
       return { ...state, ...action.payload }
     default:
@@ -46,7 +44,26 @@ export const useStore = () => {
   return state
 }
 
-export const useDispatch = () => {
+const useDispatch = () => {
   const dispatch = useContext(DispatchContext)
   return dispatch
+}
+
+export const useThemeConfig = () => {
+  const { theme } = useStore()
+  return theme
+}
+
+export const useThemeSwitch = () => {
+  const dispatch = useDispatch()
+  const theme = useTheme()
+  const themeType = theme.palette.type
+  return {
+    themeType,
+    toggle: () =>
+      dispatch({
+        type: 'UPDATE',
+        payload: { theme: themeType === 'light' ? 'dark' : 'light' },
+      }),
+  }
 }

@@ -26,13 +26,10 @@ export const create = ({ options }: { options?: Partial<State> } = {}) => {
 
       isMounted = true
       ;(app as any)._container = el
-      const unmount = () => unmountComponentAtNode(el as Element)
-      app.unmount = unmount
 
       const StoreProvider = createStoreProvider(rootReducer, {
         ...initialState,
         ...options,
-        unmount,
       })
 
       render(

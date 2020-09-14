@@ -20,7 +20,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen'
 import DarkIcon from '@material-ui/icons/Brightness4'
 import LightIcon from '@material-ui/icons/Brightness7'
 
-import { useDispatch } from '../store'
+import { useThemeSwitch } from '../store'
 
 const drawerWidth = 400
 
@@ -85,19 +85,10 @@ const FloatingActionButton = ({
 }
 
 const ThemeSwitch = () => {
-  const dispatch = useDispatch()
-  const theme = useTheme()
-  const themeType = theme.palette.type
+  const { toggle, themeType } = useThemeSwitch()
 
   return (
-    <IconButton
-      onClick={() =>
-        dispatch({
-          type: 'UPDATE',
-          payload: { theme: themeType === 'light' ? 'dark' : 'light' },
-        })
-      }
-    >
+    <IconButton onClick={toggle}>
       {themeType === 'light' ? <DarkIcon /> : <LightIcon />}
     </IconButton>
   )
