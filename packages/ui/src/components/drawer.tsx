@@ -24,8 +24,13 @@ import { useDispatch } from '../store'
 
 const drawerWidth = 400
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles<Theme, { pin?: boolean }>((theme: Theme) =>
   createStyles({
+    '@global': {
+      html: {
+        'margin-right': ({ pin = false }) => pin && drawerWidth,
+      },
+    },
     fab: {
       position: 'fixed',
       bottom: theme.spacing(2),
@@ -61,7 +66,7 @@ const FloatingActionButton = ({
   show: boolean
   onClick: () => void
 }) => {
-  const classes = useStyles()
+  const classes = useStyles({})
 
   return (
     <Zoom in={show}>
@@ -103,7 +108,7 @@ export const Drawer: React.FC = ({ children }) => {
   const [pin, setPin] = React.useState(false)
 
   const theme = useTheme()
-  const classes = useStyles()
+  const classes = useStyles({ pin })
 
   const toggleDrawer = () => !pin && setOpen(!open)
   const handleClickAway = () => !pin && setOpen(false)
