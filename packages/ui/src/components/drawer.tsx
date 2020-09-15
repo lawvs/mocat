@@ -20,7 +20,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen'
 import DarkIcon from '@material-ui/icons/Brightness4'
 import LightIcon from '@material-ui/icons/Brightness7'
 
-import { useThemeSwitch } from '../store'
+import { useDrawer, useThemeSwitch } from '../store'
 
 const drawerWidth = 400
 
@@ -95,18 +95,13 @@ const ThemeSwitch = () => {
 }
 
 export const Drawer: React.FC = ({ children }) => {
-  const [open, setOpen] = React.useState(false)
-  const [pin, setPin] = React.useState(false)
+  const { open, pin, toggleDrawer, togglePin, whenClickAway } = useDrawer()
 
   const theme = useTheme()
   const classes = useStyles({ pin })
 
-  const toggleDrawer = () => !pin && setOpen(!open)
-  const handleClickAway = () => !pin && setOpen(false)
-  const togglePin = () => setPin(!pin)
-
   return (
-    <ClickAwayListener onClickAway={handleClickAway}>
+    <ClickAwayListener onClickAway={whenClickAway}>
       <Box>
         <FloatingActionButton show={!open} onClick={toggleDrawer} />
 

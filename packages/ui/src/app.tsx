@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Grid } from '@material-ui/core'
 
 import { Drawer } from './components/drawer'
-import { useMockState } from './hook'
+import { useMockState } from './store'
 import { ActionCard } from './components/action-card'
 import { MaterialUI } from './theme'
 

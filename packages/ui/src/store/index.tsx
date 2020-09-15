@@ -1,16 +1,24 @@
 import { useTheme } from '@material-ui/core'
-import React, { createContext, useReducer, useContext, Reducer } from 'react'
+import React, {
+  createContext,
+  useReducer,
+  useContext,
+  Reducer,
+  useState,
+  useEffect,
+  useRef,
+} from 'react'
+import { eventEmitter } from '@rabbit-mock/interceptor'
+import type { MockEventMap } from '@rabbit-mock/interceptor'
 import { NOOP } from '../utils'
 
 export const initialState = {
   theme: 'auto' as 'light' | 'dark' | 'auto',
-  drawer: 'auto' as 'auto' | 'pin' | 'silent',
+  drawerMode: 'auto' as 'auto' | 'pin' | 'silent',
 }
 
 export type State = typeof initialState
-export type Action =
-  | { type: 'UPDATE'; payload: Partial<State> }
-  | { type: 'UNMOUNT' }
+export type Action = { type: 'UPDATE'; payload: Partial<State> }
 
 export const rootReducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -66,5 +74,51 @@ export const useThemeSwitch = () => {
         payload: { theme: currentTheme === 'light' ? 'dark' : 'light' },
       }),
     // setLight, setDark
+  }
+}
+
+const useEventState = <T extends keyof MockEventMap>(eventName: T) => {
+  const [state, setState] = useState<MockEventMap[T][]>([])
+  useEffect(() => {
+    const handler = (e: MockEventMap[T]) => setState([...state, e])
+
+    eventEmitter.on(eventName, handler)
+    return () => {
+      eventEmitter.off(eventName, handler)
+    }
+  }, [state])
+  return [state, setState] as const
+}
+
+export const useMockState = () => useEventState('Run/network/before')
+
+export const useDrawer = () => {
+  const { drawerMode: mode } = useStore()
+  const [event] = useMockState()
+  const [open, setOpen] = useState(mode === 'pin' || false)
+  const [pin, setPin] = useState(mode === 'pin' || false)
+
+  const firstUpdate = useRef(true)
+  useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false
+      return
+    }
+    setTimeout(() => setOpen(true), 0)
+  }, [event])
+
+  const toggleDrawer = () => !pin && setOpen(!open)
+  const togglePin = () => setPin(!pin)
+  const whenClickAway = () => !pin && setOpen(false)
+
+  return {
+    mode,
+    open,
+    pin,
+    // setOpen,
+    // setPin,
+    toggleDrawer,
+    togglePin,
+    whenClickAway,
   }
 }
