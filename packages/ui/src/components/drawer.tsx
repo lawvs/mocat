@@ -85,11 +85,11 @@ const FloatingActionButton = ({
 }
 
 const ThemeSwitch = () => {
-  const { toggle, themeType } = useThemeSwitch()
+  const { toggle, currentTheme } = useThemeSwitch()
 
   return (
     <IconButton onClick={toggle}>
-      {themeType === 'light' ? <DarkIcon /> : <LightIcon />}
+      {currentTheme === 'light' ? <DarkIcon /> : <LightIcon />}
     </IconButton>
   )
 }

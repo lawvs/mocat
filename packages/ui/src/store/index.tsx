@@ -57,13 +57,14 @@ export const useThemeConfig = () => {
 export const useThemeSwitch = () => {
   const dispatch = useDispatch()
   const theme = useTheme()
-  const themeType = theme.palette.type
+  const currentTheme = theme.palette.type
   return {
-    themeType,
+    currentTheme,
     toggle: () =>
       dispatch({
         type: 'UPDATE',
-        payload: { theme: themeType === 'light' ? 'dark' : 'light' },
+        payload: { theme: currentTheme === 'light' ? 'dark' : 'light' },
       }),
+    // setLight, setDark
   }
 }
