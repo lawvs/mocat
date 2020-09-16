@@ -38,6 +38,9 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Build
+        run: yarn lerna run build-storybook
+
       - name: Lint
         run: yarn lint
 
