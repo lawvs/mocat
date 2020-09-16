@@ -7,8 +7,7 @@ import {
   Typography,
   Button,
 } from '@material-ui/core'
-import SendIcon from '@material-ui/icons/Send'
-import DeleteIcon from '@material-ui/icons/Delete'
+import { Send as SendIcon, Delete as DeleteIcon } from '@material-ui/icons'
 import type { MockEvent } from '@rabbit-mock/interceptor'
 import { SceneButton } from './scene-button'
 import { NOOP } from '../utils'
