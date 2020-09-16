@@ -1,3 +1,7 @@
 {
-  "extends": "../../tsconfig.json"
+  "compilerOptions": {
+    "outDir": "build"
+  },
+  "extends": "../../tsconfig.json",
+  "exclude": ["build", "*/__tests__/**"]
 }
