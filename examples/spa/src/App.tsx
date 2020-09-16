@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable react/display-name */
 /* eslint-disable react/react-in-jsx-scope */
 import { defineComponent, ref, computed } from 'vue'
@@ -22,9 +23,8 @@ const FetchCard = defineComponent({
     }
 
     return () => (
-      <div className="card">
+      <div class="card">
         <button onClick={getData}>{btnText.value}</button>
-        {/* @ts-ignore */}
         <textarea value={dataStr.value}></textarea>
       </div>
     )
@@ -50,9 +50,8 @@ const AxiosCard = defineComponent({
     }
 
     return () => (
-      <div className="card">
+      <div class="card">
         <button onClick={getData}>{btnText.value}</button>
-        {/* @ts-ignore */}
         <textarea value={dataStr.value}></textarea>
       </div>
     )
@@ -64,9 +63,7 @@ export const App = defineComponent({
     return () => (
       <>
         <h1>Rabbit</h1>
-        {/* @ts-ignore */}
         <FetchCard />
-        {/* @ts-ignore */}
         <AxiosCard />
       </>
     )
