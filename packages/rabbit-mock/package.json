@@ -2,7 +2,6 @@
   "name": "rabbit-mock",
   "version": "0.1.0",
   "description": "The RabbitMock",
-  "types": "build/index.d.ts",
   "main": "index.js",
   "license": "MIT",
   "sideEffects": false,
