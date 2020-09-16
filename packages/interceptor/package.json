@@ -2,9 +2,13 @@
   "name": "@rabbit-mock/interceptor",
   "version": "0.1.0",
   "description": "Interceptor for RabbitMock",
-  "main": "src/index.ts",
+  "main": "build/index.js",
   "license": "MIT",
   "sideEffects": false,
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf build"
+  },
   "dependencies": {
     "eventemitter2": "^6.4.3",
     "fetch-mock": "^9.10.4",

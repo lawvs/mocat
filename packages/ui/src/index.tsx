@@ -1,5 +1,6 @@
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
+import { eventEmitter } from '@rabbit-mock/interceptor'
 import { App } from './app'
 import { createStoreProvider, rootReducer, initialState } from './store'
 import type { State } from './store'
@@ -8,6 +9,7 @@ import type { State } from './store'
 export const create = ({ options }: { options?: Partial<State> } = {}) => {
   let isMounted = false
   const app = {
+    hook: eventEmitter,
     mount: ({ el }: { el?: string | Element } = {}) => {
       if (isMounted) {
         console.warn('App has already been mounted.')

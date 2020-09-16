@@ -8,10 +8,10 @@
     "examples/*"
   ],
   "scripts": {
-    "build": "lerna run --stream --ignore *-example build",
+    "build": "lerna run build",
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
-    "typecheck": "lerna exec --parallel --ignore eslint-config -- tsc --noEmit",
+    "typecheck": "lerna exec --parallel --ignore eslint-config -- tsc --noEmit --project .",
     "clean": "rm -rf coverage && lerna run --parallel clean",
     "test": "jest",
     "test:ci": "jest --coverage"

@@ -9,16 +9,18 @@ import {
   Divider,
   ClickAwayListener,
   Zoom,
+  IconButton,
 } from '@material-ui/core'
 import type { Theme } from '@material-ui/core/styles/createMuiTheme'
-import IconButton from '@material-ui/core/IconButton/IconButton'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import BuildIcon from '@material-ui/icons/Build'
-import LockIcon from '@material-ui/icons/Lock'
-import LockOpenIcon from '@material-ui/icons/LockOpen'
-import DarkIcon from '@material-ui/icons/Brightness4'
-import LightIcon from '@material-ui/icons/Brightness7'
+import {
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  Build as BuildIcon,
+  Lock as LockIcon,
+  LockOpen as LockOpenIcon,
+  Brightness4 as DarkIcon,
+  Brightness7 as LightIcon,
+} from '@material-ui/icons'
 
 import { useDrawer, useThemeSwitch } from '../store'
 
