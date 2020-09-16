@@ -2,7 +2,7 @@
   "name": "eslint-config",
   "version": "0.1.0",
   "private": true,
-  "description": "SLint configuration",
+  "description": "ESLint configuration",
   "author": "lawvs",
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^3.7.0",
