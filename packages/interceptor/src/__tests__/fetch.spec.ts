@@ -3,7 +3,7 @@
 import * as nodeFetch from 'node-fetch'
 
 import { setupFetch, resetFetch } from '../fetch'
-import { eventEmitter, registerNetworkRoute } from '../eventEmitter'
+import { eventEmitter, mockRoute } from '../eventEmitter'
 
 beforeAll(() => {
   if (!globalThis.fetch) {
@@ -22,7 +22,7 @@ afterAll(() => {
 
 describe('fetch', () => {
   beforeAll(() => {
-    registerNetworkRoute({ url: '/' })
+    mockRoute({ url: '/' })
   })
 
   test('should fetch works', async () => {
@@ -89,7 +89,7 @@ describe('snapshot test', () => {
   test('should register route match snapshot', () => {
     const listener = jest.fn((payload) => expect(payload).toMatchSnapshot())
     eventEmitter.on('Register/networkRoute', listener)
-    registerNetworkRoute({
+    mockRoute({
       name: 'login',
       desc: 'login api',
       url: '/api/login',
@@ -110,7 +110,7 @@ describe('snapshot test', () => {
   })
 
   test('should network before event match snapshot', async () => {
-    registerNetworkRoute({ url: '/' })
+    mockRoute({ url: '/' })
     const listener = jest.fn((payload) => expect(payload).toMatchSnapshot())
     eventEmitter.on('Run/network/before', listener)
 

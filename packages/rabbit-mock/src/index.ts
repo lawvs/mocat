@@ -17,4 +17,4 @@ export const create = ({ el = undefined, debug = false } = {}) => {
   }
 }
 
-export { registerNetworkRoute } from '@rabbit-mock/interceptor'
+export { mockRoute } from '@rabbit-mock/interceptor'

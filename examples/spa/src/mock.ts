@@ -1,8 +1,8 @@
-import { create, registerNetworkRoute } from 'rabbit-mock'
+import { create, mockRoute } from 'rabbit-mock'
 
 create({ debug: true }).mount()
 
-registerNetworkRoute({
+mockRoute({
   name: 'api',
   url: '/api',
   scenes: [

@@ -80,9 +80,7 @@ export const matchNetworkRule = (
     return url.test(targetUrl)
   })
 
-export const registerNetworkRoute = (
-  route: Omit<NetWorkRegister, 'type' | 'method'>
-) => {
+export const mockRoute = (route: Omit<NetWorkRegister, 'type' | 'method'>) => {
   const innerRoute: NetWorkRegister = {
     ...defaultRoute,
     ...route,

@@ -2,7 +2,7 @@
 // https://github.com/node-fetch/node-fetch
 import * as nodeFetch from 'node-fetch'
 
-import { eventEmitter, registerNetworkRoute } from '../eventEmitter'
+import { eventEmitter, mockRoute } from '../eventEmitter'
 import { setupXHR, resetXHR } from '../xhr'
 
 beforeAll(() => {
@@ -38,7 +38,7 @@ const xhrRequest = (url: string, method = 'GET'): Promise<XMLHttpRequest> =>
 
 describe('xhr', () => {
   beforeAll(() => {
-    registerNetworkRoute({ url: '/' })
+    mockRoute({ url: '/' })
   })
 
   test('should xhr works', async () => {
