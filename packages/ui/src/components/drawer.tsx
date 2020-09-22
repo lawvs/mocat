@@ -96,10 +96,32 @@ const ThemeSwitch = () => {
   )
 }
 
+const DrawerHeader: React.FC<{
+  pin: boolean
+  toggleDrawer: () => void
+  togglePin: () => void
+}> = ({ pin, toggleDrawer, togglePin }) => {
+  const theme = useTheme()
+  const classes = useStyles({ pin })
+
+  return (
+    <div className={classes.drawerHeader}>
+      <IconButton onClick={toggleDrawer} disabled={pin}>
+        {theme.direction !== 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+      </IconButton>
+
+      <IconButton onClick={togglePin}>
+        {pin ? <LockIcon /> : <LockOpenIcon />}
+      </IconButton>
+
+      <ThemeSwitch />
+    </div>
+  )
+}
+
 export const Drawer: React.FC = ({ children }) => {
   const { open, pin, toggleDrawer, togglePin, whenClickAway } = useDrawer()
 
-  const theme = useTheme()
   const classes = useStyles({ pin })
 
   return (
@@ -116,22 +138,11 @@ export const Drawer: React.FC = ({ children }) => {
             paper: classes.drawerPaper,
           }}
         >
-          {/* Header */}
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={toggleDrawer} disabled={pin}>
-              {theme.direction !== 'ltr' ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-
-            <IconButton onClick={togglePin}>
-              {pin ? <LockIcon /> : <LockOpenIcon />}
-            </IconButton>
-
-            <ThemeSwitch />
-          </div>
+          <DrawerHeader
+            pin={pin}
+            togglePin={togglePin}
+            toggleDrawer={toggleDrawer}
+          />
 
           <Divider />
           {children}
