@@ -40,7 +40,12 @@ const options: RollupOptions = {
     // Allow node_modules resolution, so you can use 'external' to control
     // which external modules to include in the bundle
     // https://github.com/rollup/plugins/tree/master/packages/node-resolve
-    resolve({ browser: true }),
+    resolve({
+      // for xhr-mock proxy.browser
+      browser: true,
+      // for xhr-mock dependencies url
+      preferBuiltins: false,
+    }),
     // Allow json resolution
     json(),
   ],
