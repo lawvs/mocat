@@ -9,20 +9,14 @@ import type { RollupOptions } from 'rollup'
 const options: RollupOptions = {
   input: 'src/index.ts',
   output: [
-    { file: 'build/main.cjs.js', format: 'commonjs', sourcemap: true },
     {
-      file: 'build/main.cjs.prod.js',
+      file: 'build/index.cjs.js',
       format: 'commonjs',
       sourcemap: true,
-      plugins: [
-        replace({
-          'process.env.NODE_ENV': JSON.stringify('production'),
-        }),
-      ],
     },
-    { file: 'build/main.esm.js', format: 'esm' },
+    { file: 'build/index.esm.js', format: 'esm' },
     {
-      file: 'build/main.global.js',
+      file: 'build/index.global.js',
       format: 'iife',
       name: 'RabbitMock',
     },
@@ -34,6 +28,9 @@ const options: RollupOptions = {
     // Compile TypeScript files
     typescript({
       tsconfig: './tsconfig.json',
+    }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
     commonjs(),

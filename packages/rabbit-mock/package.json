@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "The RabbitMock",
   "types": "build/index.d.ts",
-  "main": "index.js",
+  "main": "build/index.cjs.js",
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
