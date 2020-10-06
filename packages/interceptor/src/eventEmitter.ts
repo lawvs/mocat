@@ -94,6 +94,10 @@ export const mockRoute = (route: Omit<NetWorkRegister, 'type' | 'method'>) => {
   })
 }
 
+export const mockRoutes = (
+  routes: Omit<NetWorkRegister, 'type' | 'method'>[]
+) => routes.forEach((route) => mockRoute(route))
+
 // Run event
 
 export const onRun = (event: RunEvent) => {
