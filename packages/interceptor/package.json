@@ -15,7 +15,6 @@
     "xhr-mock": "^2.5.1"
   },
   "devDependencies": {
-    "@types/fetch-mock": "^7.3.2",
-    "node-fetch": "^2.6.0"
+    "@types/fetch-mock": "^7.3.2"
   }
 }
