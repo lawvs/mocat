@@ -1,0 +1,11 @@
+{
+  "name": "global-example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "browser-sync start --server --serveStatic '../../packages/rabbit-mock/build/' --watch"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.12"
+  }
+}

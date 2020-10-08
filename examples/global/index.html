@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Rabbit Mock</title>
+  </head>
+  <body>
+    <div class="card">
+      <button id="fetch-btn">Fetch</button>
+      <textarea id="fetch-textarea"></textarea>
+    </div>
+  </body>
+  <script src="index.global.js"></script>
+  <script>
+    const getData = async () =>
+      fetch('/api/data.json').then((resp) => resp.json())
+
+    const fetchBtn = document.querySelector('#fetch-btn')
+    const fetchTextarea = document.querySelector('#fetch-textarea')
+    fetchBtn.addEventListener('click', () => {
+      fetchBtn.value = 'Fetch Loading...'
+      getData()
+        .then((data) => (fetchTextarea.value = JSON.stringify(data)))
+        .then(() => (fetchBtn.value = 'Fetch Done!'))
+        .catch((error) => {
+          fetchTextarea.value = error?.stack
+          fetchBtn.value = 'Fetch Error!'
+        })
+    })
+
+    RabbitMock.create({ debug: true }).mount()
+
+    RabbitMock.mockRoute({
+      name: 'api',
+      url: '/api',
+      scenes: [
+        {
+          name: 'Alice',
+          response: {
+            username: 'Alice',
+            msg: 'fake data',
+          },
+        },
+        {
+          name: 'Bob',
+          response: {
+            username: 'Bob',
+            msg: 'fake data',
+          },
+        },
+      ],
+    })
+  </script>
+</html>
