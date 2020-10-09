@@ -15,6 +15,7 @@ import { NOOP } from '../utils'
 export const initialState = {
   theme: 'auto' as 'light' | 'dark' | 'auto',
   drawerMode: 'auto' as 'auto' | 'pin' | 'silent',
+  eventEmitter,
 }
 
 export type State = typeof initialState
@@ -79,6 +80,7 @@ export const useThemeSwitch = () => {
 
 const useEventState = <T extends keyof MockEventMap>(eventName: T) => {
   const [state, setState] = useState<MockEventMap[T][]>([])
+  const { eventEmitter } = useStore()
   useEffect(() => {
     const handler = (e: MockEventMap[T]) => setState([...state, e])
 
