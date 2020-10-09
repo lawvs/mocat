@@ -22,8 +22,8 @@ export const SceneButton: React.FC<{
 
   const options = scenes.map((scene) => scene.name)
 
-  const handleClick = () => {
-    onClick?.(scenes[selectedIndex])
+  const handleClick = (index = selectedIndex) => {
+    onClick?.(scenes[index])
   }
 
   const handleMenuItemClick = (
@@ -31,6 +31,7 @@ export const SceneButton: React.FC<{
     index: number
   ) => {
     setSelectedIndex(index)
+    handleClick(index)
     setOpen(false)
   }
 
@@ -57,7 +58,7 @@ export const SceneButton: React.FC<{
         ref={anchorRef}
         aria-label="split button"
       >
-        <Button onClick={handleClick}>{options[selectedIndex]}</Button>
+        <Button onClick={() => handleClick()}>{options[selectedIndex]}</Button>
         <Button
           color="primary"
           size="small"
