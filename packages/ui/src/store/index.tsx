@@ -104,7 +104,9 @@ export const useDrawer = () => {
       firstUpdate.current = false
       return
     }
-    setTimeout(() => setOpen(true), 0)
+    if (mode === 'auto') {
+      Promise.resolve().then(() => setOpen(true))
+    }
   }, [event])
 
   const toggleDrawer = () => !pin && setOpen(!open)
