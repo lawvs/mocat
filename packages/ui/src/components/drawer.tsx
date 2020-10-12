@@ -22,7 +22,7 @@ import {
   Brightness7 as LightIcon,
 } from '@material-ui/icons'
 
-import { useDrawer, useThemeSwitch } from '../store'
+import { useAutoResponder, useDrawer, useThemeSwitch } from '../store'
 
 const drawerWidth = 400
 
@@ -69,12 +69,13 @@ const FloatingActionButton = ({
   onClick: () => void
 }) => {
   const classes = useStyles({})
+  const { enable: autoResponseEnable } = useAutoResponder()
 
   return (
     <Zoom in={show}>
       <Fab
         className={classes.fab}
-        color="primary"
+        color={autoResponseEnable ? 'secondary' : 'primary'}
         variant="extended"
         aria-label="mock"
         onClick={onClick}

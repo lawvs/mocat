@@ -13,9 +13,14 @@ import type { MockEventMap } from '@rabbit-mock/interceptor'
 import { NOOP } from '../utils'
 
 export const initialState = {
-  theme: 'auto' as 'light' | 'dark' | 'auto',
+  theme: 'auto' as 'auto' | 'light' | 'dark',
   drawerMode: 'auto' as 'auto' | 'pin' | 'silent',
   eventEmitter,
+  autoResponder: {
+    enable: false,
+    mode: 'scene' as 'scene' | 'pass' | 'reject',
+    delay: 0, // TODO delay with auto responder
+  },
 }
 
 export type State = typeof initialState
@@ -124,5 +129,28 @@ export const useDrawer = () => {
     toggleDrawer,
     togglePin,
     whenClickAway,
+  }
+}
+
+export const useAutoResponder = () => {
+  const {
+    autoResponder: { enable, mode, delay },
+  } = useStore()
+  const dispatch = useDispatch()
+
+  return {
+    enable,
+    mode,
+    delay,
+    toggleEnable: () =>
+      dispatch({
+        type: 'UPDATE',
+        payload: { autoResponder: { enable: !enable, mode, delay } },
+      }),
+    switchMode: (newMode: State['autoResponder']['mode']) =>
+      dispatch({
+        type: 'UPDATE',
+        payload: { autoResponder: { enable, mode: newMode, delay } },
+      }),
   }
 }
