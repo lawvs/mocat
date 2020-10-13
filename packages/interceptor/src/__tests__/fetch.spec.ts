@@ -1,18 +1,7 @@
-// polyfill jest fetch
-// https://github.com/node-fetch/node-fetch
-import * as nodeFetch from 'node-fetch'
-
 import { setupFetch, resetFetch } from '../fetch'
 import { eventEmitter, mockRoute } from '../eventEmitter'
 
 beforeAll(() => {
-  if (!globalThis.fetch) {
-    ;(globalThis as any).fetch = nodeFetch
-    ;(globalThis as any).Response = nodeFetch.Response
-    ;(globalThis as any).Headers = nodeFetch.Headers
-    ;(globalThis as any).Request = nodeFetch.Request
-  }
-
   setupFetch()
 })
 

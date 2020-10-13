@@ -1,18 +1,7 @@
-// polyfill jest fetch
-// https://github.com/node-fetch/node-fetch
-import * as nodeFetch from 'node-fetch'
-
 import { eventEmitter, mockRoute } from '../eventEmitter'
 import { setupXHR, resetXHR } from '../xhr'
 
 beforeAll(() => {
-  if (!globalThis.fetch) {
-    ;(globalThis as any).fetch = nodeFetch
-    ;(globalThis as any).Response = nodeFetch.Response
-    ;(globalThis as any).Headers = nodeFetch.Headers
-    ;(globalThis as any).Request = nodeFetch.Request
-  }
-
   setupXHR()
 })
 
