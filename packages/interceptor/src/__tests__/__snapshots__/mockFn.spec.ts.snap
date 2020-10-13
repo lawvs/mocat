@@ -26,6 +26,7 @@ Array [
       },
     ],
     "target": [Function],
+    "timeStamp": 0,
     "type": "Register/asyncFn",
   },
 ]
@@ -61,9 +62,11 @@ Array [
         },
       ],
       "target": [Function],
+      "timeStamp": 0,
       "type": "Register/asyncFn",
     },
     "target": [Function],
+    "timeStamp": 0,
     "type": "Run/asyncFn/before",
   },
 ]

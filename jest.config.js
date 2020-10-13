@@ -2,6 +2,7 @@ module.exports = {
   preset: 'ts-jest',
   clearMocks: true,
   coverageDirectory: 'coverage',
+  setupFilesAfterEnv: ['<rootDir>/scripts/setupTests.ts'],
   transform: {
     '^.+\\.(ts)$': 'ts-jest',
   },

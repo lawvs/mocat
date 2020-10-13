@@ -55,10 +55,9 @@ export const registerMock = (rule: RegisterEvent) => {
   eventEmitter.emit(rule.type, rule)
 }
 
-const defaultRoute: NetWorkRegister = {
+const defaultRoute: Omit<NetWorkRegister, 'timeStamp'> = {
   type: 'Register/networkRoute',
-  method: '*',
-  url: '*',
+  url: '',
 }
 
 const networkRules: NetWorkRegister[] = []
@@ -67,8 +66,8 @@ export const matchNetworkRule = (
   targetUrl: string,
   opts: { method?: string }
 ): NetWorkRegister | undefined =>
-  networkRules.find(({ url, method }) => {
-    if (method !== '*' && opts.method !== method) {
+  networkRules.find(({ url, method: ruleMethod }) => {
+    if (ruleMethod && opts.method !== ruleMethod) {
       return
     }
     if (typeof url === 'function') {
@@ -80,23 +79,24 @@ export const matchNetworkRule = (
     return url.test(targetUrl)
   })
 
-export const mockRoute = (route: Omit<NetWorkRegister, 'type' | 'method'>) => {
+export const mockRoute = (
+  route: Omit<NetWorkRegister, 'type' | 'timeStamp'>
+) => {
   const innerRoute: NetWorkRegister = {
     ...defaultRoute,
     ...route,
     type: 'Register/networkRoute',
+    timeStamp: new Date().getTime(),
+  }
+  if (route.method) {
+    innerRoute.method = route.method.toUpperCase()
   }
   networkRules.unshift(innerRoute)
-  registerMock({
-    ...defaultRoute,
-    ...route,
-    method: innerRoute.method.toUpperCase(),
-  })
+  registerMock(innerRoute)
 }
 
-export const mockRoutes = (
-  routes: Omit<NetWorkRegister, 'type' | 'method'>[]
-) => routes.forEach((route) => mockRoute(route))
+export const mockRoutes = (routes: Parameters<typeof mockRoute>[0][]) =>
+  routes.forEach((route) => mockRoute(route))
 
 // Run event
 

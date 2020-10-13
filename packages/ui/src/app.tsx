@@ -106,8 +106,7 @@ const Mock = () => {
     <Grid container direction="column" alignItems="stretch" spacing={2}>
       {!autoResponseEnable &&
         state.map((e) => (
-          // TODO fix key
-          <Grid item key={Math.random()} xs={12}>
+          <Grid item key={e.timeStamp} xs={12}>
             <ActionCard
               event={e}
               afterHandle={() => {

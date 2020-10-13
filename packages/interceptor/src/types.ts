@@ -33,6 +33,10 @@ export interface NetworkScene {
 
 export type Scene = NetworkScene | FnScene
 
+interface Event {
+  readonly timeStamp: number
+}
+
 //#region Register Event
 
 interface Comment {
@@ -40,23 +44,23 @@ interface Comment {
   desc?: string
 }
 
-export interface NetWorkRegister extends Comment {
+export interface NetWorkRegister extends Comment, Event {
   type: 'Register/networkRoute'
   /** String or RegExp url to match against request urls */
   url: string | RegExp | ((url: string) => boolean)
-  method: LiteralUnion<
+  method?: LiteralUnion<
     'GET' | 'POST' | 'OPTIONS' | 'PUT' | 'DELETE' | 'HEAD' | 'TRACE' | 'CONNECT'
   >
   scenes?: NetworkScene[]
 }
 
-export interface AsyncFnRegister extends Comment {
+export interface AsyncFnRegister extends Comment, Event {
   type: 'Register/asyncFn'
   target: (...args: any) => Promise<any>
   scenes?: FnScene[]
 }
 
-export interface SyncFnRegister extends Comment {
+export interface SyncFnRegister extends Comment, Event {
   type: 'Register/syncFn'
   target: (...args: any) => any
   mockFn: {
@@ -74,25 +78,22 @@ export type RegisterEvent = NetWorkRegister | FnRegister
 
 //#region Run Event
 
-type ResolveScene = (result: NetworkScene) => void
-export interface NetworkBeforeEvent {
-  type: 'Run/network/before'
+interface NetworkCommon {
   requestType: 'xhr' | 'fetch'
   rule: NetWorkRegister
   request: Request
   // TODO rename to resolveScene?
-  resolve: ResolveScene
+  resolve: (result: NetworkScene) => void
   reject: (error?: any) => void
+}
+
+export interface NetworkBeforeEvent extends NetworkCommon, Event {
+  type: 'Run/network/before'
   pass: (interceptReturn?: boolean) => void
 }
 
-interface NetworkAfterCommon {
+interface NetworkAfterCommon extends NetworkCommon, Event {
   type: 'Run/network/after'
-  requestType: 'xhr' | 'fetch'
-  rule: NetWorkRegister
-  request: Request
-  resolve: ResolveScene
-  reject: (error?: any) => void
   pass: () => void
 }
 interface NetworkSuccessEvent extends NetworkAfterCommon {
@@ -104,7 +105,7 @@ interface NetworkFailureEvent extends NetworkAfterCommon {
 
 export type NetworkAfterEvent = NetworkSuccessEvent | NetworkFailureEvent
 
-export interface AsyncFnBeforeEvent {
+export interface AsyncFnBeforeEvent extends Event {
   type: 'Run/asyncFn/before'
   rule: AsyncFnRegister
   target: (...args: any) => any
@@ -113,7 +114,7 @@ export interface AsyncFnBeforeEvent {
   pass: (interceptReturn?: boolean) => void
 }
 
-interface AsyncFnAfterCommon {
+interface AsyncFnAfterCommon extends Event {
   type: 'Run/asyncFn/after'
   rule: AsyncFnRegister
   target: (...args: any) => any
@@ -132,12 +133,12 @@ interface AsyncFnFailureEvent extends AsyncFnAfterCommon {
 
 export type AsyncFnAfterEvent = AsyncFnSuccessEvent | AsyncFnFailureEvent
 
-interface SyncFnSuccessEvent {
+interface SyncFnSuccessEvent extends Event {
   type: 'Run/syncFn'
   result: unknown
 }
 
-interface SyncFnFailureEvent {
+interface SyncFnFailureEvent extends Event {
   type: 'Run/syncFn'
   error: Error
 }

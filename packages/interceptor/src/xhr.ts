@@ -68,11 +68,13 @@ export const setupXHR = () => {
           ...baseDetail,
           // id: new Date().getTime(),
           type: 'Run/network/before',
+          timeStamp: new Date().getTime(),
           pass: (intercept = false) =>
             passRequest(
               {
                 ...baseDetail,
                 type: 'Run/network/after' as const,
+                timeStamp: new Date().getTime(),
               },
               {
                 resolveResponse: withResolveResponse(resolve, resp),

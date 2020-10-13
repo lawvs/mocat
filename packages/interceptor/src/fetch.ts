@@ -48,11 +48,13 @@ export const setupFetch = () => {
           // id: new Date().getTime(),
           ...baseDetail,
           type: 'Run/network/before',
+          timeStamp: new Date().getTime(),
           pass: (intercept = false) => {
             passRequest(
               {
                 ...baseDetail,
                 type: 'Run/network/after',
+                timeStamp: new Date().getTime(),
               },
               {
                 resolveResponse: resolve,

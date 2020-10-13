@@ -2,7 +2,7 @@
 
 exports[`snapshot test should network before event match snapshot 1`] = `
 Object {
-  "method": "*",
+  "timeStamp": 0,
   "type": "Register/networkRoute",
   "url": "/",
 }
@@ -50,10 +50,11 @@ Object {
   "requestType": "fetch",
   "resolve": [Function],
   "rule": Object {
-    "method": "*",
+    "timeStamp": 0,
     "type": "Register/networkRoute",
     "url": "/",
   },
+  "timeStamp": 0,
   "type": "Run/network/before",
 }
 `;
@@ -61,7 +62,6 @@ Object {
 exports[`snapshot test should register route match snapshot 1`] = `
 Object {
   "desc": "login api",
-  "method": "*",
   "name": "login",
   "scenes": Array [
     Object {
@@ -81,6 +81,7 @@ Object {
       "status": 400,
     },
   ],
+  "timeStamp": 0,
   "type": "Register/networkRoute",
   "url": "/api/login",
 }
