@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core'
 
 import { Drawer } from './components/drawer'
-import { useMockState, useAutoResponder } from './store'
+import { useMockState, useAutoResponder, useStore } from './store'
 import { ActionCard } from './components/action-card'
 import { MaterialUI } from './theme'
 
@@ -32,6 +32,7 @@ const ToolBar = () => {
     toggleEnable,
     switchMode,
   } = useAutoResponder()
+  const { disablePass } = useStore()
 
   const responseModeBtn = ['scene', 'pass', 'reject'] as const
 
@@ -45,21 +46,23 @@ const ToolBar = () => {
         onClick={toggleEnable}
       />
       <ButtonGroup variant="contained" size="small">
-        {responseModeBtn.map((mode) => (
-          <Button
-            color={
-              autoResponseMode === mode
-                ? enable
-                  ? 'secondary'
-                  : 'primary'
-                : 'default'
-            }
-            onClick={() => switchMode(mode)}
-            key={mode}
-          >
-            {mode}
-          </Button>
-        ))}
+        {responseModeBtn
+          .filter((i) => !disablePass || i !== 'pass')
+          .map((mode) => (
+            <Button
+              color={
+                autoResponseMode === mode
+                  ? enable
+                    ? 'secondary'
+                    : 'primary'
+                  : 'default'
+              }
+              onClick={() => switchMode(mode)}
+              key={mode}
+            >
+              {mode}
+            </Button>
+          ))}
       </ButtonGroup>
     </>
   )

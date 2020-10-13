@@ -16,6 +16,7 @@ export const initialState = {
   theme: 'auto' as 'auto' | 'light' | 'dark',
   drawerMode: 'auto' as 'auto' | 'pin' | 'silent',
   eventEmitter,
+  disablePass: false,
   autoResponder: {
     enable: false,
     mode: 'scene' as 'scene' | 'pass' | 'reject',

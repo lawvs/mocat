@@ -11,6 +11,7 @@ import { Send as SendIcon, Delete as DeleteIcon } from '@material-ui/icons'
 import type { MockEvent } from '@rabbit-mock/interceptor'
 import { SceneButton } from './scene-button'
 import { NOOP } from '../utils'
+import { useStore } from '../store'
 
 const useStyles = makeStyles({
   root: {
@@ -23,6 +24,7 @@ export const ActionCard: React.FC<{
   afterHandle?: () => void
 }> = ({ event, afterHandle = NOOP }) => {
   const classes = useStyles()
+  const { disablePass } = useStore()
   const title =
     'name' in event
       ? event.name ?? 'anonymous'
@@ -55,7 +57,7 @@ export const ActionCard: React.FC<{
           ></SceneButton>
         )}
 
-        {'pass' in event && (
+        {'pass' in event && !disablePass && (
           <Button
             variant="contained"
             color="primary"
