@@ -7,9 +7,10 @@ import React, {
   useState,
   useEffect,
   useRef,
+  useCallback,
 } from 'react'
 import { eventEmitter } from '@rabbit-mock/interceptor'
-import type { MockEventMap } from '@rabbit-mock/interceptor'
+import type { MockEventMap, MockEvent } from '@rabbit-mock/interceptor'
 import { NOOP } from '../utils'
 
 export const initialState = {
@@ -89,16 +90,14 @@ const useEventState = <T extends keyof MockEventMap>(eventName: T) => {
   const { eventEmitter } = useStore()
   useEffect(() => {
     const handler = (e: MockEventMap[T]) => setState([...state, e])
-
     eventEmitter.on(eventName, handler)
     return () => {
       eventEmitter.off(eventName, handler)
     }
-  }, [state])
+  }, [state, setState, eventEmitter, eventName])
+
   return [state, setState] as const
 }
-
-export const useMockState = () => useEventState('Run/network/before')
 
 export const useDrawer = () => {
   const { drawerMode: mode } = useStore()
@@ -139,10 +138,37 @@ export const useAutoResponder = () => {
   } = useStore()
   const dispatch = useDispatch()
 
+  const eventHandler = useCallback(
+    (e: MockEvent) => {
+      if (e.type !== 'Run/network/before') {
+        throw new Error('Event type incorrect')
+      }
+      switch (mode) {
+        case 'scene':
+          if (e?.rule.scenes?.length) {
+            e?.resolve(e.rule.scenes[0])
+            break
+          }
+          e.pass()
+          break
+        case 'pass':
+          e.pass()
+          break
+        case 'reject':
+          e.reject()
+          break
+        default:
+          throw new Error('Unknown response mode! mode: ' + mode)
+      }
+    },
+    [mode]
+  )
+
   return {
     enable,
     mode,
     delay,
+    eventHandler,
     toggleEnable: () =>
       dispatch({
         type: 'UPDATE',
@@ -154,4 +180,17 @@ export const useAutoResponder = () => {
         payload: { autoResponder: { enable, mode: newMode, delay } },
       }),
   }
+}
+
+export const useMockState = () => {
+  const [state, setState] = useEventState('Run/network/before')
+  const { enable: autoResponseEnable, eventHandler } = useAutoResponder()
+
+  useEffect(() => {
+    if (autoResponseEnable && state.length) {
+      state.forEach((e) => eventHandler(e))
+      setState([])
+    }
+  }, [state, setState, autoResponseEnable, eventHandler])
+  return [state, setState] as const
 }

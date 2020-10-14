@@ -70,51 +70,19 @@ const ToolBar = () => {
 
 const Mock = () => {
   const [state, setState] = useMockState()
-  const {
-    enable: autoResponseEnable,
-    mode: autoResponseMode,
-  } = useAutoResponder()
-
-  useEffect(() => {
-    if (!autoResponseEnable || !state.length) {
-      return
-    }
-    switch (autoResponseMode) {
-      case 'scene':
-        state.forEach((e) => {
-          if (e.rule.scenes?.length) {
-            e.resolve(e.rule.scenes[0])
-            return
-          }
-          e.pass()
-        })
-        break
-      case 'pass':
-        state.forEach((e) => e.pass())
-        break
-      case 'reject':
-        state.forEach((e) => e.reject())
-        break
-      default:
-        throw new Error('Unknown response mode! mode: ' + autoResponseMode)
-    }
-    // Clear
-    setState([])
-  }, [state, autoResponseEnable])
 
   return (
     <Grid container direction="column" alignItems="stretch" spacing={2}>
-      {!autoResponseEnable &&
-        state.map((e) => (
-          <Grid item key={e.timeStamp} xs={12}>
-            <ActionCard
-              event={e}
-              afterHandle={() => {
-                setState(state.filter((i) => i !== e))
-              }}
-            ></ActionCard>
-          </Grid>
-        ))}
+      {state.map((e) => (
+        <Grid item key={e.timeStamp} xs={12}>
+          <ActionCard
+            event={e}
+            afterHandle={() => {
+              setState(state.filter((i) => i !== e))
+            }}
+          ></ActionCard>
+        </Grid>
+      ))}
     </Grid>
   )
 }
