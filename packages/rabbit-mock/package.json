@@ -5,7 +5,6 @@
   "main": "build/index.cjs.js",
   "types": "build/index.d.ts",
   "module": "build/index.esm.js",
-  "browser": "build/index.global.js",
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
