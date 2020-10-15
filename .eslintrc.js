@@ -2,7 +2,7 @@
 module.exports = {
   root: true,
   extends: ['./packages/eslint-config'],
-  ignorePatterns: ['*.js', 'packages/*/build/**/*.ts'],
+  ignorePatterns: ['*.js', 'packages/*/build/**/*.ts', 'examples/spa/**'],
   settings: {
     react: {
       version: require('react').version,

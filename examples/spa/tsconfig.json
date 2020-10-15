@@ -13,7 +13,10 @@
     "baseUrl": ".",
     "types": ["webpack-env"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      // Disable react type definitions
+      // https://github.com/microsoft/TypeScript/issues/17042
+      "react" : ["src/shims-vue.d.ts"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },

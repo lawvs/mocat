@@ -1,6 +1,3 @@
-/* eslint-disable react/no-unknown-property */
-/* eslint-disable react/display-name */
-/* eslint-disable react/react-in-jsx-scope */
 import { defineComponent, ref, computed } from 'vue'
 import axios from 'axios'
 
