@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "outDir": "build",
-    "jsx": "react"
+    "jsx": "react",
+    "types": []
   },
   "extends": "../../tsconfig.json",
   "exclude": ["build", "src/**/*.stories.tsx"]

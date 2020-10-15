@@ -99,39 +99,6 @@ const useEventState = <T extends keyof MockEventMap>(eventName: T) => {
   return [state, setState] as const
 }
 
-export const useDrawer = () => {
-  const { drawerMode: mode } = useStore()
-  const [event] = useMockState()
-  const [open, setOpen] = useState(mode === 'pin' || false)
-  const [pin, setPin] = useState(mode === 'pin' || false)
-
-  const firstUpdate = useRef(true)
-  useEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false
-      return
-    }
-    if (mode === 'auto') {
-      Promise.resolve().then(() => setOpen(true))
-    }
-  }, [event, mode])
-
-  const toggleDrawer = () => !pin && setOpen(!open)
-  const togglePin = () => setPin(!pin)
-  const whenClickAway = () => !pin && setOpen(false)
-
-  return {
-    mode,
-    open,
-    pin,
-    // setOpen,
-    // setPin,
-    toggleDrawer,
-    togglePin,
-    whenClickAway,
-  }
-}
-
 export const useAutoResponder = () => {
   const {
     autoResponder: { enable, mode, delay },
@@ -193,4 +160,45 @@ export const useMockState = () => {
     }
   }, [state, setState, autoResponseEnable, eventHandler])
   return [state, setState] as const
+}
+
+export const useDrawer = () => {
+  const { drawerMode: mode } = useStore()
+  const [event] = useMockState()
+  const { enable: autoResponderEnable } = useAutoResponder()
+  const [open, setOpen] = useState(mode === 'pin' || false)
+  const [pin, setPin] = useState(mode === 'pin' || false)
+  const timerId = useRef<ReturnType<typeof setTimeout>>()
+  const firstUpdate = useRef(true)
+  useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false
+      return
+    }
+    // open drawer automatic when event changes
+    if (mode !== 'silent' && !autoResponderEnable) {
+      clearTimeout(timerId.current)
+      setOpen(true)
+    }
+  }, [autoResponderEnable, event, mode])
+
+  const toggleDrawer = () => !pin && setOpen(!open)
+  const togglePin = () => setPin(!pin)
+  const whenClickAway = () => {
+    if (!pin) {
+      clearTimeout(timerId.current)
+      timerId.current = setTimeout(() => setOpen(false), 0)
+    }
+  }
+
+  return {
+    mode,
+    open,
+    pin,
+    // setOpen,
+    // setPin,
+    toggleDrawer,
+    togglePin,
+    whenClickAway,
+  }
 }
