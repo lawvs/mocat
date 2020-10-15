@@ -114,7 +114,7 @@ export const useDrawer = () => {
     if (mode === 'auto') {
       Promise.resolve().then(() => setOpen(true))
     }
-  }, [event])
+  }, [event, mode])
 
   const toggleDrawer = () => !pin && setOpen(!open)
   const togglePin = () => setPin(!pin)
