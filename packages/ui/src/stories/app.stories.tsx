@@ -20,6 +20,7 @@ export const Basic = () => {
     const eventName = 'Run/network/before' as const
     const e = {
       type: 'Run/network/before',
+      timeStamp: new Date().getTime(),
       requestType: 'fetch',
       rule: {
         type: 'Register/networkRoute',

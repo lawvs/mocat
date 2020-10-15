@@ -145,8 +145,8 @@ export const useAutoResponder = () => {
       }
       switch (mode) {
         case 'scene':
-          if (e?.rule.scenes?.length) {
-            e?.resolve(e.rule.scenes[0])
+          if (e.rule.scenes?.length) {
+            e.resolve(e.rule.scenes[0])
             break
           }
           e.pass()
