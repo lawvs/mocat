@@ -1,6 +1,6 @@
 import { create, mockRoute } from 'rabbit-mock'
 
-create({ debug: true }).mount()
+create({ debug: true })
 
 mockRoute({
   name: 'api',

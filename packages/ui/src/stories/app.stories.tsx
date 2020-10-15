@@ -7,16 +7,20 @@ export default {
   title: 'App',
 }
 
-export const Basic = () => {
-  const app = create()
-  const unmount = app.unmount
+export const Instance = () => {
+  let app
+  const unmount = () => app.unmount()
 
   const mount = () => {
-    action('mount')()
-    app.mount()
+    action('create')()
+    app = create()
   }
 
   const dispatch = () => {
+    if (!app) {
+      console.warn('please create app first')
+      return
+    }
     const eventName = 'Run/network/before' as const
     const e = {
       type: 'Run/network/before',
@@ -48,7 +52,7 @@ export const Basic = () => {
   return (
     <>
       <Button onClick={mount}>Create</Button>
-      <Button onClick={() => unmount()}>Unmount</Button>
+      <Button onClick={unmount}>Unmount</Button>
       <Button onClick={() => dispatch()}>Dispatch</Button>
     </>
   )
