@@ -1,4 +1,9 @@
-import { setupFetch, setupXHR, log } from '@rabbit-mock/interceptor'
+import {
+  eventEmitter,
+  setupFetch,
+  setupXHR,
+  log,
+} from '@rabbit-mock/interceptor'
 import { create as createUI } from '@rabbit-mock/ui'
 import type { UIOptions } from '@rabbit-mock/ui'
 
@@ -8,12 +13,13 @@ export interface RabbitMockOptions extends UIOptions {
 
 export const create = ({
   debug = false,
+
   ...uiOptions
 }: RabbitMockOptions = {}) => {
   if (debug) log()
   const resetFetch = setupFetch()
   const resetXHR = setupXHR()
-  const ui = createUI(uiOptions)
+  const ui = createUI({ eventEmitter, ...uiOptions })
   // eventEmitter.onAny(ui.hook.emit)
   return {
     unmount: () => {

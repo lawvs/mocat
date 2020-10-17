@@ -9,14 +9,21 @@ import React, {
   useRef,
   useCallback,
 } from 'react'
-import { eventEmitter } from '@rabbit-mock/interceptor'
-import type { MockEventMap, MockEvent } from '@rabbit-mock/interceptor'
+import { EventEmitter2 } from 'eventemitter2'
+import type {
+  MockEventEmitter,
+  MockEventMap,
+  MockEvent,
+} from '@rabbit-mock/interceptor'
 import { NOOP } from '../utils'
 
 export const initialState = {
   theme: 'auto' as 'auto' | 'light' | 'dark',
-  drawerMode: 'auto' as 'auto' | 'pin' | 'silent',
-  eventEmitter,
+  drawerMode: 'auto' as
+    | 'auto'
+    | /** Will fallback to 'auto' when click the pin btn */ 'pin'
+    | 'silent',
+  eventEmitter: new EventEmitter2() as MockEventEmitter,
   disablePass: false,
   autoResponder: {
     enable: false,
