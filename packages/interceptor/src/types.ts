@@ -78,56 +78,61 @@ export type RegisterEvent = NetWorkRegister | FnRegister
 
 //#region Run Event
 
-interface NetworkCommon {
-  requestType: 'xhr' | 'fetch'
-  rule: NetWorkRegister
-  request: Request
+interface NetworkEventBase extends Event {
+  readonly requestType: 'xhr' | 'fetch'
+  /**
+   * matched route rule
+   */
+  readonly rule: NetWorkRegister
+  readonly request: Request
   // TODO rename to resolveScene?
-  resolve: (result: NetworkScene) => void
-  reject: (error?: any) => void
+  readonly resolve: (result: NetworkScene) => void
+  /**
+   * mock offline network
+   */
+  readonly reject: (error?: any) => void
 }
 
-export interface NetworkBeforeEvent extends NetworkCommon, Event {
-  type: 'Run/network/before'
-  pass: (interceptReturn?: boolean) => void
+export interface NetworkBeforeEvent extends NetworkEventBase {
+  readonly type: 'Run/network/before'
+  readonly pass: (interceptReturn?: boolean) => void
 }
 
-interface NetworkAfterCommon extends NetworkCommon, Event {
-  type: 'Run/network/after'
-  pass: () => void
+interface NetworkAfterBase extends NetworkEventBase {
+  readonly type: 'Run/network/after'
+  readonly pass: () => void
 }
-interface NetworkSuccessEvent extends NetworkAfterCommon {
-  response: Response
+interface NetworkSuccessEvent extends NetworkAfterBase {
+  readonly response: Response
 }
-interface NetworkFailureEvent extends NetworkAfterCommon {
-  error: unknown
+interface NetworkFailureEvent extends NetworkAfterBase {
+  readonly error: unknown
 }
 
 export type NetworkAfterEvent = NetworkSuccessEvent | NetworkFailureEvent
 
-export interface AsyncFnBeforeEvent extends Event {
-  type: 'Run/asyncFn/before'
+interface AsyncFnBase extends Event {
   rule: AsyncFnRegister
   target: (...args: any) => any
   resolve: (result: any) => void
   reject: (error?: any) => void
+}
+
+export interface AsyncFnBeforeEvent extends AsyncFnBase {
+  type: 'Run/asyncFn/before'
   pass: (interceptReturn?: boolean) => void
 }
 
-interface AsyncFnAfterCommon extends Event {
+interface AsyncFnAfterBase extends AsyncFnBase {
   type: 'Run/asyncFn/after'
-  rule: AsyncFnRegister
-  target: (...args: any) => any
-  resolve: (result: any) => void
-  reject: (error?: any) => void
   pass: () => void
 }
 
-interface AsyncFnSuccessEvent extends AsyncFnAfterCommon {
+interface AsyncFnSuccessEvent extends AsyncFnAfterBase {
   result: unknown
 }
 
-interface AsyncFnFailureEvent extends AsyncFnAfterCommon {
+interface AsyncFnFailureEvent extends AsyncFnAfterBase {
   error: Error
 }
 
