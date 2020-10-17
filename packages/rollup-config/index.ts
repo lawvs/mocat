@@ -10,16 +10,12 @@ const options: RollupOptions = {
   input: 'src/index.ts',
   output: [
     {
-      file: 'build/index.cjs.js',
-      format: 'commonjs',
+      file: 'build/index.js',
+      format: 'umd',
+      name: 'RabbitMock',
       sourcemap: true,
     },
     { file: 'build/index.esm.js', format: 'esm' },
-    {
-      file: 'build/index.global.js',
-      format: 'iife',
-      name: 'RabbitMock',
-    },
   ],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
   external: [],

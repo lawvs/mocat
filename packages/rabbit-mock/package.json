@@ -2,7 +2,7 @@
   "name": "rabbit-mock",
   "version": "0.1.0",
   "description": "The RabbitMock",
-  "main": "build/index.cjs.js",
+  "main": "build/index.js",
   "types": "build/index.d.ts",
   "module": "build/index.esm.js",
   "license": "MIT",
