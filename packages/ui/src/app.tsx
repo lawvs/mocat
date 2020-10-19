@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Grid,
@@ -18,12 +18,16 @@ import { useMockState, useAutoResponder, useStore } from './store'
 import { ActionCard } from './components/action-card'
 import { MaterialUI } from './theme'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles<Theme, { deg?: number }>((theme: Theme) =>
   createStyles({
     toolBar: {
       '& > *': {
         margin: theme.spacing(0.5),
       },
+    },
+    delayBtn: {
+      transform: ({ deg = 0 }) => `rotate(${deg}deg)`,
+      transition: `transform ${theme.transitions.duration.standard}ms ease`,
     },
   })
 )
@@ -38,6 +42,8 @@ const ToolBar = () => {
     switchMode,
   } = useAutoResponder()
   const { disablePass } = useStore()
+  const [btnDeg, setBtnDeg] = useState(0)
+  const classes = useStyles({ deg: btnDeg })
 
   const responseModeBtn = ['scene', 'pass', 'reject'] as const
 
@@ -71,7 +77,11 @@ const ToolBar = () => {
       </ButtonGroup>
       <Tooltip title={delay + 'ms'} placement="top">
         <IconButton
-          onClick={toggleDelay}
+          className={classes.delayBtn}
+          onClick={() => {
+            setBtnDeg(btnDeg + 180)
+            toggleDelay()
+          }}
           size="small"
           color={enable ? 'secondary' : 'default'}
         >
@@ -102,7 +112,7 @@ const Mock = () => {
 }
 
 export const App = () => {
-  const classes = useStyles()
+  const classes = useStyles({})
   return (
     <React.StrictMode>
       <MaterialUI>
