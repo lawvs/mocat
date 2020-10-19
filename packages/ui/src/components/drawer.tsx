@@ -99,15 +99,15 @@ const ThemeSwitch = () => {
 
 const DrawerHeader: React.FC<{
   pin: boolean
-  toggleDrawer: () => void
+  closeDrawer: () => void
   togglePin: () => void
-}> = ({ pin, toggleDrawer, togglePin }) => {
+}> = ({ pin, closeDrawer, togglePin }) => {
   const theme = useTheme()
   const classes = useStyles({ pin })
 
   return (
     <div className={classes.drawerHeader}>
-      <IconButton onClick={toggleDrawer} disabled={pin}>
+      <IconButton onClick={closeDrawer} disabled={pin}>
         {theme.direction !== 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
       </IconButton>
 
@@ -121,14 +121,14 @@ const DrawerHeader: React.FC<{
 }
 
 export const Drawer: React.FC = ({ children }) => {
-  const { open, pin, toggleDrawer, togglePin, whenClickAway } = useDrawer()
+  const { open, pin, setOpen, togglePin, whenClickAway } = useDrawer()
 
   const classes = useStyles({ pin })
 
   return (
     <ClickAwayListener onClickAway={whenClickAway}>
       <Box>
-        <FloatingActionButton show={!open} onClick={toggleDrawer} />
+        <FloatingActionButton show={!open} onClick={setOpen} />
 
         <MUIDrawer
           open={open}
@@ -142,7 +142,7 @@ export const Drawer: React.FC = ({ children }) => {
           <DrawerHeader
             pin={pin}
             togglePin={togglePin}
-            toggleDrawer={toggleDrawer}
+            closeDrawer={() => setOpen(false)}
           />
 
           <Divider />

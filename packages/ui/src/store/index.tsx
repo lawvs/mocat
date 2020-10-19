@@ -6,10 +6,10 @@ import React, {
   Reducer,
   useState,
   useEffect,
-  useRef,
   useCallback,
 } from 'react'
 import { EventEmitter2 } from 'eventemitter2'
+import usePrevious from 'react-use/lib/usePrevious'
 import type {
   MockEventEmitter,
   MockEventMap,
@@ -19,10 +19,11 @@ import { NOOP } from '../utils'
 
 export const initialState = {
   theme: 'auto' as 'auto' | 'light' | 'dark',
-  drawerMode: 'auto' as
-    | 'auto'
-    | /** Will fallback to 'auto' when click the pin btn */ 'pin'
-    | 'silent',
+  drawer: {
+    /** fixed drawer */
+    pin: false,
+    open: false,
+  },
   eventEmitter: new EventEmitter2() as MockEventEmitter,
   disablePass: false,
   autoResponder: {
@@ -33,12 +34,28 @@ export const initialState = {
 }
 
 export type State = typeof initialState
-export type Action = { type: 'UPDATE'; payload: Partial<State> }
+export type Action =
+  | { type: 'UPDATE'; payload: Partial<State> }
+  | {
+      type: 'DRAWER/UPDATE'
+      payload: Partial<State['drawer']>
+    }
+  | {
+      type: 'AUTO_RESPONDER/UPDATE'
+      payload: Partial<State['autoResponder']>
+    }
 
 export const rootReducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'UPDATE':
       return { ...state, ...action.payload }
+    case 'DRAWER/UPDATE':
+      return { ...state, drawer: { ...state.drawer, ...action.payload } }
+    case 'AUTO_RESPONDER/UPDATE':
+      return {
+        ...state,
+        autoResponder: { ...state.autoResponder, ...action.payload },
+      }
     default:
       return state
   }
@@ -89,6 +106,61 @@ export const useThemeSwitch = () => {
         payload: { theme: currentTheme === 'light' ? 'dark' : 'light' },
       }),
     // setLight, setDark
+  }
+}
+
+export const useDrawer = () => {
+  const {
+    drawer: { pin, open },
+  } = useStore()
+  const dispatch = useDispatch()
+  const setOpen = useCallback(
+    (newState = true) => {
+      if (pin) {
+        return
+      }
+      // TODO other solution
+      // wait click away
+      setTimeout(
+        () =>
+          dispatch({
+            type: 'DRAWER/UPDATE',
+            payload: { open: newState },
+          }),
+        0
+      )
+    },
+    [dispatch, pin]
+  )
+
+  const setPin = useCallback(
+    (newState: boolean) =>
+      dispatch({
+        type: 'DRAWER/UPDATE',
+        payload: { pin: newState },
+      }),
+    [dispatch]
+  )
+
+  const togglePin = () => setPin(!pin)
+  const whenClickAway = useCallback(() => {
+    if (pin) {
+      return
+    }
+    dispatch({
+      type: 'DRAWER/UPDATE',
+      payload: { open: false },
+    })
+  }, [dispatch, pin])
+
+  return {
+    open: pin || open,
+    pin,
+    setOpen,
+    // setPin,
+    // toggleDrawer: () => setOpen(!open),
+    togglePin,
+    whenClickAway,
   }
 }
 
@@ -145,13 +217,13 @@ export const useAutoResponder = () => {
     eventHandler,
     toggleEnable: () =>
       dispatch({
-        type: 'UPDATE',
-        payload: { autoResponder: { enable: !enable, mode, delay } },
+        type: 'AUTO_RESPONDER/UPDATE',
+        payload: { enable: !enable },
       }),
     switchMode: (newMode: State['autoResponder']['mode']) =>
       dispatch({
-        type: 'UPDATE',
-        payload: { autoResponder: { enable, mode: newMode, delay } },
+        type: 'AUTO_RESPONDER/UPDATE',
+        payload: { mode: newMode },
       }),
   }
 }
@@ -159,53 +231,21 @@ export const useAutoResponder = () => {
 export const useMockState = () => {
   const [state, setState] = useEventState('Run/network/before')
   const { enable: autoResponseEnable, eventHandler } = useAutoResponder()
-
+  const { setOpen } = useDrawer()
+  const stateShow = autoResponseEnable ? [] : state
+  const prevLength = usePrevious(state.length) ?? 0
   useEffect(() => {
     if (autoResponseEnable && state.length) {
-      state.forEach((e) => eventHandler(e))
+      state.forEach(eventHandler)
       setState([])
     }
-  }, [state, setState, autoResponseEnable, eventHandler])
-  return [state, setState] as const
-}
+  }, [autoResponseEnable, eventHandler, setState, state])
 
-export const useDrawer = () => {
-  const { drawerMode: mode } = useStore()
-  const [event] = useMockState()
-  const { enable: autoResponderEnable } = useAutoResponder()
-  const [open, setOpen] = useState(mode === 'pin' || false)
-  const [pin, setPin] = useState(mode === 'pin' || false)
-  const timerId = useRef<ReturnType<typeof setTimeout>>()
-  const firstUpdate = useRef(true)
   useEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false
-      return
-    }
     // open drawer automatic when event changes
-    if (mode !== 'silent' && !autoResponderEnable) {
-      clearTimeout(timerId.current)
+    if (stateShow.length > prevLength) {
       setOpen(true)
     }
-  }, [autoResponderEnable, event, mode])
-
-  const toggleDrawer = () => !pin && setOpen(!open)
-  const togglePin = () => setPin(!pin)
-  const whenClickAway = () => {
-    if (!pin) {
-      clearTimeout(timerId.current)
-      timerId.current = setTimeout(() => setOpen(false), 0)
-    }
-  }
-
-  return {
-    mode,
-    open,
-    pin,
-    // setOpen,
-    // setPin,
-    toggleDrawer,
-    togglePin,
-    whenClickAway,
-  }
+  }, [prevLength, setOpen, stateShow.length])
+  return [stateShow, setState] as const
 }

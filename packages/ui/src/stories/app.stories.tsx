@@ -1,6 +1,7 @@
 import { Button } from '@storybook/react/demo'
-import React from 'react'
 import { action } from '@storybook/addon-actions'
+import React from 'react'
+import merge from 'lodash/merge'
 import { createStoreProvider, rootReducer, initialState } from '../store'
 import { App } from '../app'
 import { create } from '..'
@@ -10,10 +11,10 @@ export default {
 }
 
 export const DefaultPin = () => {
-  const StoreProvider = createStoreProvider(rootReducer, {
-    ...initialState,
-    drawerMode: 'pin',
-  })
+  const StoreProvider = createStoreProvider(
+    rootReducer,
+    merge(initialState, { drawer: { pin: true, open: true } })
+  )
 
   const dispatch = () => {
     const eventName = 'Run/network/before' as const

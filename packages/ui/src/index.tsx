@@ -1,11 +1,16 @@
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
+import merge from 'lodash/merge'
 import { App } from './app'
 import { createStoreProvider, rootReducer, initialState } from './store'
 import type { State } from './store'
 // import './service'
 
-export interface UIOptions extends Partial<State> {
+type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>
+}
+
+export interface UIOptions extends DeepPartial<State> {
   el?: string | Element
 }
 
@@ -19,10 +24,10 @@ export const create = ({ el, ...options }: UIOptions = {}) => {
     document.body.append(el)
   }
 
-  const StoreProvider = createStoreProvider(rootReducer, {
-    ...initialState,
-    ...options,
-  })
+  const StoreProvider = createStoreProvider(
+    rootReducer,
+    merge(initialState, options)
+  )
 
   render(
     <StoreProvider>
