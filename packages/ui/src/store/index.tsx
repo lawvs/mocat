@@ -189,31 +189,41 @@ export const useAutoResponder = () => {
       if (e.type !== 'Run/network/before') {
         throw new Error('Event type incorrect')
       }
+      const withDelay = (fn: (...args: any) => void) => setTimeout(fn, delay)
       switch (mode) {
         case 'scene':
           if (e.rule.scenes?.length) {
-            e.resolve(e.rule.scenes[0])
+            const scene = e.rule.scenes[0]
+            withDelay(() => e.resolve(scene))
             break
           }
-          e.pass()
+          withDelay(() => e.pass())
           break
         case 'pass':
-          e.pass()
+          withDelay(() => e.pass())
           break
         case 'reject':
-          e.reject()
+          withDelay(() => e.reject())
           break
         default:
           throw new Error('Unknown response mode! mode: ' + mode)
       }
     },
-    [mode]
+    [delay, mode]
   )
+
+  const delayScene = [100, 1000, 5000]
+  const toggleDelay = () =>
+    dispatch({
+      type: 'AUTO_RESPONDER/UPDATE',
+      payload: { delay: delayScene.find((i) => i > delay) ?? 0 },
+    })
 
   return {
     enable,
     mode,
     delay,
+    toggleDelay,
     eventHandler,
     toggleEnable: () =>
       dispatch({

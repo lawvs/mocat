@@ -5,10 +5,13 @@ import {
   Chip,
   ButtonGroup,
   Button,
+  IconButton,
+  Tooltip,
   createStyles,
   makeStyles,
   Theme,
 } from '@material-ui/core'
+import { HourglassEmpty as HourglassEmptyIcon } from '@material-ui/icons'
 
 import { Drawer } from './components/drawer'
 import { useMockState, useAutoResponder, useStore } from './store'
@@ -28,7 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
 const ToolBar = () => {
   const {
     enable,
-    mode: autoResponseMode,
+    mode,
+    delay,
+    toggleDelay,
     toggleEnable,
     switchMode,
   } = useAutoResponder()
@@ -48,22 +53,31 @@ const ToolBar = () => {
       <ButtonGroup variant="contained" size="small">
         {responseModeBtn
           .filter((i) => !disablePass || i !== 'pass')
-          .map((mode) => (
+          .map((btnMode) => (
             <Button
               color={
-                autoResponseMode === mode
+                mode === btnMode
                   ? enable
                     ? 'secondary'
                     : 'primary'
                   : 'default'
               }
-              onClick={() => switchMode(mode)}
-              key={mode}
+              onClick={() => switchMode(btnMode)}
+              key={btnMode}
             >
-              {mode}
+              {btnMode}
             </Button>
           ))}
       </ButtonGroup>
+      <Tooltip title={delay + 'ms'} placement="top">
+        <IconButton
+          onClick={toggleDelay}
+          size="small"
+          color={enable ? 'secondary' : 'default'}
+        >
+          <HourglassEmptyIcon />
+        </IconButton>
+      </Tooltip>
     </>
   )
 }
