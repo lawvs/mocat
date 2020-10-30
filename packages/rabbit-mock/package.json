@@ -11,6 +11,9 @@
     "build": "rollup --config",
     "clean": "rm -rf build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@rabbit-mock/interceptor": "^0.1.0",
     "@rabbit-mock/ui": "^0.1.0"

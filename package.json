@@ -3,33 +3,32 @@
   "version": "0.0.1",
   "private": true,
   "description": "mocking for ajax requests",
+  "keywords": [
+    "mock",
+    "mockAjax"
+  ],
+  "homepage": "https://github.com/lawvs/rabbit-mock#readme",
+  "bugs": {
+    "url": "https://github.com/lawvs/rabbit-mock/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lawvs/rabbit-mock"
+  },
+  "license": "MIT",
+  "author": "lawvs",
   "workspaces": [
     "packages/*",
     "examples/*"
   ],
   "scripts": {
     "build": "lerna run build",
+    "clean": "rm -rf coverage && lerna run --parallel clean",
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
-    "typecheck": "lerna exec --parallel --ignore eslint-config --ignore global-example -- tsc --noEmit --project .",
-    "clean": "rm -rf coverage && lerna run --parallel clean",
     "test": "jest",
-    "test:ci": "jest --coverage"
+    "typecheck": "lerna exec --parallel --ignore eslint-config --ignore global-example -- tsc --noEmit --project ."
   },
-  "keywords": [
-    "mock",
-    "mockAjax"
-  ],
-  "author": "lawvs",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lawvs/rabbit-mock"
-  },
-  "bugs": {
-    "url": "https://github.com/lawvs/rabbit-mock/issues"
-  },
-  "homepage": "https://github.com/lawvs/rabbit-mock#readme",
   "devDependencies": {
     "@types/jest": "^26.0.5",
     "@types/node": "^14.0.23",
