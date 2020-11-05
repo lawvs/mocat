@@ -124,10 +124,10 @@ export const App = () => {
     <React.StrictMode>
       <MaterialUI>
         <Drawer>
-          <Box className={classes.toolBar} p={1}>
+          <Box className={classes.toolBar} sx={{ padding: 1 }}>
             <ToolBar />
           </Box>
-          <Box display="flex" flexDirection="column" px={2}>
+          <Box sx={{ display: 'flex', paddingX: 2, flexDirection: 'column' }}>
             <Mock />
           </Box>
         </Drawer>
