@@ -66,7 +66,7 @@ const ToolBar = () => {
                   ? enable
                     ? 'secondary'
                     : 'primary'
-                  : 'default'
+                  : 'inherit'
               }
               onClick={() => switchMode(btnMode)}
               key={btnMode}
