@@ -16,7 +16,7 @@
     "@material-ui/icons": "^5.0.0-alpha.15",
     "@rabbit-mock/interceptor": "^0.1.0",
     "lodash": "^4.17.20",
-    "react": "^ 16.13.1",
+    "react": "^ 17.0.1",
     "react-dom": "^16.13.1",
     "react-use": "^15.3.4"
   },
