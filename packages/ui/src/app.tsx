@@ -90,7 +90,6 @@ const ToolBar = () => {
             toggleDelay()
           }}
           size="small"
-          color={enable ? 'secondary' : 'default'}
         >
           <HourglassEmptyIcon />
         </IconButton>
