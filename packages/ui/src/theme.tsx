@@ -14,7 +14,7 @@ export const MaterialUI: React.FC = ({ children }) => {
     () =>
       createMuiTheme({
         palette: {
-          type: themeType,
+          mode: themeType,
         },
       }),
     [themeType]

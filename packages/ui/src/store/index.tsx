@@ -97,7 +97,7 @@ export const useThemeConfig = () => {
 export const useThemeSwitch = () => {
   const dispatch = useDispatch()
   const theme = useTheme()
-  const currentTheme = theme.palette.type
+  const currentTheme = theme.palette.mode
   return {
     currentTheme,
     toggle: () =>

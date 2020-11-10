@@ -3,8 +3,8 @@ import {
   Box,
   Grid,
   Chip,
-  ButtonGroup,
-  Button,
+  ToggleButtonGroup,
+  ToggleButton,
   IconButton,
   Tooltip,
   createStyles,
@@ -47,6 +47,16 @@ const ToolBar = () => {
 
   const responseModeBtn = ['scene', 'pass', 'reject'] as const
 
+  const handleMode = (
+    event: React.MouseEvent<HTMLElement>,
+    newMode: 'scene' | 'pass' | 'reject' | null
+  ) => {
+    if (newMode === null) {
+      return
+    }
+    switchMode(newMode)
+  }
+
   return (
     <>
       <Chip
@@ -56,25 +66,22 @@ const ToolBar = () => {
         color={enable ? 'secondary' : 'default'}
         onClick={toggleEnable}
       />
-      <ButtonGroup variant="contained" size="small">
+      <ToggleButtonGroup
+        size="small"
+        exclusive
+        value={mode}
+        onChange={handleMode}
+        aria-label="auto response mode"
+      >
         {responseModeBtn
           .filter((i) => !disablePass || i !== 'pass')
           .map((btnMode) => (
-            <Button
-              color={
-                mode === btnMode
-                  ? enable
-                    ? 'secondary'
-                    : 'primary'
-                  : 'default'
-              }
-              onClick={() => switchMode(btnMode)}
-              key={btnMode}
-            >
+            <ToggleButton value={btnMode} aria-label={btnMode} key={btnMode}>
               {btnMode}
-            </Button>
+            </ToggleButton>
           ))}
-      </ButtonGroup>
+      </ToggleButtonGroup>
+
       <Tooltip title={delay + 'ms'} placement="top">
         <IconButton
           className={classes.delayBtn}
@@ -83,7 +90,6 @@ const ToolBar = () => {
             toggleDelay()
           }}
           size="small"
-          color={enable ? 'secondary' : 'default'}
         >
           <HourglassEmptyIcon />
         </IconButton>
@@ -117,10 +123,10 @@ export const App = () => {
     <React.StrictMode>
       <MaterialUI>
         <Drawer>
-          <Box className={classes.toolBar} p={1}>
+          <Box className={classes.toolBar} sx={{ padding: 1 }}>
             <ToolBar />
           </Box>
-          <Box display="flex" flexDirection="column" px={2}>
+          <Box sx={{ display: 'flex', paddingX: 2, flexDirection: 'column' }}>
             <Mock />
           </Box>
         </Drawer>
