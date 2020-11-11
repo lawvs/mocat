@@ -14,7 +14,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "devDependencies": {
+  "dependencies": {
     "@mocat/interceptor": "^0.1.0",
     "@mocat/ui": "^0.1.0"
   }
