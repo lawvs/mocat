@@ -12,7 +12,7 @@ const options: RollupOptions = {
     {
       file: 'build/index.js',
       format: 'umd',
-      name: 'RabbitMock',
+      name: 'Mocat',
       sourcemap: true,
     },
     { file: 'build/index.esm.js', format: 'esm' },

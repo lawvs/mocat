@@ -1,7 +1,7 @@
 {
-  "name": "@rabbit-mock/interceptor",
+  "name": "@mocat/interceptor",
   "version": "0.1.0",
-  "description": "Interceptor for RabbitMock",
+  "description": "Interceptor for Mocat",
   "main": "build/index.js",
   "license": "MIT",
   "sideEffects": false,

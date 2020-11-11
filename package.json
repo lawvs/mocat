@@ -1,5 +1,5 @@
 {
-  "name": "rabbit-mock",
+  "name": "mocat",
   "version": "0.0.1",
   "private": true,
   "description": "mocking for ajax requests",
@@ -7,13 +7,13 @@
     "mock",
     "mockAjax"
   ],
-  "homepage": "https://github.com/lawvs/rabbit-mock#readme",
+  "homepage": "https://github.com/lawvs/mocat#readme",
   "bugs": {
-    "url": "https://github.com/lawvs/rabbit-mock/issues"
+    "url": "https://github.com/lawvs/mocat/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lawvs/rabbit-mock"
+    "url": "git+https://github.com/lawvs/mocat"
   },
   "license": "MIT",
   "author": "lawvs",

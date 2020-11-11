@@ -1,7 +1,7 @@
 {
-  "name": "@rabbit-mock/ui",
+  "name": "@mocat/ui",
   "version": "0.1.0",
-  "description": "User Interface for RabbitMock",
+  "description": "User Interface for Mocat",
   "main": "build/index.js",
   "license": "MIT",
   "sideEffects": false,
@@ -14,7 +14,7 @@
   "dependencies": {
     "@material-ui/core": "^5.0.0-alpha.15",
     "@material-ui/icons": "^5.0.0-alpha.15",
-    "@rabbit-mock/interceptor": "^0.1.0",
+    "@mocat/interceptor": "^0.1.0",
     "lodash": "^4.17.20",
     "react": "^ 17.0.1",
     "react-dom": "^16.13.1",
