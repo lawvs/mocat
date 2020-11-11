@@ -1,11 +1,6 @@
-import {
-  eventEmitter,
-  setupFetch,
-  setupXHR,
-  log,
-} from '@rabbit-mock/interceptor'
-import { create as createUI } from '@rabbit-mock/ui'
-import type { UIOptions } from '@rabbit-mock/ui'
+import { eventEmitter, setupFetch, setupXHR, log } from '@mocat/interceptor'
+import { create as createUI } from '@mocat/ui'
+import type { UIOptions } from '@mocat/ui'
 
 export interface RabbitMockOptions extends UIOptions {
   debug?: boolean
@@ -30,4 +25,4 @@ export const create = ({
   }
 }
 
-export { mockRoute, mockRoutes } from '@rabbit-mock/interceptor'
+export { mockRoute, mockRoutes } from '@mocat/interceptor'

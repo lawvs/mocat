@@ -30,9 +30,9 @@
         })
     })
 
-    RabbitMock.create({ debug: true })
+    Mocat.create({ debug: true })
 
-    RabbitMock.mockRoute({
+    Mocat.mockRoute({
       name: 'api',
       url: '/api',
       scenes: [

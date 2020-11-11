@@ -1,7 +1,7 @@
 {
-  "name": "rabbit-mock",
+  "name": "mocat",
   "version": "0.1.0",
-  "description": "The RabbitMock",
+  "description": "The Mocat",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "module": "build/index.esm.js",
@@ -14,8 +14,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@rabbit-mock/interceptor": "^0.1.0",
-    "@rabbit-mock/ui": "^0.1.0"
+  "devDependencies": {
+    "@mocat/interceptor": "^0.1.0",
+    "@mocat/ui": "^0.1.0"
   }
 }

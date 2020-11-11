@@ -14,7 +14,7 @@ import type {
   MockEventEmitter,
   MockEventMap,
   MockEvent,
-} from '@rabbit-mock/interceptor'
+} from '@mocat/interceptor'
 import { NOOP } from '../utils'
 
 export const initialState = {

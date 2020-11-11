@@ -1,4 +1,4 @@
-import { create, mockRoute } from 'rabbit-mock'
+import { create, mockRoute } from 'mocat'
 
 create({ debug: true })
 
