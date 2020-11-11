@@ -2,6 +2,8 @@
 
 ![CI](https://github.com/lawvs/mocat/workflows/CI/badge.svg)
 
+![demo](https://user-images.githubusercontent.com/18554747/98848902-bd531d80-2495-11eb-8ce9-bbb29eea46d7.gif)
+
 ## Installation
 
 To install and save in your package.json dev dependencies, run:
