@@ -2,15 +2,11 @@ import { eventEmitter, setupFetch, setupXHR, log } from '@mocat/interceptor'
 import { create as createUI } from '@mocat/ui'
 import type { UIOptions } from '@mocat/ui'
 
-export interface RabbitMockOptions extends UIOptions {
+export interface MocatOptions extends UIOptions {
   debug?: boolean
 }
 
-export const create = ({
-  debug = false,
-
-  ...uiOptions
-}: RabbitMockOptions = {}) => {
+export const create = ({ debug = false, ...uiOptions }: MocatOptions = {}) => {
   if (debug) log()
   const resetFetch = setupFetch()
   const resetXHR = setupXHR()
