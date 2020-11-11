@@ -9,6 +9,9 @@
     "build": "tsc",
     "clean": "rm -rf build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "eventemitter2": "^6.4.3",
     "fetch-mock": "^9.10.4",

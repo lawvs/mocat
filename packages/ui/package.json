@@ -11,6 +11,9 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@material-ui/core": "^5.0.0-alpha.15",
     "@material-ui/icons": "^5.0.0-alpha.15",
