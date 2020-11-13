@@ -1,6 +1,5 @@
 {
   "name": "mocat",
-  "version": "0.0.1",
   "private": true,
   "description": "mocking for ajax requests",
   "keywords": [
@@ -27,6 +26,9 @@
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
     "test": "jest",
+    "server-examples": "lerna run dev --parallel --scope *-example",
+    "test:e2e": "cypress run",
+    "test:e2e-ci": "start-server-and-test server-examples '3001|3002' test:e2e",
     "typecheck": "lerna exec --parallel --ignore eslint-config --ignore global-example -- tsc --noEmit --project ."
   },
   "devDependencies": {
@@ -36,5 +38,9 @@
     "lerna": "^3.22.1",
     "ts-jest": "^26.1.3",
     "typescript": "^4.0.2"
+  },
+  "optionalDependencies": {
+    "cypress": "^5.6.0",
+    "start-server-and-test": "^1.11.5"
   }
 }

@@ -81,7 +81,7 @@ const FloatingActionButton = ({
         onClick={onClick}
       >
         <BuildIcon className={classes.fabExtendedIcon} />
-        Mock
+        Mocat
       </Fab>
     </Zoom>
   )

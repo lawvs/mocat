@@ -1,4 +1,4 @@
-name: CI
+name: Storybook
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  build:
+  story-book:
     strategy:
       matrix:
         node-version: [14.x]
@@ -30,26 +30,5 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Lint
-        run: yarn lint
-
-      - name: Type check
-        run: yarn typecheck
-
-      - name: Test
-        run: yarn test --coverage
-
-      - name: Test E2E
-        run: yarn test:e2e-ci
-        env:
-          WAIT_ON_TIMEOUT: 60000 # 60s
-
-      - name: Upload artifacts
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: cypress
-          path: |
-            cypress/images
-            cypress/videos
-          if-no-files-found: ignore
+      - name: Build storybook
+        run: yarn lerna run build-storybook
