@@ -79,6 +79,10 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+# Cypress files
+cypress/videos
+cypress/screenshots
+
 # Generated files
 build
 dist
