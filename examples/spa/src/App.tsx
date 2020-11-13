@@ -22,7 +22,7 @@ const FetchCard = defineComponent({
     return () => (
       <div class="card">
         <button onClick={getData}>{btnText.value}</button>
-        <textarea value={dataStr.value}></textarea>
+        <textarea data-testid="fetch-textarea" value={dataStr.value}></textarea>
       </div>
     )
   },
