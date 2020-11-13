@@ -3,8 +3,8 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "dev": "browser-sync start --server --serveStatic ./node_modules/mocat/build/ --watch",
-    "build": "mkdir -p dist && cp -r index.html api ./node_modules/mocat/build/index.js dist",
+    "dev": "browser-sync start --server --serveStatic '../../node_modules/mocat/build/' --no-open --watch --port 3001",
+    "build": "mkdir -p dist && cp -r index.html api ../../node_modules/mocat/build/index.js dist",
     "clean": "rm -rf dist"
   },
   "devDependencies": {

@@ -59,7 +59,7 @@ export const App = defineComponent({
   setup() {
     return () => (
       <>
-        <h1>Rabbit</h1>
+        <h1>Mocat</h1>
         <FetchCard />
         <AxiosCard />
       </>
