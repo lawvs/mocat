@@ -20,7 +20,7 @@ export const create = ({ el, ...options }: UIOptions = {}) => {
   }
   if (!el) {
     el = document.createElement('div')
-    el.id = 'rabbit-hole'
+    el.id = 'mocat-root'
     document.body.append(el)
   }
 
