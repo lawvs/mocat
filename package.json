@@ -25,12 +25,10 @@
     "clean": "rm -rf coverage && lerna run --parallel clean",
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
+    "test": "jest",
     "server-examples": "lerna run dev --parallel --scope *-example",
-    "cy:run": "cypress run",
-    "cy:ci": "start-server-and-test server-examples '3001|3002' cy:run",
-    "test:jest": "jest",
-    "test": "yarn test:jest && yarn test:cy",
-    "test:ci": "yarn test:jest --coverage && yarn cy:ci",
+    "test:e2e": "cypress run",
+    "test:e2e-ci": "start-server-and-test server-examples '3001|3002' test:e2e",
     "typecheck": "lerna exec --parallel --ignore eslint-config --ignore global-example -- tsc --noEmit --project ."
   },
   "devDependencies": {
