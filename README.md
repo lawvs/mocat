@@ -1,6 +1,9 @@
 # Mocat
 
 ![CI](https://github.com/lawvs/mocat/workflows/CI/badge.svg)
+[![npm](https://img.shields.io/npm/v/mocat)](https://www.npmjs.com/package/mocat)
+
+Mocat is a development toolbar for mock. It allows you interactively develop and test network request. This library is inspired by [cypress](https://github.com/cypress-io/cypress).
 
 ![demo](https://user-images.githubusercontent.com/18554747/98848902-bd531d80-2495-11eb-8ce9-bbb29eea46d7.gif)
 
