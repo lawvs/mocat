@@ -1,17 +1,20 @@
 import React from 'react'
 import {
   makeStyles,
+  Box,
   Card,
   CardContent,
   CardActions,
   Typography,
+  IconButton,
   Button,
+  Tooltip,
 } from '@material-ui/core'
 import { Send as SendIcon, Delete as DeleteIcon } from '@material-ui/icons'
 import type { MockEvent } from '@mocat/interceptor'
-import { SceneButton } from './scene-button'
 import { NOOP } from '../utils'
 import { useStore } from '../store'
+import type { Scene } from '@mocat/interceptor'
 
 const useStyles = makeStyles({
   root: {
@@ -37,7 +40,41 @@ export const ActionCard: React.FC<{
   return (
     <Card className={classes.root} elevation={3}>
       <CardContent>
-        <Typography color="textSecondary">{event.type}</Typography>
+        <Box sx={{ display: 'flex', 'justify-content': 'space-between' }}>
+          <Typography color="textSecondary">{event.type}</Typography>
+
+          <Box>
+            {'pass' in event && !disablePass && (
+              <Tooltip title="pass" placement="top">
+                <IconButton
+                  aria-label="pass"
+                  size="small"
+                  onClick={() => {
+                    event.pass()
+                    afterHandle()
+                  }}
+                >
+                  <SendIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )}
+            {'reject' in event && (
+              <Tooltip title="reject" placement="top">
+                <IconButton
+                  aria-label="reject"
+                  size="small"
+                  onClick={() => {
+                    event.reject()
+                    afterHandle()
+                  }}
+                >
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )}
+          </Box>
+        </Box>
+
         <Typography variant="h5" component="h2" noWrap>
           {title}
         </Typography>
@@ -47,43 +84,22 @@ export const ActionCard: React.FC<{
       </CardContent>
 
       <CardActions>
-        {'rule' in event && event.rule.scenes && (
-          <SceneButton
-            scenes={event.rule.scenes}
-            onClick={(scene) => {
-              event.resolve(scene)
-              afterHandle()
-            }}
-          ></SceneButton>
-        )}
-
-        {'pass' in event && !disablePass && (
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<SendIcon />}
-            onClick={() => {
-              event.pass()
-              afterHandle()
-            }}
-          >
-            Pass
-          </Button>
-        )}
-
-        {'reject' in event && (
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<DeleteIcon />}
-            onClick={() => {
-              event.reject()
-              afterHandle()
-            }}
-          >
-            Reject
-          </Button>
-        )}
+        {'rule' in event &&
+          event.rule.scenes &&
+          (event.rule.scenes as Scene[]).map((scene) => (
+            <Tooltip title={scene.desc ?? ''} placement="top" key={scene.name}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  event.resolve(scene)
+                  afterHandle()
+                }}
+              >
+                {scene.name}
+              </Button>
+            </Tooltip>
+          ))}
       </CardActions>
     </Card>
   )
