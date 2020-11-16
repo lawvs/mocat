@@ -19,15 +19,19 @@ export default {
         scenes: [
           {
             name: 'scene 1',
-            desc: 'desc',
+            desc: 'desc1',
             status: 200,
             response: { data: 'success' },
           },
           {
             name: 'scene 2',
-            desc: 'desc',
+            desc: 'desc2',
             status: 400,
             response: { data: 'error' },
+          },
+          {
+            name: 'scene 3 without desc',
+            response: { data: 'success' },
           },
         ],
       },

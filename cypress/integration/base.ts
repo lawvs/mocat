@@ -51,7 +51,7 @@ export const baseTest = (target: { name: string; url: string }) =>
       }).as('api')
 
       getFetchBtn().click()
-      getFromMocat('button').contains('Pass').click()
+      getFromMocat('[data-testid=SendIcon]').click()
       cy.wait('@api')
       getFetchTextarea().should('contain.value', 'real data')
     })
@@ -62,7 +62,7 @@ export const baseTest = (target: { name: string; url: string }) =>
       })
 
       getFetchBtn().click()
-      cy.contains('Reject').click()
+      getFromMocat('[data-testid=DeleteIcon]').click()
       getFetchTextarea().should('contain.value', 'TypeError: Failed to fetch')
     })
   })
