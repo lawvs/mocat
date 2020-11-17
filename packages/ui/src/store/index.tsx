@@ -29,7 +29,7 @@ export const initialState = {
   autoResponder: {
     enable: false,
     mode: 'scene' as 'scene' | 'pass' | 'reject',
-    delay: 0, // TODO delay with auto responder
+    delay: 0,
   },
 }
 
@@ -116,9 +116,6 @@ export const useDrawer = () => {
   const dispatch = useDispatch()
   const setOpen = useCallback(
     (newState = true) => {
-      if (pin) {
-        return
-      }
       // TODO other solution
       // wait click away
       setTimeout(
@@ -130,7 +127,7 @@ export const useDrawer = () => {
         0
       )
     },
-    [dispatch, pin]
+    [dispatch]
   )
 
   const setPin = useCallback(
@@ -154,7 +151,7 @@ export const useDrawer = () => {
   }, [dispatch, pin])
 
   return {
-    open: pin || open,
+    open,
     pin,
     setOpen,
     // setPin,
@@ -241,7 +238,7 @@ export const useAutoResponder = () => {
 export const useMockState = () => {
   const [state, setState] = useEventState('Run/network/before')
   const { enable: autoResponseEnable, eventHandler } = useAutoResponder()
-  const { setOpen } = useDrawer()
+  const { setOpen, pin } = useDrawer()
   const stateShow = autoResponseEnable ? [] : state
   const prevLength = usePrevious(state.length) ?? 0
   useEffect(() => {
@@ -253,10 +250,10 @@ export const useMockState = () => {
 
   useEffect(() => {
     // open drawer automatic when event changes
-    if (stateShow.length > prevLength) {
+    if (stateShow.length > prevLength && !pin) {
       setOpen(true)
     }
-  }, [prevLength, setOpen, stateShow.length])
+  }, [pin, prevLength, setOpen, stateShow.length])
   return [stateShow, setState] as const
 }
 

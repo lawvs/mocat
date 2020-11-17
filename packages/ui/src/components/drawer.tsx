@@ -116,7 +116,7 @@ const DrawerHeader: React.FC<{
 
   return (
     <div className={classes.drawerHeader}>
-      <IconButton onClick={closeDrawer} disabled={pin}>
+      <IconButton onClick={closeDrawer}>
         {theme.direction !== 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
       </IconButton>
 
@@ -137,7 +137,7 @@ export const Drawer: React.FC = ({ children }) => {
   return (
     <ClickAwayListener onClickAway={whenClickAway}>
       <Box>
-        <FloatingActionButton show={!open} onClick={() => setOpen(true)} />
+        <FloatingActionButton show={!open} onClick={() => setOpen()} />
 
         <MUIDrawer
           open={open}
