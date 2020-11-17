@@ -5,6 +5,7 @@ import {
   createStyles,
   Box,
   Fab,
+  Badge,
   Drawer as MUIDrawer,
   Divider,
   ClickAwayListener,
@@ -22,7 +23,12 @@ import {
   Brightness7 as LightIcon,
 } from '@material-ui/icons'
 
-import { useAutoResponder, useDrawer, useThemeSwitch } from '../store'
+import {
+  useAutoResponder,
+  useDrawer,
+  useMockEventLength,
+  useThemeSwitch,
+} from '../store'
 
 const drawerWidth = 400
 
@@ -70,6 +76,7 @@ const FloatingActionButton = ({
 }) => {
   const classes = useStyles({})
   const { enable: autoResponseEnable } = useAutoResponder()
+  const eventCnt = useMockEventLength()
 
   return (
     <Zoom in={show}>
@@ -80,7 +87,9 @@ const FloatingActionButton = ({
         aria-label="mock"
         onClick={onClick}
       >
-        <BuildIcon className={classes.fabExtendedIcon} />
+        <Badge badgeContent={eventCnt} color="secondary">
+          <BuildIcon className={classes.fabExtendedIcon} />
+        </Badge>
         Mocat
       </Fab>
     </Zoom>
@@ -128,7 +137,7 @@ export const Drawer: React.FC = ({ children }) => {
   return (
     <ClickAwayListener onClickAway={whenClickAway}>
       <Box>
-        <FloatingActionButton show={!open} onClick={setOpen} />
+        <FloatingActionButton show={!open} onClick={() => setOpen(true)} />
 
         <MUIDrawer
           open={open}

@@ -259,3 +259,5 @@ export const useMockState = () => {
   }, [prevLength, setOpen, stateShow.length])
   return [stateShow, setState] as const
 }
+
+export const useMockEventLength = () => useMockState()[0].length
