@@ -44,11 +44,11 @@ const useStyles = makeStyles<Theme, { pin?: boolean }>((theme: Theme) =>
     },
     drawer: {
       width: drawerWidth,
+      'max-width': '100vw',
       flexShrink: 0,
     },
     drawerPaper: {
       'overflow-x': 'hidden',
-      width: drawerWidth,
     },
     drawerHeader: {
       display: 'flex',

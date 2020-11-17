@@ -17,8 +17,12 @@ import { useStore } from '../store'
 import type { Scene } from '@mocat/interceptor'
 
 const useStyles = makeStyles({
-  root: {
-    // maxWidth: 345,
+  cardActions: {
+    flexWrap: 'wrap',
+    padding: -4,
+    '& > *': {
+      margin: 4,
+    },
   },
 })
 
@@ -38,9 +42,9 @@ export const ActionCard: React.FC<{
     'desc' in event ? event.name : 'rule' in event && event.rule.desc
 
   return (
-    <Card className={classes.root} elevation={3}>
+    <Card elevation={3}>
       <CardContent>
-        <Box sx={{ display: 'flex', 'justify-content': 'space-between' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography color="textSecondary">{event.type}</Typography>
 
           <Box>
@@ -83,7 +87,7 @@ export const ActionCard: React.FC<{
         </Typography>
       </CardContent>
 
-      <CardActions>
+      <CardActions className={classes.cardActions} disableSpacing>
         {'rule' in event &&
           event.rule.scenes &&
           (event.rule.scenes as Scene[]).map((scene) => (
