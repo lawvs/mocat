@@ -6,6 +6,7 @@ import type {
   RegisterEvent,
   RunEvent,
   NetWorkRegister,
+  MockRoute,
 } from './types'
 
 export interface MockEventEmitter {
@@ -79,9 +80,7 @@ export const matchNetworkRule = (
     return url.test(targetUrl)
   })
 
-export const mockRoute = (
-  route: Omit<NetWorkRegister, 'type' | 'timeStamp'>
-) => {
+export const mockRoute = (route: MockRoute) => {
   const innerRoute: NetWorkRegister = {
     ...defaultRoute,
     ...route,
@@ -95,7 +94,7 @@ export const mockRoute = (
   registerMock(innerRoute)
 }
 
-export const mockRoutes = (routes: Parameters<typeof mockRoute>[0][]) =>
+export const mockRoutes = (routes: MockRoute[]) =>
   routes.forEach((route) => mockRoute(route))
 
 // Run event

@@ -22,3 +22,4 @@ export const create = ({ debug = false, ...uiOptions }: MocatOptions = {}) => {
 }
 
 export { mockRoute, mockRoutes } from '@mocat/interceptor'
+export type { MockRoute } from '@mocat/interceptor'

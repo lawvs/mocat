@@ -25,8 +25,15 @@ yarn add --dev mocat
 import { create, mockRoute } from 'mocat'
 
 mockRoute({
+  // Describe the name of API
   name: 'api',
+  // Describe the API (optional)
+  // desc: '',
+  // Specify the URL to match
   url: '/api',
+  // Specify the HTTP method to match on (optional)
+  // method: 'GET',
+  // Create scene
   scenes: [
     {
       name: 'Alice',

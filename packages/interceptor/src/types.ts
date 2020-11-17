@@ -44,14 +44,25 @@ interface Comment {
   desc?: string
 }
 
-export interface NetWorkRegister extends Comment, Event {
-  type: 'Register/networkRoute'
-  /** String or RegExp url to match against request urls */
+export interface MockRoute extends Comment {
+  /**
+   * Match against the full request URL.
+   * If a string is passed, it will be used as a substring match,
+   * not an equality match.
+   */
   url: string | RegExp | ((url: string) => boolean)
+  /**
+   * Match against the request's HTTP method.
+   * All methods are matched by default.
+   */
   method?: LiteralUnion<
     'GET' | 'POST' | 'OPTIONS' | 'PUT' | 'DELETE' | 'HEAD' | 'TRACE' | 'CONNECT'
   >
   scenes?: NetworkScene[]
+}
+
+export interface NetWorkRegister extends MockRoute, Event {
+  type: 'Register/networkRoute'
 }
 
 export interface AsyncFnRegister extends Comment, Event {
