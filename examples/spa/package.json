@@ -1,6 +1,6 @@
 {
   "name": "vue-spa-example",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
@@ -17,7 +17,7 @@
     "@vue/cli-plugin-typescript": "~4.5.4",
     "@vue/cli-service": "~4.5.4",
     "@vue/compiler-sfc": "^3.0.0-0",
-    "mocat": "^0.2.0",
+    "mocat": "^0.2.1",
     "typescript": "^4.0.2"
   }
 }
