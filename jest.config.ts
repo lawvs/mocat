@@ -1,8 +1,6 @@
-/**
- * @type {import('@jest/types').Config.InitialOptions}
- * See https://jestjs.io/docs/en/configuration
- */
-const jestConfig = {
+import type { Config } from '@jest/types'
+
+const config: Config.InitialOptions = {
   preset: 'ts-jest',
   clearMocks: true,
   coverageDirectory: 'coverage',
@@ -16,4 +14,4 @@ const jestConfig = {
   collectCoverageFrom: ['./packages/**/src/*.ts'],
 }
 
-module.exports = jestConfig
+export default config
