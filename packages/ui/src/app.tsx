@@ -58,7 +58,7 @@ const ToolBar = () => {
   }
 
   return (
-    <>
+    <Box className={classes.toolBar} sx={{ padding: 1, whiteSpace: 'nowrap' }}>
       <Chip
         label="Auto Response"
         clickable
@@ -94,7 +94,7 @@ const ToolBar = () => {
           <HourglassEmptyIcon />
         </IconButton>
       </Tooltip>
-    </>
+    </Box>
   )
 }
 
@@ -118,14 +118,11 @@ const Mock = () => {
 }
 
 export const App = () => {
-  const classes = useStyles({})
   return (
     <React.StrictMode>
       <MaterialUI>
         <Drawer>
-          <Box className={classes.toolBar} sx={{ padding: 1 }}>
-            <ToolBar />
-          </Box>
+          <ToolBar />
           <Box sx={{ display: 'flex', paddingX: 2, flexDirection: 'column' }}>
             <Mock />
           </Box>
