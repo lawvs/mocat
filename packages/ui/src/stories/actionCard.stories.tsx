@@ -1,7 +1,7 @@
 import React from 'react'
 import { action } from '@storybook/addon-actions'
 import type { Story } from '@storybook/react/types-6-0'
-import { ActionCard } from '../components/action-card'
+import { ActionCard } from '../components/actionCard'
 
 export default {
   title: 'ActionCard',
