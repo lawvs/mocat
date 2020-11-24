@@ -4,17 +4,12 @@ import React, {
   useReducer,
   useContext,
   Reducer,
-  useState,
   useEffect,
   useCallback,
 } from 'react'
 import { EventEmitter2 } from 'eventemitter2'
 import usePrevious from 'react-use/lib/usePrevious'
-import type {
-  MockEventEmitter,
-  MockEventMap,
-  MockEvent,
-} from '@mocat/interceptor'
+import type { MockEventEmitter, MockEvent } from '@mocat/interceptor'
 import { NOOP } from '../utils'
 
 export const initialState = {
@@ -31,6 +26,7 @@ export const initialState = {
     mode: 'scene' as 'scene' | 'pass' | 'reject',
     delay: 0,
   },
+  mockEvent: [] as MockEvent[],
 }
 
 export type State = typeof initialState
@@ -44,6 +40,7 @@ export type Action =
       type: 'AUTO_RESPONDER/UPDATE'
       payload: Partial<State['autoResponder']>
     }
+  | { type: 'NETWORK_EVENT/UPDATE'; payload: State['mockEvent'] }
 
 export const rootReducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -55,6 +52,11 @@ export const rootReducer = (state: State, action: Action) => {
       return {
         ...state,
         autoResponder: { ...state.autoResponder, ...action.payload },
+      }
+    case 'NETWORK_EVENT/UPDATE':
+      return {
+        ...state,
+        mockEvent: action.payload,
       }
     default:
       return state
@@ -161,11 +163,17 @@ export const useDrawer = () => {
   }
 }
 
-const useEventState = <T extends keyof MockEventMap>(eventName: T) => {
-  const [state, setState] = useState<MockEventMap[T][]>([])
+const useEventState = <T extends MockEvent['type']>(eventName: T) => {
+  const { mockEvent: state } = useStore()
+  const dispatch = useDispatch()
+  const setState = useCallback(
+    (payload: MockEvent[]) =>
+      dispatch({ type: 'NETWORK_EVENT/UPDATE', payload }),
+    [dispatch]
+  )
   const { eventEmitter } = useStore()
   useEffect(() => {
-    const handler = (e: MockEventMap[T]) => setState([...state, e])
+    const handler = (e: MockEvent) => setState([...state, e])
     eventEmitter.on(eventName, handler)
     return () => {
       eventEmitter.off(eventName, handler)
