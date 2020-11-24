@@ -16,7 +16,7 @@ import { HourglassEmpty as HourglassEmptyIcon } from '@material-ui/icons'
 import { Drawer } from './components/drawer'
 import { useMockState, useAutoResponder, useStore } from './store'
 import { ActionCard } from './components/actionCard'
-import { MaterialUI } from './theme'
+import { MaterialUI } from './store/theme'
 
 const useStyles = makeStyles<Theme, { deg?: number }>((theme: Theme) =>
   createStyles({
