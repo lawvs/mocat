@@ -3,8 +3,10 @@
  * Workaround for [Microsoft/TypeScript#29729](https://github.com/microsoft/typescript/issues/29729).
  *
  * See https://github.com/sindresorhus/type-fest/blob/master/source/literal-union.d.ts
+ *
+ * @internal
  */
-export type LiteralUnion<T extends U, U = string> = T | (U & { _?: never })
+type LiteralUnion<T extends U, U = string> = T | (U & { _?: never })
 
 // Scene
 
@@ -113,10 +115,10 @@ interface NetworkAfterBase extends NetworkEventBase {
   readonly type: 'Run/network/after'
   readonly pass: () => void
 }
-interface NetworkSuccessEvent extends NetworkAfterBase {
+export interface NetworkSuccessEvent extends NetworkAfterBase {
   readonly response: Response
 }
-interface NetworkFailureEvent extends NetworkAfterBase {
+export interface NetworkFailureEvent extends NetworkAfterBase {
   readonly error: unknown
 }
 
@@ -139,22 +141,22 @@ interface AsyncFnAfterBase extends AsyncFnBase {
   pass: () => void
 }
 
-interface AsyncFnSuccessEvent extends AsyncFnAfterBase {
+export interface AsyncFnSuccessEvent extends AsyncFnAfterBase {
   result: unknown
 }
 
-interface AsyncFnFailureEvent extends AsyncFnAfterBase {
+export interface AsyncFnFailureEvent extends AsyncFnAfterBase {
   error: Error
 }
 
 export type AsyncFnAfterEvent = AsyncFnSuccessEvent | AsyncFnFailureEvent
 
-interface SyncFnSuccessEvent extends Event {
+export interface SyncFnSuccessEvent extends Event {
   type: 'Run/syncFn'
   result: unknown
 }
 
-interface SyncFnFailureEvent extends Event {
+export interface SyncFnFailureEvent extends Event {
   type: 'Run/syncFn'
   error: Error
 }
@@ -166,7 +168,7 @@ export type RunEvent =
   | NetworkAfterEvent
   | AsyncFnBeforeEvent
   | AsyncFnAfterEvent
-  | SyncFnEvent
+// | SyncFnEvent
 
 //#endregion
 
