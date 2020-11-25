@@ -28,11 +28,12 @@
     "server-examples": "lerna run dev --parallel --scope *-example",
     "test:e2e": "cypress run",
     "test:e2e-ci": "start-server-and-test server-examples '3001|3002' test:e2e",
-    "typecheck": "lerna exec --parallel --ignore eslint-config --ignore global-example -- tsc --noEmit --project ."
+    "typecheck": "lerna exec --parallel --ignore @mocat/eslint-config --ignore global-example -- tsc --noEmit --project ."
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
     "@types/node": "^14.0.23",
+    "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.6.3",
     "lerna": "^3.22.1",
     "ts-jest": "^26.1.3",

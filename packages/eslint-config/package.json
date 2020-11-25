@@ -1,5 +1,5 @@
 {
-  "name": "eslint-config",
+  "name": "@mocat/eslint-config",
   "version": "0.2.1",
   "private": true,
   "description": "ESLint configuration",
@@ -8,7 +8,7 @@
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
     "eslint": "^7.14.0",
-    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
