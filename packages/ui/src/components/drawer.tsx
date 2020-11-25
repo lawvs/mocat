@@ -46,13 +46,11 @@ const useStyles = makeStyles<Theme, { marginBody?: boolean }>(
     fabExtendedIcon: {
       marginRight: theme.spacing(1),
     },
-    drawer: {
-      width: drawerWidth,
-      'max-width': '100vw',
-      flexShrink: 0,
-    },
     drawerPaper: {
-      'overflow-x': 'hidden',
+      overflowX: 'hidden',
+      width: drawerWidth,
+      maxWidth: '100vw',
+      flexShrink: 0,
     },
     drawerHeader: {
       display: 'flex',
@@ -142,7 +140,6 @@ export const Drawer: React.FC = ({ children }) => {
           open={open}
           anchor="right"
           variant="persistent"
-          className={classes.drawer}
           classes={{
             paper: classes.drawerPaper,
           }}
