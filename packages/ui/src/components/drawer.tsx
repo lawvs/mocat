@@ -2,7 +2,6 @@ import React from 'react'
 import {
   makeStyles,
   useTheme,
-  createStyles,
   Box,
   Fab,
   Badge,
@@ -32,11 +31,11 @@ import {
 
 const drawerWidth = 400
 
-const useStyles = makeStyles<Theme, { pin?: boolean }>((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles<Theme, { marginBody?: boolean }>(
+  (theme: Theme) => ({
     '@global': {
       html: {
-        'margin-right': ({ pin = false }) => pin && drawerWidth,
+        marginRight: ({ marginBody = false }) => marginBody && drawerWidth,
       },
     },
     fab: {
@@ -107,12 +106,13 @@ const ThemeSwitch = () => {
 }
 
 const DrawerHeader: React.FC<{
+  open: boolean
   pin: boolean
   closeDrawer: () => void
   togglePin: () => void
-}> = ({ pin, closeDrawer, togglePin }) => {
+}> = ({ open, pin, closeDrawer, togglePin }) => {
   const theme = useTheme()
-  const classes = useStyles({ pin })
+  const classes = useStyles({ marginBody: pin && open })
 
   return (
     <div className={classes.drawerHeader}>
@@ -132,7 +132,7 @@ const DrawerHeader: React.FC<{
 export const Drawer: React.FC = ({ children }) => {
   const { open, pin, setOpen, togglePin, whenClickAway } = useDrawer()
 
-  const classes = useStyles({ pin })
+  const classes = useStyles({ marginBody: pin && open })
 
   return (
     <ClickAwayListener onClickAway={whenClickAway}>
@@ -149,6 +149,7 @@ export const Drawer: React.FC = ({ children }) => {
           }}
         >
           <DrawerHeader
+            open={open}
             pin={pin}
             togglePin={togglePin}
             closeDrawer={() => setOpen(false)}
