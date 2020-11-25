@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react'
-import { usePrevious } from 'react-use'
+import usePrevious from 'react-use/lib/usePrevious'
 import type { MockEvent } from '@mocat/interceptor'
 import { useDispatch, useStore } from './store'
 import { useAutoResponder } from './autoResponder'
