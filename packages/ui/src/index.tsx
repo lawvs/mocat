@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import merge from 'lodash/merge'
 import { App } from './app'

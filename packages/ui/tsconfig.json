@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "build",
-    "jsx": "react",
+    "jsx": "react-jsx",
     "types": []
   },
   "extends": "../../tsconfig.json",

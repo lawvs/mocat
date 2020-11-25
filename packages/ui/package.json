@@ -19,21 +19,21 @@
     "@material-ui/icons": "^5.0.0-alpha.15",
     "@mocat/interceptor": "^0.2.1",
     "lodash": "^4.17.20",
-    "react": "^ 17.0.1",
-    "react-dom": "^16.13.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-use": "^15.3.4"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
-    "@storybook/addon-actions": "^6.0.12",
-    "@storybook/addon-controls": "^6.0.12",
-    "@storybook/addon-docs": "^6.0.12",
-    "@storybook/addon-links": "^6.0.12",
-    "@storybook/addon-toolbars": "^6.0.17",
-    "@storybook/addons": "^6.0.12",
-    "@storybook/react": "^6.0.12",
+    "@storybook/addon-actions": "^6.1.6",
+    "@storybook/addon-controls": "^6.1.6",
+    "@storybook/addon-docs": "^6.1.6",
+    "@storybook/addon-links": "^6.1.6",
+    "@storybook/addon-toolbars": "^6.1.6",
+    "@storybook/addons": "^6.1.6",
+    "@storybook/react": "^6.1.6",
     "@types/lodash": "^4.14.162",
-    "@types/react": "^16.9.43",
-    "@types/react-dom": "^16.9.8"
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0"
   }
 }

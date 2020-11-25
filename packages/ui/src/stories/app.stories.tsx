@@ -1,6 +1,5 @@
 import { Button } from '@storybook/react/demo'
 import { action } from '@storybook/addon-actions'
-import React from 'react'
 import merge from 'lodash/merge'
 import { createStoreProvider, rootReducer, initialState } from '../store'
 import { App } from '../app'

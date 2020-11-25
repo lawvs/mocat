@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { StrictMode, useState } from 'react'
 import {
   Box,
   Grid,
@@ -14,8 +14,8 @@ import {
 import { HourglassEmpty as HourglassEmptyIcon } from '@material-ui/icons'
 
 import { Drawer } from './components/drawer'
-import { useMockState, useAutoResponder, useStore } from './store'
 import { ActionCard } from './components/actionCard'
+import { useMockState, useAutoResponder, useStore } from './store'
 import { MaterialUI } from './store/theme'
 
 const useStyles = makeStyles<Theme, { deg?: number }>((theme: Theme) =>
@@ -119,7 +119,7 @@ const Mock = () => {
 
 export const App = () => {
   return (
-    <React.StrictMode>
+    <StrictMode>
       <MaterialUI>
         <Drawer>
           <ToolBar />
@@ -128,6 +128,6 @@ export const App = () => {
           </Box>
         </Drawer>
       </MaterialUI>
-    </React.StrictMode>
+    </StrictMode>
   )
 }
