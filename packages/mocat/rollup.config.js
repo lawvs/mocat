@@ -4,4 +4,4 @@ require('ts-node').register({
   },
 })
 
-module.exports = require('rollup-config')
+module.exports = require('@mocat/rollup-config')
