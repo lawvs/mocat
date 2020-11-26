@@ -1,8 +1,8 @@
-import { create, mockRoute } from 'mocat'
+import { create } from 'mocat'
 
-create({ debug: true })
+const app = create({ debug: true })
 
-mockRoute({
+app.mockRoute({
   name: 'api',
   url: '/api',
   scenes: [

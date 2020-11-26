@@ -30,9 +30,9 @@
         })
     })
 
-    Mocat.create({ debug: true })
+    const app = Mocat.create({ debug: true })
 
-    Mocat.mockRoute({
+    app.mockRoute({
       name: 'api',
       url: '/api',
       scenes: [

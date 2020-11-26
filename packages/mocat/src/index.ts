@@ -1,4 +1,11 @@
-import { eventEmitter, setupFetch, setupXHR, log } from '@mocat/interceptor'
+import {
+  mockRoute,
+  mockRoutes,
+  eventEmitter,
+  setupFetch,
+  setupXHR,
+  log,
+} from '@mocat/interceptor'
 import { create as createUI } from '@mocat/ui'
 import type { UIOptions } from '@mocat/ui'
 
@@ -13,6 +20,8 @@ export const create = ({ debug = false, ...uiOptions }: MocatOptions = {}) => {
   const ui = createUI({ eventEmitter, ...uiOptions })
   // eventEmitter.onAny(ui.hook.emit)
   return {
+    mockRoute,
+    mockRoutes,
     unmount: () => {
       resetFetch()
       resetXHR()
@@ -21,5 +30,4 @@ export const create = ({ debug = false, ...uiOptions }: MocatOptions = {}) => {
   }
 }
 
-export { mockRoute, mockRoutes } from '@mocat/interceptor'
 export type { MockRoute } from '@mocat/interceptor'

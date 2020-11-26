@@ -24,7 +24,9 @@ yarn add --dev mocat
 ```ts
 import { create, mockRoute } from 'mocat'
 
-mockRoute({
+const app = create()
+
+app.mockRoute({
   // Describe the name of API
   name: 'api',
   // Describe the API (optional)
@@ -51,8 +53,6 @@ mockRoute({
     },
   ],
 })
-
-create()
 ```
 
 ## References
