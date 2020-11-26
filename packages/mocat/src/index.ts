@@ -31,3 +31,4 @@ export const create = ({ debug = false, ...uiOptions }: MocatOptions = {}) => {
 }
 
 export type { MockRoute } from '@mocat/interceptor'
+export const version = process.env.VERSION

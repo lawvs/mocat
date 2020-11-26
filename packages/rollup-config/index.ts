@@ -5,6 +5,7 @@ import json from '@rollup/plugin-json'
 import replace from '@rollup/plugin-replace'
 import type { RollupOptions } from 'rollup'
 // import { terser } from 'rollup-plugin-terser'
+import { getGitVersion } from './git-info'
 
 const options: RollupOptions = {
   input: 'src/index.ts',
@@ -25,9 +26,20 @@ const options: RollupOptions = {
     typescript({
       tsconfig: './tsconfig.json',
     }),
-    replace({
-      'process.env.NODE_ENV': JSON.stringify('production'),
-    }),
+    replace(
+      Object.entries({
+        NODE_ENV: 'production',
+        VERSION: getGitVersion(),
+        BUILD_DATE: new Date().toISOString(),
+        CI: process.env.CI || null,
+      }).reduce(
+        (acc, [key, value]) => ({
+          ...acc,
+          [`process.env.${key}`]: JSON.stringify(value),
+        }),
+        {}
+      )
+    ),
     // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
     commonjs(),
     // Allow node_modules resolution, so you can use 'external' to control

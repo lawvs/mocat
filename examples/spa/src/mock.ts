@@ -1,4 +1,4 @@
-import { create } from 'mocat'
+import { create, version } from 'mocat'
 
 const app = create({ debug: true })
 
@@ -22,3 +22,5 @@ app.mockRoute({
     },
   ],
 })
+
+console.log('Mocat version: ', version)
