@@ -32,9 +32,10 @@ export const useAutoResponder = () => {
             withDelay(() => e.resolve(scene))
             break
           }
-          withDelay(() => e.pass())
-          break
+        // no scenes
+        // falls through
         case 'pass':
+          // TODO request first and wait for a delay
           withDelay(() => e.pass())
           break
         case 'reject':
