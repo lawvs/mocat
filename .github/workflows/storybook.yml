@@ -27,8 +27,8 @@ jobs:
       - name: Install node modules
         uses: bahmutov/npm-install@v1
 
-      - name: Build
-        run: yarn build
+      - name: Build dependencies
+        run: yarn lerna run build --scope @mocat/interceptor
 
       - name: Build storybook
         run: yarn lerna run build-storybook
