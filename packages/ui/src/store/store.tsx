@@ -4,6 +4,7 @@ import type { MockEventEmitter, MockEvent } from '@mocat/interceptor'
 import { NOOP } from '../utils'
 
 export const initialState = {
+  brandTitle: 'Mocat',
   theme: 'auto' as 'auto' | 'light' | 'dark',
   drawer: {
     /** drawer fixed state */

@@ -25,6 +25,7 @@ import {
   useAutoResponder,
   useDrawer,
   useMockEventLength,
+  useStore,
   useThemeSwitch,
 } from '../store'
 
@@ -70,6 +71,7 @@ const FloatingActionButton = ({
   show: boolean
   onClick: () => void
 }) => {
+  const { brandTitle } = useStore()
   const classes = useStyles({})
   const { enable: autoResponseEnable } = useAutoResponder()
   const eventCnt = useMockEventLength()
@@ -86,7 +88,7 @@ const FloatingActionButton = ({
         <Badge badgeContent={eventCnt} color="secondary">
           <BuildIcon className={classes.fabExtendedIcon} />
         </Badge>
-        Mocat
+        {brandTitle}
       </Fab>
     </Zoom>
   )
