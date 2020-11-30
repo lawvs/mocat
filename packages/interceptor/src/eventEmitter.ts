@@ -97,6 +97,10 @@ export const mockRoute = (route: MockRoute) => {
 export const mockRoutes = (routes: MockRoute[]) =>
   routes.forEach((route) => mockRoute(route))
 
+export const clearMocks = () => {
+  networkRules.length = 0
+}
+
 // Run event
 
 export const onRun = (event: RunEvent) => {

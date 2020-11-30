@@ -22,7 +22,7 @@ yarn add --dev mocat
 ## Usage
 
 ```ts
-import { create, mockRoute } from 'mocat'
+import { create } from 'mocat'
 
 const app = create()
 

@@ -4,6 +4,7 @@ import {
   eventEmitter,
   setupFetch,
   setupXHR,
+  clearMocks,
   log,
 } from '@mocat/interceptor'
 import { create as createUI } from '@mocat/ui'
@@ -22,9 +23,10 @@ export const create = ({ debug = false, ...uiOptions }: MocatOptions = {}) => {
   return {
     mockRoute,
     mockRoutes,
-    unmount: () => {
+    destroy: () => {
       resetFetch()
       resetXHR()
+      clearMocks()
       ui.unmount()
     },
   }
