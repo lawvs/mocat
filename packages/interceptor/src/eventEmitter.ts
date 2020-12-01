@@ -52,7 +52,7 @@ export const log = () => {
 // const mockMap = new Map<any, any>()
 
 export const registerMock = (rule: RegisterEvent) => {
-  // mockMap.set(target, { desc, scenes })
+  // mockMap.set(target, { desc, scenarios })
   eventEmitter.emit(rule.type, rule)
 }
 

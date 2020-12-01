@@ -2,17 +2,17 @@
 import FetchMock from 'fetch-mock'
 
 import { onRun, matchNetworkRule } from './eventEmitter'
-import { networkSceneToResponse, NOOP, passRequest } from './utils'
-import type { NetworkBeforeEvent, NetworkScene } from './types'
+import { networkScenarioToResponse, NOOP, passRequest } from './utils'
+import type { NetworkBeforeEvent, NetworkScenario } from './types'
 
 let originalFetch: typeof fetch | null = null
 
 export const realFetch = (...args: Parameters<typeof fetch>) =>
   (originalFetch || fetch)(...args)
 
-const withResolveScene = (resolve: (response: Response) => void) => (
-  scene: NetworkScene
-) => resolve(networkSceneToResponse(scene))
+const withResolveScenario = (resolve: (response: Response) => void) => (
+  scenario: NetworkScenario
+) => resolve(networkScenarioToResponse(scenario))
 
 export const setupFetch = () => {
   if (originalFetch) {
@@ -40,7 +40,7 @@ export const setupFetch = () => {
           requestType: 'fetch' as const,
           rule: matchedRule,
           request,
-          resolve: withResolveScene(resolve),
+          resolve: withResolveScenario(resolve),
           reject: (error: any = new TypeError('Failed to fetch')) =>
             reject(error),
         }

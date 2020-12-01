@@ -5,9 +5,9 @@ import type { MockResponse } from 'xhr-mock'
 import type { MockHeaders } from 'xhr-mock/lib/types'
 
 import { onRun, matchNetworkRule } from './eventEmitter'
-import { networkSceneToResponse, NOOP, passRequest } from './utils'
+import { networkScenarioToResponse, NOOP, passRequest } from './utils'
 import { realFetch } from './fetch'
-import type { NetworkBeforeEvent, NetworkScene } from './types'
+import type { NetworkBeforeEvent, NetworkScenario } from './types'
 
 let originalXHR: typeof XMLHttpRequest | null = null
 
@@ -26,12 +26,12 @@ const withResolveResponse = (
   )
 }
 
-const withResolveScene = (
+const withResolveScenario = (
   resolve: (response: MockResponse) => void,
   resp: MockResponse
-) => async (scene: NetworkScene) => {
-  const sceneResp = networkSceneToResponse(scene)
-  withResolveResponse(resolve, resp)(sceneResp)
+) => async (scenario: NetworkScenario) => {
+  const scenarioResp = networkScenarioToResponse(scenario)
+  withResolveResponse(resolve, resp)(scenarioResp)
 }
 
 export const setupXHR = () => {
@@ -60,7 +60,7 @@ export const setupXHR = () => {
           requestType: 'xhr' as const,
           rule: matchedRule,
           request,
-          resolve: withResolveScene(resolve, resp),
+          resolve: withResolveScenario(resolve, resp),
           reject: () => reject(),
         }
 

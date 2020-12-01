@@ -25,7 +25,7 @@ export const DefaultPin = () => {
         type: 'Register/networkRoute',
         url: '/',
         method: '*',
-        scenes: [
+        scenarios: [
           {
             name: 'name',
             desc: 'desc',
@@ -78,7 +78,7 @@ export const Instance = () => {
         type: 'Register/networkRoute',
         url: '/',
         method: '*',
-        scenes: [
+        scenarios: [
           {
             name: 'name',
             desc: 'desc',

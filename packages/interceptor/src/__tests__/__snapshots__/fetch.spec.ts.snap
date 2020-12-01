@@ -63,7 +63,7 @@ exports[`snapshot test should register route match snapshot 1`] = `
 Object {
   "desc": "login api",
   "name": "login",
-  "scenes": Array [
+  "scenarios": Array [
     Object {
       "name": "login success",
       "response": Object {

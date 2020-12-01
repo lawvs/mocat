@@ -82,7 +82,7 @@ describe('snapshot test', () => {
       name: 'login',
       desc: 'login api',
       url: '/api/login',
-      scenes: [
+      scenarios: [
         {
           name: 'login success',
           response: { code: 0, username: 'admin' },

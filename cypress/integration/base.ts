@@ -34,7 +34,7 @@ export const baseTest = (target: { name: string; url: string }) =>
       cy.contains('Run/network/before')
     })
 
-    it('should SCENE works', () => {
+    it('should SCENARIO works', () => {
       cy.route2('/api', () => {
         throw new Error('should not request network')
       })

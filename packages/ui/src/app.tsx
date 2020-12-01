@@ -45,11 +45,11 @@ const ToolBar = () => {
   const [btnDeg, setBtnDeg] = useState(0)
   const classes = useStyles({ deg: btnDeg })
 
-  const responseModeBtn = ['scene', 'pass', 'reject'] as const
+  const responseModeBtn = ['scenario', 'pass', 'reject'] as const
 
   const handleMode = (
     event: React.MouseEvent<HTMLElement>,
-    newMode: 'scene' | 'pass' | 'reject' | null
+    newMode: 'scenario' | 'pass' | 'reject' | null
   ) => {
     if (newMode === null) {
       return

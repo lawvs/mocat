@@ -16,7 +16,7 @@ export const initialState = {
   disablePass: false,
   autoResponder: {
     enable: false,
-    mode: 'scene' as 'scene' | 'pass' | 'reject',
+    mode: 'scenario' as 'scenario' | 'pass' | 'reject',
     delay: 0,
   },
   mockEvent: [] as MockEvent[],

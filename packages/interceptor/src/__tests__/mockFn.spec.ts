@@ -52,9 +52,9 @@ describe('snapshot test', () => {
     const mockFn = mockAsyncFn({
       name: 'login api',
       desc: 'it is a mock api',
-      scenes: [
+      scenarios: [
         {
-          name: 'scene 1',
+          name: 'scenario 1',
           desc: 'login success',
           return: {
             code: 0,
@@ -64,7 +64,7 @@ describe('snapshot test', () => {
           },
         },
         {
-          name: 'scene 2',
+          name: 'scenario 2',
           desc: 'login failure',
           error: { code: 1, message: 'password incorrect' },
         },

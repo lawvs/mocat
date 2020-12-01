@@ -10,7 +10,7 @@ import {
   Tooltip,
 } from '@material-ui/core'
 import { Send as SendIcon, Delete as DeleteIcon } from '@material-ui/icons'
-import type { MockEvent, Scene } from '@mocat/interceptor'
+import type { MockEvent, Scenario } from '@mocat/interceptor'
 import { NOOP } from '../utils'
 import { useStore } from '../store'
 
@@ -87,18 +87,22 @@ export const ActionCard: React.FC<{
 
       <CardActions className={classes.cardActions} disableSpacing>
         {'rule' in event &&
-          event.rule.scenes &&
-          (event.rule.scenes as Scene[]).map((scene) => (
-            <Tooltip title={scene.desc ?? ''} placement="top" key={scene.name}>
+          event.rule.scenarios &&
+          (event.rule.scenarios as Scenario[]).map((scenario) => (
+            <Tooltip
+              title={scenario.desc ?? ''}
+              placement="top"
+              key={scenario.name}
+            >
               <Button
                 variant="contained"
                 color="primary"
                 onClick={() => {
-                  event.resolve(scene)
+                  event.resolve(scenario)
                   afterHandle()
                 }}
               >
-                {scene.name}
+                {scenario.name}
               </Button>
             </Tooltip>
           ))}

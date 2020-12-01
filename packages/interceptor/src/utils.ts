@@ -1,4 +1,4 @@
-import type { NetworkScene, NetworkAfterEvent } from './types'
+import type { NetworkScenario, NetworkAfterEvent } from './types'
 import { realFetch } from './fetch'
 import { onRun } from './eventEmitter'
 
@@ -13,14 +13,16 @@ function isPureObject(input: any): input is Record<any, any> {
   return Object.getPrototypeOf(input).isPrototypeOf(Object)
 }
 
-export const networkSceneToResponse = (scene: NetworkScene): Response => {
+export const networkScenarioToResponse = (
+  scenario: NetworkScenario
+): Response => {
   const data =
-    isPureObject(scene.response) || typeof scene.response === 'number'
-      ? JSON.stringify(scene.response)
-      : scene.response
+    isPureObject(scenario.response) || typeof scenario.response === 'number'
+      ? JSON.stringify(scenario.response)
+      : scenario.response
   return new Response(data, {
-    status: scene.status,
-    headers: scene.headers,
+    status: scenario.status,
+    headers: scenario.headers,
   })
 }
 

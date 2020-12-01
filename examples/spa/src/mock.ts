@@ -5,7 +5,7 @@ const app = create({ debug: true })
 app.mockRoute({
   name: 'api',
   url: '/api',
-  scenes: [
+  scenarios: [
     {
       name: 'Alice',
       response: {

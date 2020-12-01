@@ -15,21 +15,21 @@ export default {
         type: 'Register/networkRoute',
         url: '/',
         method: '*',
-        scenes: [
+        scenarios: [
           {
-            name: 'scene 1',
+            name: 'scenario 1',
             desc: 'desc1',
             status: 200,
             response: { data: 'success' },
           },
           {
-            name: 'scene 2',
+            name: 'scenario 2',
             desc: 'desc2',
             status: 400,
             response: { data: 'error' },
           },
           {
-            name: 'scene 3 without desc',
+            name: 'scenario 3 without desc',
             response: { data: 'success' },
           },
         ],

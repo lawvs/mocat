@@ -26,13 +26,13 @@ export const useAutoResponder = () => {
       }
       const withDelay = (fn: (...args: any) => void) => setTimeout(fn, delay)
       switch (mode) {
-        case 'scene':
-          if (e.rule.scenes?.length) {
-            const scene = e.rule.scenes[0]
-            withDelay(() => e.resolve(scene))
+        case 'scenario':
+          if (e.rule.scenarios?.length) {
+            const scenario = e.rule.scenarios[0]
+            withDelay(() => e.resolve(scenario))
             break
           }
-        // no scenes
+        // no scenarios
         // falls through
         case 'pass':
           // TODO request first and wait for a delay
@@ -48,10 +48,10 @@ export const useAutoResponder = () => {
     [delay, mode]
   )
 
-  const delayScene = [100, 1000, 5000]
+  const delayScenario = [100, 1000, 5000]
   const toggleDelay = () =>
     updateAutoResponder({
-      delay: delayScene.find((i) => i > delay) ?? 0,
+      delay: delayScenario.find((i) => i > delay) ?? 0,
     })
 
   return {

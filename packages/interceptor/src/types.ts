@@ -8,9 +8,9 @@
  */
 type LiteralUnion<T extends U, U = string> = T | (U & { _?: never })
 
-// Scene
+// Scenario
 
-export interface FnScene {
+export interface FnScenario {
   name: string
   desc?: string
   pass?: boolean
@@ -19,7 +19,7 @@ export interface FnScene {
   // implementation?: (...args: any[]) => any
 }
 
-export interface NetworkScene {
+export interface NetworkScenario {
   name: string
   desc?: string
   /**
@@ -38,7 +38,7 @@ export interface NetworkScene {
   error?: any
 }
 
-export type Scene = NetworkScene | FnScene
+export type Scenario = NetworkScenario | FnScenario
 
 interface Event {
   readonly timeStamp: number
@@ -65,7 +65,7 @@ export interface MockRoute extends Comment {
   method?: LiteralUnion<
     'GET' | 'POST' | 'OPTIONS' | 'PUT' | 'DELETE' | 'HEAD' | 'TRACE' | 'CONNECT'
   >
-  scenes?: NetworkScene[]
+  scenarios?: NetworkScenario[]
 }
 
 export interface NetWorkRegister extends MockRoute, Event {
@@ -75,7 +75,7 @@ export interface NetWorkRegister extends MockRoute, Event {
 export interface AsyncFnRegister extends Comment, Event {
   type: 'Register/asyncFn'
   target: (...args: any) => Promise<any>
-  scenes?: FnScene[]
+  scenarios?: FnScenario[]
 }
 
 export interface SyncFnRegister extends Comment, Event {
@@ -86,7 +86,7 @@ export interface SyncFnRegister extends Comment, Event {
     mockReturnValue: (value: any) => void
     mockImplementation: (...args: any) => any
   }
-  scenes?: FnScene[]
+  scenarios?: FnScenario[]
 }
 
 type FnRegister = AsyncFnRegister | SyncFnRegister
@@ -103,8 +103,8 @@ interface NetworkEventBase extends Event {
    */
   readonly rule: NetWorkRegister
   readonly request: Request
-  // TODO rename to resolveScene?
-  readonly resolve: (result: NetworkScene) => void
+  // TODO rename to resolveScenario?
+  readonly resolve: (result: NetworkScenario) => void
   /**
    * mock offline network
    */

@@ -5,10 +5,10 @@ Array [
   Object {
     "desc": "it is a mock api",
     "name": "login api",
-    "scenes": Array [
+    "scenarios": Array [
       Object {
         "desc": "login success",
-        "name": "scene 1",
+        "name": "scenario 1",
         "return": Object {
           "code": 0,
           "data": Object {
@@ -22,7 +22,7 @@ Array [
           "code": 1,
           "message": "password incorrect",
         },
-        "name": "scene 2",
+        "name": "scenario 2",
       },
     ],
     "target": [Function],
@@ -41,10 +41,10 @@ Array [
     "rule": Object {
       "desc": "it is a mock api",
       "name": "login api",
-      "scenes": Array [
+      "scenarios": Array [
         Object {
           "desc": "login success",
-          "name": "scene 1",
+          "name": "scenario 1",
           "return": Object {
             "code": 0,
             "data": Object {
@@ -58,7 +58,7 @@ Array [
             "code": 1,
             "message": "password incorrect",
           },
-          "name": "scene 2",
+          "name": "scenario 2",
         },
       ],
       "target": [Function],
