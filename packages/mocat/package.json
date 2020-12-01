@@ -1,6 +1,6 @@
 {
   "name": "mocat",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "The Mocat",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@mocat/interceptor": "^0.2.2",
-    "@mocat/ui": "^0.2.2"
+    "@mocat/interceptor": "^0.2.3",
+    "@mocat/ui": "^0.2.3"
   }
 }
