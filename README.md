@@ -28,38 +28,28 @@ import { create } from 'mocat'
 const app = create()
 
 app.mockRoute({
-  // Describe the name of API
-  name: 'api',
-  // Describe the API (optional)
-  // desc: '',
+  name: 'login api',
   // Specify the URL to match
-  url: '/api',
-  // Specify the HTTP method to match on (optional)
-  // method: 'GET',
+  url: '/api/login',
   // Create scenarios
-  scenes: [
+  scenarios: [
     {
-      name: 'Alice',
+      name: 'login success',
       response: {
         username: 'Alice',
-        msg: 'fake data',
+        msg: 'ok',
       },
     },
     {
-      // Scenario name
-      name: 'Bob',
-      // Scenario description
-      desc: 'the bob',
+      name: 'login fail',
+      desc: 'username or password incorrect',
       // The HTTP status code to send.
-      status: 200,
+      status: 400,
       // HTTP headers to accompany the response.
       headers: { 'Content-Type': 'application/json' },
-      /**
-       * Reply to the request with a body.
-       */
+      // Serve a static string/JSON object as the response body.
       response: {
-        username: 'Bob',
-        msg: 'fake data',
+        msg: 'username or password incorrect',
       },
     },
   ],
@@ -79,6 +69,70 @@ createApp(App).mount('#app')
 
 if (process.env.NODE_ENV !== 'production') {
   await import('./mock')
+}
+```
+
+## API
+
+### MockRoute
+
+```ts
+export interface MockRoute {
+  /**
+   * The name of API.
+   */
+  name?: string
+  desc?: string
+  /**
+   * Match against the full request URL.
+   * If a string is passed, it will be used as a substring match,
+   * not an equality match.
+   */
+  url: string | RegExp | ((url: string) => boolean)
+  /**
+   * Match against the request's HTTP method.
+   * All methods are matched by default.
+   */
+  method?:
+    | 'GET'
+    | 'POST'
+    | 'OPTIONS'
+    | 'PUT'
+    | 'DELETE'
+    | 'HEAD'
+    | 'TRACE'
+    | 'CONNECT'
+  scenarios?: NetworkScenario[]
+}
+```
+
+### NetworkScenario
+
+```ts
+export interface NetworkScenario {
+  /**
+   * The name of scenario.
+   */
+  name: string
+  /**
+   * The description of scenario.
+   */
+  desc?: string
+  /**
+   * The HTTP status code to send.
+   * @default 200
+   */
+  status?: number
+  /**
+   * HTTP headers to accompany the response.
+   * @default {}
+   */
+  headers?: Record<string, string>
+  /**
+   * Serve a static string/JSON object as the response body.
+   */
+  response?: ConstructorParameters<typeof Response>[0] | Record<string, any>
+  error?: any
 }
 ```
 

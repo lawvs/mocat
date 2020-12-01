@@ -20,7 +20,13 @@ export interface FnScenario {
 }
 
 export interface NetworkScenario {
+  /**
+   * The name of scenario.
+   */
   name: string
+  /**
+   * The description of scenario.
+   */
   desc?: string
   /**
    * The HTTP status code to send.
@@ -33,7 +39,9 @@ export interface NetworkScenario {
    */
   headers?: Record<string, string>
   // cookie?: string
-  /** Response body */
+  /**
+   * Serve a static string/JSON object as the response body.
+   */
   response?: ConstructorParameters<typeof Response>[0] | Record<string, any>
   error?: any
 }
