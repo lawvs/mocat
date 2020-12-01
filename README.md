@@ -3,7 +3,7 @@
 ![CI](https://github.com/lawvs/mocat/workflows/CI/badge.svg)
 [![npm](https://img.shields.io/npm/v/mocat)](https://www.npmjs.com/package/mocat)
 
-Mocat is a development toolbar for mock. It allows you interactively develop and test network request. This library is inspired by [cypress](https://github.com/cypress-io/cypress).
+Mocat is a development toolbar for mocking. It allows you to interactively develop and test network requests. This library is inspired by [cypress](https://github.com/cypress-io/cypress).
 
 ![demo](https://user-images.githubusercontent.com/18554747/100751183-5ab4c800-342a-11eb-9172-5df6d1198f06.gif)
 
@@ -12,7 +12,7 @@ Mocat is a development toolbar for mock. It allows you interactively develop and
 To install and save in your package.json dev dependencies, run:
 
 ```sh
-# with npm
+# With npm
 npm install --save-dev mocat
 
 # Or with Yarn
@@ -147,4 +147,4 @@ export interface NetworkScenario {
 
 ## License
 
-[MIT](LICENCE)
+[MIT](LICENSE)
