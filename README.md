@@ -5,7 +5,7 @@
 
 Mocat is a development toolbar for mock. It allows you interactively develop and test network request. This library is inspired by [cypress](https://github.com/cypress-io/cypress).
 
-![demo](https://user-images.githubusercontent.com/18554747/98848902-bd531d80-2495-11eb-8ce9-bbb29eea46d7.gif)
+![demo](https://user-images.githubusercontent.com/18554747/100751183-5ab4c800-342a-11eb-9172-5df6d1198f06.gif)
 
 ## Installation
 
@@ -22,6 +22,7 @@ yarn add --dev mocat
 ## Usage
 
 ```ts
+// mock.ts
 import { create } from 'mocat'
 
 const app = create()
@@ -35,7 +36,7 @@ app.mockRoute({
   url: '/api',
   // Specify the HTTP method to match on (optional)
   // method: 'GET',
-  // Create scene
+  // Create scenarios
   scenes: [
     {
       name: 'Alice',
@@ -45,7 +46,17 @@ app.mockRoute({
       },
     },
     {
+      // Scenario name
       name: 'Bob',
+      // Scenario description
+      desc: 'the bob',
+      // The HTTP status code to send.
+      status: 200,
+      // HTTP headers to accompany the response.
+      headers: { 'Content-Type': 'application/json' },
+      /**
+       * Reply to the request with a body.
+       */
       response: {
         username: 'Bob',
         msg: 'fake data',
@@ -55,7 +66,23 @@ app.mockRoute({
 })
 ```
 
-## References
+Then load it from the application entry:
+
+```ts
+// main.ts
+import { App } from './App'
+
+// Load React
+ReactDOM.render(<App />, document.getElementById('app'))
+// Or Vue
+createApp(App).mount('#app')
+
+if (process.env.NODE_ENV !== 'production') {
+  await import('./mock')
+}
+```
+
+## Other similar projects
 
 - [Mock](https://github.com/nuysoft/Mock)
 - [data-mocks](https://github.com/ovotech/data-mocks)

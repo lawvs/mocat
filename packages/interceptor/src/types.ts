@@ -23,9 +23,14 @@ export interface NetworkScene {
   name: string
   desc?: string
   /**
+   * The HTTP status code to send.
    * @default 200
    */
   status?: number
+  /**
+   * HTTP headers to accompany the response.
+   * @default {}
+   */
   headers?: Record<string, string>
   // cookie?: string
   /** Response body */
