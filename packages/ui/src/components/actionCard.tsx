@@ -1,9 +1,11 @@
 import {
   makeStyles,
+  Theme,
   Box,
   Card,
   CardContent,
   CardActions,
+  Chip,
   Typography,
   IconButton,
   Button,
@@ -14,15 +16,15 @@ import type { MockEvent, Scenario } from '@mocat/interceptor'
 import { NOOP } from '../utils'
 import { useStore } from '../store'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   cardActions: {
     flexWrap: 'wrap',
-    padding: -4,
+    padding: theme.spacing(-0.5),
     '& > *': {
-      margin: 4,
+      margin: theme.spacing(0.5),
     },
   },
-})
+}))
 
 export const ActionCard: React.FC<{
   event: MockEvent
@@ -39,44 +41,66 @@ export const ActionCard: React.FC<{
   const subTitle =
     'desc' in event ? event.name : 'rule' in event && event.rule.desc
 
+  const Header = () => (
+    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          '& > *': (theme) => ({
+            marginLeft: theme.spacing(0.5),
+            marginRight: theme.spacing(0.5),
+          }),
+        }}
+      >
+        <Typography color="textSecondary">{event.type}</Typography>
+
+        {/* tags */}
+        {'requestType' in event && (
+          <Chip size="small" label={event.requestType} />
+        )}
+        {'request' in event && (
+          <Chip size="small" label={event.request.method} />
+        )}
+      </Box>
+
+      <Box>
+        {'pass' in event && !disablePass && (
+          <Tooltip title="pass" placement="top">
+            <IconButton
+              aria-label="pass"
+              size="small"
+              onClick={() => {
+                event.pass()
+                afterHandle()
+              }}
+            >
+              <SendIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
+        {'reject' in event && (
+          <Tooltip title="reject" placement="top">
+            <IconButton
+              aria-label="reject"
+              size="small"
+              onClick={() => {
+                event.reject()
+                afterHandle()
+              }}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Box>
+    </Box>
+  )
+
   return (
     <Card elevation={3}>
       <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography color="textSecondary">{event.type}</Typography>
-
-          <Box>
-            {'pass' in event && !disablePass && (
-              <Tooltip title="pass" placement="top">
-                <IconButton
-                  aria-label="pass"
-                  size="small"
-                  onClick={() => {
-                    event.pass()
-                    afterHandle()
-                  }}
-                >
-                  <SendIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            )}
-            {'reject' in event && (
-              <Tooltip title="reject" placement="top">
-                <IconButton
-                  aria-label="reject"
-                  size="small"
-                  onClick={() => {
-                    event.reject()
-                    afterHandle()
-                  }}
-                >
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            )}
-          </Box>
-        </Box>
-
+        <Header />
         <Typography variant="h5" component="h2" noWrap>
           {title}
         </Typography>
