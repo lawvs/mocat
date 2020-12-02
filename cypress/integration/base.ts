@@ -56,7 +56,7 @@ export const baseTest = (target: { name: string; url: string }) =>
     })
 
     it('should SCENARIO works', () => {
-      cy.route2('/api', () => {
+      cy.intercept('/api', () => {
         throw new Error('should not request network')
       })
 
@@ -66,7 +66,7 @@ export const baseTest = (target: { name: string; url: string }) =>
     })
 
     it('should PASS works', () => {
-      cy.route2('/api', (req) => {
+      cy.intercept('/api', (req) => {
         expect(req.url).to.include('/data.json')
         req.reply((res) => res)
       }).as('api')
@@ -78,7 +78,7 @@ export const baseTest = (target: { name: string; url: string }) =>
     })
 
     it('should REJECT works', () => {
-      cy.route2('/api', () => {
+      cy.intercept('/api', () => {
         throw new Error('should not request network')
       })
 
