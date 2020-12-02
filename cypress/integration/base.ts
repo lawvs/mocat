@@ -24,14 +24,35 @@ export const baseTest = (target: { name: string; url: string }) =>
     it('should auto close work', () => {
       clickMocat()
       getMocatBtn().should('not.be.visible')
-      cy.get('.MuiPaper-root').should('be.visible')
+      getFromMocat('.MuiPaper-root').should('be.visible')
       clickEmpty()
+      getMocatBtn().should('be.visible')
+    })
+
+    it('should LOCK work', () => {
+      const getLockIcon = () => getFromMocat('[data-testid=LockIcon]')
+      const getLockOpenIcon = () => getFromMocat('[data-testid=LockOpenIcon]')
+
+      clickMocat()
+      // pin
+      getLockOpenIcon().click()
+      getLockIcon().should('be.visible')
+      clickEmpty()
+      getMocatBtn().should('not.be.visible')
+      getLockIcon().should('be.visible')
+
+      // unpin
+      getLockIcon().click()
+      getLockOpenIcon().should('be.visible')
+      clickEmpty()
+      getLockOpenIcon().should('not.be.visible')
       getMocatBtn().should('be.visible')
     })
 
     it('should request trigger mocat', () => {
       getFetchBtn().click()
-      cy.contains('Run/network/before')
+      getMocatBtn().should('not.be.visible')
+      getFromMocat('.MuiCard-root').should('have.length', 1)
     })
 
     it('should SCENARIO works', () => {
