@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Mocat Global Example</title>
+    <title>Mocat ESM Example</title>
   </head>
   <body>
     <div class="card">
@@ -12,8 +12,7 @@
       <textarea id="fetch-textarea" data-testid="fetch-textarea"></textarea>
     </div>
   </body>
-  <script src="index.js"></script>
-  <script>
+  <script type="module">
     const getData = async () =>
       fetch('/api/data.json').then((resp) => resp.json())
 
@@ -30,7 +29,8 @@
         })
     })
 
-    const app = Mocat.create({ debug: true })
+    import { create, version } from './index.esm.js'
+    const app = create({ debug: true })
 
     app.mockRoute({
       name: 'api',
@@ -53,6 +53,6 @@
       ],
     })
 
-    console.log('Mocat version:', Mocat.version)
+    console.log('Mocat version:', version)
   </script>
 </html>

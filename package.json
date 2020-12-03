@@ -28,7 +28,7 @@
     "server-examples": "lerna run dev --parallel --scope *-example",
     "test:e2e": "cypress run",
     "test:e2e-ci": "start-server-and-test server-examples '3001|3002' test:e2e",
-    "typecheck": "lerna exec --parallel --ignore @mocat/eslint-config --ignore global-example -- tsc --noEmit --project ."
+    "typecheck": "lerna exec --parallel --ignore @mocat/eslint-config --ignore global-example --ignore esm-example -- tsc --noEmit --project ."
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
