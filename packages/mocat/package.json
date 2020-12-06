@@ -1,21 +1,35 @@
 {
   "name": "mocat",
   "version": "0.2.3",
-  "description": "The Mocat",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
-  "module": "build/index.esm.js",
+  "description": "a development toolbar for mocking",
+  "keywords": [
+    "ajax",
+    "interceptor",
+    "hijack",
+    "mocking",
+    "mocks",
+    "rest",
+    "spy",
+    "stubs",
+    "test",
+    "testing",
+    "tool",
+    "ui"
+  ],
   "license": "MIT",
   "sideEffects": false,
+  "main": "build/index.js",
+  "module": "build/index.esm.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "build": "rollup --config",
     "clean": "rm -rf build"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
     "@mocat/interceptor": "^0.2.3",
     "@mocat/ui": "^0.2.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
