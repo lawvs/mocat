@@ -41,7 +41,7 @@ describe('xhr', () => {
     expect(listener).toBeCalledTimes(1)
   })
 
-  test('should fetch works with status', async () => {
+  test('should xhr works with status', async () => {
     const listener = jest.fn((payload) => payload.resolve({ status: 400 }))
     eventEmitter.once('Run/network/before', listener)
     const xhr = await xhrRequest('/')
@@ -50,7 +50,7 @@ describe('xhr', () => {
     expect(listener).toBeCalledTimes(1)
   })
 
-  test('should fetch works with header', async () => {
+  test('should xhr works with header', async () => {
     const listener = jest.fn((payload) =>
       payload.resolve({ headers: { 'Content-Type': 'application/json' } })
     )
@@ -61,7 +61,7 @@ describe('xhr', () => {
     expect(listener).toBeCalledTimes(1)
   })
 
-  test('should fetch works with empty response', async () => {
+  test('should xhr works with empty response', async () => {
     const listener = jest.fn((payload) => payload.resolve({}))
     eventEmitter.once('Run/network/before', listener)
     const xhr = await xhrRequest('/')
@@ -70,7 +70,26 @@ describe('xhr', () => {
     expect(listener).toBeCalledTimes(1)
   })
 
-  test('should fetch works when reject', async () => {
+  test('should xhr works with json', async () => {
+    const data = { code: 1, msg: 'success' }
+    const listener = jest.fn((payload) => payload.resolve({ response: data }))
+    eventEmitter.once('Run/network/before', listener)
+
+    const xhr = await xhrRequest('/')
+    expect(xhr.response).toEqual(JSON.stringify(data))
+    expect(listener).toBeCalledTimes(1)
+  })
+
+  test('should xhr works with array json', async () => {
+    const data = [{ data: 1, msg: 'success' }, { data: 2 }]
+    const listener = jest.fn((payload) => payload.resolve({ response: data }))
+    eventEmitter.once('Run/network/before', listener)
+    const xhr = await xhrRequest('/')
+    expect(xhr.response).toEqual(JSON.stringify(data))
+    expect(listener).toBeCalledTimes(1)
+  })
+
+  test('should xhr works when reject', async () => {
     const listener = jest.fn((payload) => payload.reject())
     eventEmitter.once('Run/network/before', listener)
     try {

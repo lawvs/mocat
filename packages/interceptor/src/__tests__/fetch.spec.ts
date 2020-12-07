@@ -58,7 +58,15 @@ describe('fetch', () => {
   test('should fetch works with json', async () => {
     const data = { code: 1, msg: 'success' }
     const listener = jest.fn((payload) => payload.resolve({ response: data }))
+    eventEmitter.once('Run/network/before', listener)
 
+    expect((await fetch('/')).json()).resolves.toEqual(data)
+    expect(listener).toBeCalledTimes(1)
+  })
+
+  test('should fetch works with array json', async () => {
+    const data = [{ data: 1, msg: 'success' }, { data: 2 }]
+    const listener = jest.fn((payload) => payload.resolve({ response: data }))
     eventEmitter.once('Run/network/before', listener)
 
     expect((await fetch('/')).json()).resolves.toEqual(data)

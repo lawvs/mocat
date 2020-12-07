@@ -7,8 +7,11 @@ export const NOOP = () => {
 }
 
 // TODO fix type error
-function isPureObject(input: any): input is Record<any, any> {
+function needStringify(input: unknown): input is Record<string, any> | any[] {
   if (input === null || input === undefined) return false
+  if (typeof input === 'number') return true
+  if (Array.isArray(input)) return true
+  // is pure object
   // eslint-disable-next-line no-prototype-builtins
   return Object.getPrototypeOf(input).isPrototypeOf(Object)
 }
@@ -16,10 +19,9 @@ function isPureObject(input: any): input is Record<any, any> {
 export const networkScenarioToResponse = (
   scenario: NetworkScenario
 ): Response => {
-  const data =
-    isPureObject(scenario.response) || typeof scenario.response === 'number'
-      ? JSON.stringify(scenario.response)
-      : scenario.response
+  const data = needStringify(scenario.response)
+    ? JSON.stringify(scenario.response)
+    : scenario.response
   return new Response(data, {
     status: scenario.status,
     headers: scenario.headers,
