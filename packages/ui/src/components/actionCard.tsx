@@ -47,15 +47,14 @@ export const ActionCard: React.FC<{
         sx={{
           display: 'flex',
           flexWrap: 'wrap',
-          '& > *': (theme) => ({
+          // Space Between
+          '* + *': (theme) => ({
             marginLeft: theme.spacing(0.5),
-            marginRight: theme.spacing(0.5),
           }),
         }}
       >
-        <Typography color="textSecondary">{event.type}</Typography>
-
-        {/* tags */}
+        {/* Tags */}
+        <Chip size="small" label={event.type} />
         {'requestType' in event && (
           <Chip size="small" label={event.requestType} />
         )}
