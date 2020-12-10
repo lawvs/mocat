@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import zh_CN from './zh-CN.json'
 import en_US from './en-US.json'
 
@@ -47,16 +47,18 @@ type I18nInstance = {
   t: (keys: string, options?: Record<string, any>) => string
   getFixedT: (lng?: string, ns?: string) => I18nInstance['t']
   changeLanguage: (lng: string) => Promise<I18nInstance['t']>
+  on: (eventName: 'languageChanged', callback: (lng: string) => void) => void
+  off: (eventName: 'languageChanged', callback: (lng: string) => void) => void
 }
 
 let language = standardizeLocale(navigator.language)
 
 const getFixedT: I18nInstance['getFixedT'] = (lng = language) => {
+  if (!(lng in resources)) {
+    console.warn(`[i18n] missed language:${lng}`)
+    lng = language
+  }
   return (keys: string) => {
-    if (!(lng in resources)) {
-      console.warn(`[i18n] missed language:${lng}`)
-      return keys
-    }
     if (!(keys in resources[lng].translation)) {
       console.warn(`[i18n] missed key: ${lng} ${keys}`)
       return keys
@@ -64,14 +66,23 @@ const getFixedT: I18nInstance['getFixedT'] = (lng = language) => {
     return resources[lng].translation[keys]
   }
 }
-
+const observers = {
+  languageChanged: [] as ((lng: string) => void)[],
+}
 const i18nInstance: I18nInstance = {
   language,
   getFixedT,
   t: (...args) => getFixedT(language)(...args),
   changeLanguage(lng) {
     language = lng
+    observers['languageChanged'].forEach((fn) => fn(lng))
     return Promise.resolve(getFixedT(lng))
+  },
+  on(eventName, callback) {
+    observers[eventName].push(callback)
+  },
+  off(eventName, callback) {
+    observers[eventName] = observers[eventName].filter((fn) => fn !== callback)
   },
 }
 
@@ -89,8 +100,33 @@ export function useTranslation(
   const { i18n: i18nFromContext } = useContext(I18nContext) || {}
   const i18n = i18nFromProps || i18nFromContext || i18nInstance
 
+  // binding t function to namespace (acts also as rerender trigger)
+  function getT() {
+    return {
+      t: i18n.getFixedT(),
+    }
+  }
+  const [t, setT] = useState(getT()) // seems we can't have functions as value -> wrap it in obj
+
+  const isMounted = useRef(true)
+  useEffect(() => {
+    isMounted.current = true
+    function boundReset() {
+      if (isMounted.current) setT(getT())
+    }
+
+    // bind events to trigger change, like languageChanged
+    i18n.on('languageChanged', boundReset)
+
+    // unbinding on unmount
+    return () => {
+      isMounted.current = false
+      i18n.off('languageChanged', boundReset)
+    }
+  })
+
   return {
     i18n,
-    t: i18n.t,
+    t: t.t,
   }
 }
