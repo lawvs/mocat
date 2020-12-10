@@ -15,6 +15,7 @@ import { Send as SendIcon, Delete as DeleteIcon } from '@material-ui/icons'
 import type { MockEvent, Scenario } from '@mocat/interceptor'
 import { NOOP } from '../utils'
 import { useStore } from '../store'
+import { useTranslation } from '../i18n'
 
 const useStyles = makeStyles((theme: Theme) => ({
   cardActions: {
@@ -32,6 +33,7 @@ export const ActionCard: React.FC<{
 }> = ({ event, afterHandle = NOOP }) => {
   const classes = useStyles()
   const { disablePass } = useStore()
+  const { t } = useTranslation()
   const title =
     'name' in event
       ? event.name ?? 'anonymous'
@@ -65,7 +67,7 @@ export const ActionCard: React.FC<{
 
       <Box>
         {'pass' in event && !disablePass && (
-          <Tooltip title="pass" placement="top">
+          <Tooltip title={t('pass')} placement="top">
             <IconButton
               aria-label="pass"
               size="small"
@@ -79,7 +81,7 @@ export const ActionCard: React.FC<{
           </Tooltip>
         )}
         {'reject' in event && (
-          <Tooltip title="reject" placement="top">
+          <Tooltip title={t('reject')} placement="top">
             <IconButton
               aria-label="reject"
               size="small"

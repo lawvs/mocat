@@ -17,6 +17,7 @@ import { Drawer } from './components/drawer'
 import { ActionCard } from './components/actionCard'
 import { useMockState, useAutoResponder, useStore } from './store'
 import { MaterialUI } from './store/theme'
+import { useTranslation } from './i18n'
 
 const useStyles = makeStyles<Theme, { deg?: number }>((theme: Theme) =>
   createStyles({
@@ -44,8 +45,7 @@ const ToolBar = () => {
   const { disablePass } = useStore()
   const [btnDeg, setBtnDeg] = useState(0)
   const classes = useStyles({ deg: btnDeg })
-
-  const responseModeBtn = ['scenario', 'pass', 'reject'] as const
+  const { t } = useTranslation()
 
   const handleMode = (
     event: React.MouseEvent<HTMLElement>,
@@ -60,7 +60,7 @@ const ToolBar = () => {
   return (
     <Box className={classes.toolBar} sx={{ padding: 1, whiteSpace: 'nowrap' }}>
       <Chip
-        label="Auto Response"
+        label={t('Auto Response')}
         clickable
         size="small"
         color={enable ? 'secondary' : 'default'}
@@ -73,11 +73,11 @@ const ToolBar = () => {
         onChange={handleMode}
         aria-label="auto response mode"
       >
-        {responseModeBtn
+        {['scenario', 'pass', 'reject']
           .filter((i) => !disablePass || i !== 'pass')
           .map((btnMode) => (
             <ToggleButton value={btnMode} aria-label={btnMode} key={btnMode}>
-              {btnMode}
+              {t(btnMode)}
             </ToggleButton>
           ))}
       </ToggleButtonGroup>
