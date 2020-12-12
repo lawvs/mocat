@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import zh_CN from './zh-CN.json'
+import ja_JP from './ja-JP.json'
 import en_US from './en-US.json'
 
 const LOCALES = [
@@ -8,11 +9,11 @@ const LOCALES = [
     lng: '简体中文',
     res: zh_CN,
   },
-  // {
-  //   tag: 'ja-JP',
-  //   lng: '日本語',
-  //   res: ja_JP,
-  // },
+  {
+    tag: 'ja-JP',
+    lng: '日本語',
+    res: ja_JP,
+  },
   {
     tag: 'en-US',
     lng: 'English',
