@@ -3,6 +3,7 @@ import merge from 'lodash/merge'
 import { App } from './app'
 import { createStoreProvider, rootReducer, initialState } from './store'
 import type { State } from './store'
+import { i18nInstance } from './i18n'
 // import './service'
 
 type DeepPartial<T> = {
@@ -21,6 +22,11 @@ export const create = ({ el, ...options }: UIOptions = {}) => {
     el = document.createElement('div')
     el.id = 'mocat-root'
     document.body.append(el)
+  }
+
+  const language = options.language
+  if (language && language !== 'auto') {
+    i18nInstance.changeLanguage(language)
   }
 
   const StoreProvider = createStoreProvider(

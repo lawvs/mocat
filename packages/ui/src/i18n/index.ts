@@ -3,6 +3,8 @@ import zh_CN from './zh-CN.json'
 import ja_JP from './ja-JP.json'
 import en_US from './en-US.json'
 
+export type Languages = 'zh-CN' | 'ja-JP' | 'en-US'
+
 const LOCALES = [
   {
     tag: 'zh-CN',
@@ -70,13 +72,20 @@ const getFixedT: I18nInstance['getFixedT'] = (lng = language) => {
 const observers = {
   languageChanged: [] as ((lng: string) => void)[],
 }
-const i18nInstance: I18nInstance = {
+
+export const i18nInstance: I18nInstance = {
   language,
   getFixedT,
   t: (...args) => getFixedT(language)(...args),
   changeLanguage(lng) {
-    language = lng
-    observers['languageChanged'].forEach((fn) => fn(lng))
+    if (!(lng in resources)) {
+      console.warn(`[i18n] missed language:${lng}`)
+      return Promise.reject()
+    }
+    if (language !== lng) {
+      language = lng
+      observers['languageChanged'].forEach((fn) => fn(lng))
+    }
     return Promise.resolve(getFixedT(lng))
   },
   on(eventName, callback) {

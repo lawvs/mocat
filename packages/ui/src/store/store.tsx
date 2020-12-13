@@ -2,9 +2,11 @@ import { createContext, useReducer, useContext, Reducer } from 'react'
 import { EventEmitter2 } from 'eventemitter2'
 import type { MockEventEmitter, MockEvent } from '@mocat/interceptor'
 import { NOOP } from '../utils'
+import type { Languages } from '../i18n'
 
 export const initialState = {
   brandTitle: 'Mocat',
+  language: 'auto' as 'auto' | Languages,
   theme: 'auto' as 'auto' | 'light' | 'dark',
   drawer: {
     /** drawer fixed state */
@@ -19,6 +21,9 @@ export const initialState = {
     mode: 'scenario' as 'scenario' | 'pass' | 'reject',
     delay: 0,
   },
+  /**
+   * @internal
+   */
   mockEvent: [] as MockEvent[],
 }
 
