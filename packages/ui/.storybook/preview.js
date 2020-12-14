@@ -23,7 +23,7 @@ const withThemeProvider = (Story, context) => {
     <ThemeProvider
       theme={createMuiTheme({
         palette: {
-          type: theme,
+          mode: theme,
         },
       })}
     >
