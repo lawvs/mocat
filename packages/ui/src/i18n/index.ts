@@ -1,4 +1,12 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import {
+  createContext,
+  createElement,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import zh_CN from './zh-CN.json'
 import ja_JP from './ja-JP.json'
 import en_US from './en-US.json'
@@ -100,6 +108,31 @@ const I18nContext = createContext<{
   i18n?: I18nInstance
   defaultNS?: string
 }>({ i18n: i18nInstance })
+
+export function I18nProvider({
+  i18n,
+  defaultNS,
+  children,
+}: {
+  i18n?: I18nInstance
+  defaultNS?: string
+  children?: JSX.Element
+}) {
+  const value = useMemo(
+    () => ({
+      i18n,
+      defaultNS,
+    }),
+    [i18n, defaultNS]
+  )
+  return createElement(
+    I18nContext.Provider,
+    {
+      value,
+    },
+    children
+  )
+}
 
 export function useTranslation(
   ns?: string,
