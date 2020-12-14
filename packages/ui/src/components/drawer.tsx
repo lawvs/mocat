@@ -50,7 +50,7 @@ const useStyles = makeStyles<Theme, { marginBody?: boolean }>(
     drawerPaper: {
       overflowX: 'hidden',
       width: drawerWidth,
-      maxWidth: '100vw',
+      maxWidth: '90vw',
       flexShrink: 0,
     },
     drawerHeader: {
