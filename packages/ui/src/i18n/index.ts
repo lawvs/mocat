@@ -55,7 +55,10 @@ const standardizeLocale = (language: string) => {
 
 type I18nInstance = {
   language: string
-  t: (keys: string, options?: Record<string, any>) => string
+  /**
+   * The options is currently only available for interpolation.
+   */
+  t: (keys: string, options?: Record<string, string | number>) => string
   getFixedT: (lng?: string, ns?: string) => I18nInstance['t']
   changeLanguage: (lng: string) => Promise<I18nInstance['t']>
   on: (eventName: 'languageChanged', callback: (lng: string) => void) => void
@@ -69,12 +72,17 @@ const getFixedT: I18nInstance['getFixedT'] = (lng = language) => {
     console.warn(`[i18n] missed language:${lng}`)
     lng = language
   }
-  return (keys: string) => {
+  return (keys, options) => {
     if (!(keys in resources[lng].translation)) {
       console.warn(`[i18n] missed key: ${lng} ${keys}`)
       return keys
     }
-    return resources[lng].translation[keys]
+    let translation = resources[lng].translation[keys]
+    // simple interpolation
+    for (const [key, value] of Object.entries(options || {})) {
+      translation = translation.replaceAll(`{{${key}}}`, String(value))
+    }
+    return translation
   }
 }
 const observers = {
