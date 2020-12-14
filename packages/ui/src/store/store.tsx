@@ -18,7 +18,7 @@ export const initialState = {
   disablePass: false,
   autoResponder: {
     enable: false,
-    mode: 'scenario' as 'scenario' | 'pass' | 'reject',
+    mode: 'Scenario' as 'Scenario' | 'Pass' | 'Reject',
     delay: 0,
   },
   /**

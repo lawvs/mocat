@@ -67,7 +67,7 @@ export const ActionCard: React.FC<{
 
       <Box>
         {'pass' in event && !disablePass && (
-          <Tooltip title={t('pass')} placement="top">
+          <Tooltip title={t('Pass')} placement="top">
             <IconButton
               aria-label="pass"
               size="small"
@@ -81,7 +81,7 @@ export const ActionCard: React.FC<{
           </Tooltip>
         )}
         {'reject' in event && (
-          <Tooltip title={t('reject')} placement="top">
+          <Tooltip title={t('Reject')} placement="top">
             <IconButton
               aria-label="reject"
               size="small"

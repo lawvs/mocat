@@ -2,7 +2,7 @@ import type { MockEvent } from '@mocat/interceptor'
 import { useCallback } from 'react'
 import { State, useDispatch, useStore } from './store'
 
-type AutoResponderState = State['autoResponder']
+export type AutoResponderState = State['autoResponder']
 
 const useUpdateAutoResponder = () => {
   const dispatch = useDispatch()
@@ -26,7 +26,7 @@ export const useAutoResponder = () => {
       }
       const withDelay = (fn: (...args: any) => void) => setTimeout(fn, delay)
       switch (mode) {
-        case 'scenario':
+        case 'Scenario':
           if (e.rule.scenarios?.length) {
             const scenario = e.rule.scenarios[0]
             withDelay(() => e.resolve(scenario))
@@ -34,11 +34,11 @@ export const useAutoResponder = () => {
           }
         // no scenarios
         // falls through
-        case 'pass':
+        case 'Pass':
           // TODO request first and wait for a delay
           withDelay(() => e.pass())
           break
-        case 'reject':
+        case 'Reject':
           withDelay(() => e.reject())
           break
         default:

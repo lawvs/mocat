@@ -1,6 +1,7 @@
 {
   "Auto Response": "自動返信",
-  "scenario": "シナリオ",
-  "pass": "送信",
-  "reject": "破棄"
+  "Scenario": "シナリオ",
+  "Pass": "送信",
+  "Reject": "破棄",
+  "Delay": "遅延 {{millisecond}} ミリ秒"
 }

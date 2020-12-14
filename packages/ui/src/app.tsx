@@ -16,6 +16,7 @@ import { HourglassEmpty as HourglassEmptyIcon } from '@material-ui/icons'
 import { Drawer } from './components/drawer'
 import { ActionCard } from './components/actionCard'
 import { useMockState, useAutoResponder, useStore } from './store'
+import type { AutoResponderState } from './store/autoResponder'
 import { MaterialUI } from './store/theme'
 import { useTranslation } from './i18n'
 
@@ -49,7 +50,7 @@ const ToolBar = () => {
 
   const handleMode = (
     event: React.MouseEvent<HTMLElement>,
-    newMode: 'scenario' | 'pass' | 'reject' | null
+    newMode: AutoResponderState['mode'] | null
   ) => {
     if (newMode === null) {
       return
@@ -73,7 +74,7 @@ const ToolBar = () => {
         onChange={handleMode}
         aria-label="auto response mode"
       >
-        {['scenario', 'pass', 'reject']
+        {['Scenario', 'Pass', 'Reject']
           .filter((i) => !disablePass || i !== 'pass')
           .map((btnMode) => (
             <ToggleButton value={btnMode} aria-label={btnMode} key={btnMode}>
@@ -82,7 +83,7 @@ const ToolBar = () => {
           ))}
       </ToggleButtonGroup>
 
-      <Tooltip title={delay + 'ms'} placement="top">
+      <Tooltip title={t('Delay', { millisecond: delay })} placement="top">
         <IconButton
           className={classes.delayBtn}
           onClick={() => {
