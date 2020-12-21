@@ -39,7 +39,6 @@ export const setupFetch = () => {
         const baseDetail = {
           requestType: 'fetch' as const,
           rule: matchedRule,
-          request,
           resolve: withResolveScenario(resolve),
           reject: (error: any = new TypeError('Failed to fetch')) =>
             reject(error),
@@ -47,12 +46,14 @@ export const setupFetch = () => {
         const detail: NetworkBeforeEvent = {
           // id: new Date().getTime(),
           ...baseDetail,
+          request: request.clone(),
           type: 'Run/network/before',
           timeStamp: new Date().getTime(),
           pass: (intercept = false) => {
             passRequest(
               {
                 ...baseDetail,
+                request: request.clone(),
                 type: 'Run/network/after',
                 timeStamp: new Date().getTime(),
               },

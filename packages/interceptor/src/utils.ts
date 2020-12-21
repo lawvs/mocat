@@ -46,7 +46,7 @@ export const passRequest = async (
     }
     const detail: NetworkAfterEvent = {
       ...partialEvent,
-      response,
+      response: response.clone(),
       pass: () => resolveResponse(response),
     }
     onRun(detail)

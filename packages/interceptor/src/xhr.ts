@@ -59,20 +59,20 @@ export const setupXHR = () => {
         const baseDetail = {
           requestType: 'xhr' as const,
           rule: matchedRule,
-          request,
           resolve: withResolveScenario(resolve, resp),
           reject: () => reject(),
         }
 
         const detail: NetworkBeforeEvent = {
           ...baseDetail,
-          // id: new Date().getTime(),
+          request: request.clone(),
           type: 'Run/network/before',
           timeStamp: new Date().getTime(),
           pass: (intercept = false) =>
             passRequest(
               {
                 ...baseDetail,
+                request: request.clone(),
                 type: 'Run/network/after' as const,
                 timeStamp: new Date().getTime(),
               },

@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import {
   makeStyles,
   Theme,
@@ -43,65 +44,68 @@ export const ActionCard: React.FC<{
   const subTitle =
     'desc' in event ? event.name : 'rule' in event && event.rule.desc
 
-  const Header = () => (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          // Space Between
-          '* + *': (theme) => ({
-            marginLeft: theme.spacing(0.5),
-          }),
-        }}
-      >
-        {/* Tags */}
-        <Chip size="small" label={event.type} />
-        {'requestType' in event && (
-          <Chip size="small" label={event.requestType} />
-        )}
-        {'request' in event && (
-          <Chip size="small" label={event.request.method} />
-        )}
-      </Box>
+  const TagsHeader = useCallback(
+    () => (
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            // Space Between
+            '* + *': (theme) => ({
+              marginLeft: theme.spacing(0.5),
+            }),
+          }}
+        >
+          {/* Tags */}
+          <Chip size="small" label={event.type} />
+          {'requestType' in event && (
+            <Chip size="small" label={event.requestType} />
+          )}
+          {'request' in event && (
+            <Chip size="small" label={event.request.method} />
+          )}
+        </Box>
 
-      <Box>
-        {'pass' in event && !disablePass && (
-          <Tooltip title={t('Pass')} placement="top">
-            <IconButton
-              aria-label="pass"
-              size="small"
-              onClick={() => {
-                event.pass()
-                afterHandle()
-              }}
-            >
-              <SendIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        )}
-        {'reject' in event && (
-          <Tooltip title={t('Reject')} placement="top">
-            <IconButton
-              aria-label="reject"
-              size="small"
-              onClick={() => {
-                event.reject()
-                afterHandle()
-              }}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        )}
+        <Box>
+          {'pass' in event && !disablePass && (
+            <Tooltip title={t('Pass')} placement="top">
+              <IconButton
+                aria-label="pass"
+                size="small"
+                onClick={() => {
+                  event.pass()
+                  afterHandle()
+                }}
+              >
+                <SendIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          )}
+          {'reject' in event && (
+            <Tooltip title={t('Reject')} placement="top">
+              <IconButton
+                aria-label="reject"
+                size="small"
+                onClick={() => {
+                  event.reject()
+                  afterHandle()
+                }}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Box>
       </Box>
-    </Box>
+    ),
+    [afterHandle, disablePass, event, t]
   )
 
   return (
     <Card elevation={3}>
       <CardContent>
-        <Header />
+        <TagsHeader />
         <Typography variant="h5" component="h2" noWrap>
           {title}
         </Typography>
