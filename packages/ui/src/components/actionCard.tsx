@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import {
   makeStyles,
   Theme,
@@ -26,15 +25,87 @@ const useStyles = makeStyles((theme: Theme) => ({
       margin: theme.spacing(0.5),
     },
   },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
 }))
+
+const TagsHeader: React.FC<{
+  event: MockEvent
+  afterHandle?: () => void
+}> = ({ event, afterHandle = NOOP }) => {
+  const { disablePass } = useStore()
+  const { t } = useTranslation()
+
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          // Space Between
+          '* + *': (theme) => ({
+            marginLeft: theme.spacing(0.5),
+          }),
+        }}
+      >
+        {/* Tags */}
+        <Chip size="small" label={event.type} />
+        {'requestType' in event && (
+          <Chip size="small" label={event.requestType} />
+        )}
+        {'request' in event && (
+          <Chip size="small" label={event.request.method} />
+        )}
+      </Box>
+
+      <Box>
+        {'pass' in event && !disablePass && (
+          <Tooltip title={t('Pass')} placement="top">
+            <IconButton
+              aria-label="pass"
+              size="small"
+              onClick={() => {
+                event.pass()
+                afterHandle()
+              }}
+            >
+              <SendIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
+        {'reject' in event && (
+          <Tooltip title={t('Reject')} placement="top">
+            <IconButton
+              aria-label="reject"
+              size="small"
+              onClick={() => {
+                event.reject()
+                afterHandle()
+              }}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Box>
+    </Box>
+  )
+}
 
 export const ActionCard: React.FC<{
   event: MockEvent
   afterHandle?: () => void
 }> = ({ event, afterHandle = NOOP }) => {
   const classes = useStyles()
-  const { disablePass } = useStore()
-  const { t } = useTranslation()
+
   const title =
     'name' in event
       ? event.name ?? 'anonymous'
@@ -44,68 +115,10 @@ export const ActionCard: React.FC<{
   const subTitle =
     'desc' in event ? event.name : 'rule' in event && event.rule.desc
 
-  const TagsHeader = useCallback(
-    () => (
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            // Space Between
-            '* + *': (theme) => ({
-              marginLeft: theme.spacing(0.5),
-            }),
-          }}
-        >
-          {/* Tags */}
-          <Chip size="small" label={event.type} />
-          {'requestType' in event && (
-            <Chip size="small" label={event.requestType} />
-          )}
-          {'request' in event && (
-            <Chip size="small" label={event.request.method} />
-          )}
-        </Box>
-
-        <Box>
-          {'pass' in event && !disablePass && (
-            <Tooltip title={t('Pass')} placement="top">
-              <IconButton
-                aria-label="pass"
-                size="small"
-                onClick={() => {
-                  event.pass()
-                  afterHandle()
-                }}
-              >
-                <SendIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          )}
-          {'reject' in event && (
-            <Tooltip title={t('Reject')} placement="top">
-              <IconButton
-                aria-label="reject"
-                size="small"
-                onClick={() => {
-                  event.reject()
-                  afterHandle()
-                }}
-              >
-                <DeleteIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          )}
-        </Box>
-      </Box>
-    ),
-    [afterHandle, disablePass, event, t]
-  )
-
   return (
     <Card elevation={3}>
       <CardContent>
-        <TagsHeader />
+        <TagsHeader event={event} afterHandle={afterHandle} />
         <Typography variant="h5" component="h2" noWrap>
           {title}
         </Typography>
