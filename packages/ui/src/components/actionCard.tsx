@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import {
   makeStyles,
   Theme,
@@ -10,8 +11,13 @@ import {
   IconButton,
   Button,
   Tooltip,
+  Collapse,
 } from '@material-ui/core'
-import { Send as SendIcon, Delete as DeleteIcon } from '@material-ui/icons'
+import {
+  Send as SendIcon,
+  Delete as DeleteIcon,
+  ExpandMore as ExpandMoreIcon,
+} from '@material-ui/icons'
 import type { MockEvent, Scenario } from '@mocat/interceptor'
 import { NOOP } from '../utils'
 import { useStore } from '../store'
@@ -100,11 +106,68 @@ const TagsHeader: React.FC<{
   )
 }
 
+const HeadersDetail: React.FC<{ headers: Headers }> = ({ headers }) => (
+  <>
+    {[...headers.entries()].map(([key, value]) => (
+      <Typography key={key}>{`${key}: ${value}`}</Typography>
+    ))}
+  </>
+)
+const BodyDetail: React.FC<{ body?: string }> = ({ body }) =>
+  body ? <Typography>{body}</Typography> : <></>
+
+const NetworkDetail: React.FC<{
+  reqOrResp: Request | Response
+}> = ({ reqOrResp }) => {
+  const [body, setBody] = useState<string | undefined>()
+  useEffect(() => {
+    reqOrResp.clone().text().then(setBody)
+  }, [reqOrResp])
+
+  return (
+    <CardContent>
+      <Typography>{`${
+        'method' in reqOrResp ? reqOrResp.method : reqOrResp.status
+      } ${reqOrResp.url}`}</Typography>
+      <HeadersDetail headers={reqOrResp.headers}></HeadersDetail>
+      <BodyDetail body={body}></BodyDetail>
+    </CardContent>
+  )
+}
+
+const CardCollapse: React.FC<{
+  expanded: boolean
+  event: MockEvent
+}> = ({ event, expanded }) => {
+  switch (event.type) {
+    case 'Run/network/before':
+      return (
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <NetworkDetail reqOrResp={event.request}></NetworkDetail>
+        </Collapse>
+      )
+    case 'Run/network/after':
+      return (
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          {'response' in event && (
+            <NetworkDetail reqOrResp={event.response}></NetworkDetail>
+          )}
+        </Collapse>
+      )
+    default:
+      return <></>
+  }
+}
+
 export const ActionCard: React.FC<{
   event: MockEvent
   afterHandle?: () => void
 }> = ({ event, afterHandle = NOOP }) => {
   const classes = useStyles()
+  const [expanded, setExpanded] = useState(false)
+  const handleExpandClick = () => {
+    setExpanded(!expanded)
+  }
 
   const title =
     'name' in event
@@ -148,7 +211,18 @@ export const ActionCard: React.FC<{
               </Button>
             </Tooltip>
           ))}
+
+        <IconButton
+          className={`${classes.expand} ${expanded ? classes.expandOpen : ''}`}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </IconButton>
       </CardActions>
+
+      <CardCollapse expanded={expanded} event={event} />
     </Card>
   )
 }
