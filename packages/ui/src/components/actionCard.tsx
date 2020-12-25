@@ -41,6 +41,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
+  cardDetail: {
+    '& > * + *': {
+      marginTop: theme.spacing(1),
+    },
+  },
 }))
 
 const TagsHeader: React.FC<{
@@ -107,11 +112,11 @@ const TagsHeader: React.FC<{
 }
 
 const HeadersDetail: React.FC<{ headers: Headers }> = ({ headers }) => (
-  <>
+  <Typography>
     {[...headers.entries()].map(([key, value]) => (
       <Typography key={key}>{`${key}: ${value}`}</Typography>
     ))}
-  </>
+  </Typography>
 )
 const BodyDetail: React.FC<{ body?: string }> = ({ body }) =>
   body ? <Typography>{body}</Typography> : <></>
@@ -119,13 +124,15 @@ const BodyDetail: React.FC<{ body?: string }> = ({ body }) =>
 const NetworkDetail: React.FC<{
   reqOrResp: Request | Response
 }> = ({ reqOrResp }) => {
+  const classes = useStyles()
+
   const [body, setBody] = useState<string | undefined>()
   useEffect(() => {
     reqOrResp.clone().text().then(setBody)
   }, [reqOrResp])
 
   return (
-    <CardContent>
+    <CardContent className={classes.cardDetail}>
       <Typography>{`${
         'method' in reqOrResp ? reqOrResp.method : reqOrResp.status
       } ${reqOrResp.url}`}</Typography>
@@ -135,25 +142,21 @@ const NetworkDetail: React.FC<{
   )
 }
 
-const CardCollapse: React.FC<{
-  expanded: boolean
+const CardDetail: React.FC<{
   event: MockEvent
-}> = ({ event, expanded }) => {
+}> = ({ event }) => {
   switch (event.type) {
     case 'Run/network/before':
-      return (
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <NetworkDetail reqOrResp={event.request}></NetworkDetail>
-        </Collapse>
-      )
+      return <NetworkDetail reqOrResp={event.request}></NetworkDetail>
     case 'Run/network/after':
-      return (
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          {'response' in event && (
-            <NetworkDetail reqOrResp={event.response}></NetworkDetail>
-          )}
-        </Collapse>
-      )
+      if ('response' in event) {
+        return <NetworkDetail reqOrResp={event.response}></NetworkDetail>
+      }
+      if ('error' in event) {
+        // TODO error card
+        return <></>
+      }
+    // fallthrough
     default:
       return <></>
   }
@@ -222,7 +225,9 @@ export const ActionCard: React.FC<{
         </IconButton>
       </CardActions>
 
-      <CardCollapse expanded={expanded} event={event} />
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardDetail event={event} />
+      </Collapse>
     </Card>
   )
 }
