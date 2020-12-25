@@ -40,6 +40,9 @@ jobs:
       - name: Test E2E
         run: yarn test:e2e-ci
 
+      - name: Copy README
+        run: cp README.md packages/mocat
+
       - name: Publish
         run: yarn lerna publish from-package --yes
         env:
