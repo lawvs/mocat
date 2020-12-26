@@ -30,9 +30,14 @@ describe('xhr', () => {
     mockRoute({ url: '/' })
   })
 
+  beforeEach(() => {
+    // @ts-ignore
+    eventEmitter.removeAllListeners()
+  })
+
   test('should xhr works', async () => {
     const listener = jest.fn((payload) => payload.resolve({ response: 1 }))
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
     const xhr = await xhrRequest('/')
 
     expect(xhr.status).toEqual(200)
@@ -43,7 +48,7 @@ describe('xhr', () => {
 
   test('should xhr works with status', async () => {
     const listener = jest.fn((payload) => payload.resolve({ status: 400 }))
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
     const xhr = await xhrRequest('/')
 
     expect(xhr.status).toEqual(400)
@@ -54,7 +59,7 @@ describe('xhr', () => {
     const listener = jest.fn((payload) =>
       payload.resolve({ headers: { 'Content-Type': 'application/json' } })
     )
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
     const xhr = await xhrRequest('/')
 
     expect(xhr.getResponseHeader('Content-Type')).toEqual('application/json')
@@ -63,7 +68,7 @@ describe('xhr', () => {
 
   test('should xhr works with empty response', async () => {
     const listener = jest.fn((payload) => payload.resolve({}))
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
     const xhr = await xhrRequest('/')
 
     expect(xhr.response).toEqual('')
@@ -73,7 +78,7 @@ describe('xhr', () => {
   test('should xhr works with json', async () => {
     const data = { code: 1, msg: 'success' }
     const listener = jest.fn((payload) => payload.resolve({ response: data }))
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
 
     const xhr = await xhrRequest('/')
     expect(xhr.response).toEqual(JSON.stringify(data))
@@ -83,7 +88,7 @@ describe('xhr', () => {
   test('should xhr works with array json', async () => {
     const data = [{ data: 1, msg: 'success' }, { data: 2 }]
     const listener = jest.fn((payload) => payload.resolve({ response: data }))
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
     const xhr = await xhrRequest('/')
     expect(xhr.response).toEqual(JSON.stringify(data))
     expect(listener).toBeCalledTimes(1)
@@ -91,7 +96,7 @@ describe('xhr', () => {
 
   test('should xhr works when reject', async () => {
     const listener = jest.fn((payload) => payload.reject())
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
     try {
       await xhrRequest('/')
       fail('Unreachable')

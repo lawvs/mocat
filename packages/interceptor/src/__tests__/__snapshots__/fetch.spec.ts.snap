@@ -2,15 +2,6 @@
 
 exports[`snapshot test should network before event match snapshot 1`] = `
 Object {
-  "scenarios": Array [],
-  "timeStamp": 0,
-  "type": "Register/networkRoute",
-  "url": "/",
-}
-`;
-
-exports[`snapshot test should network before event match snapshot 2`] = `
-Object {
   "pass": [Function],
   "reject": [Function],
   "request": Request {

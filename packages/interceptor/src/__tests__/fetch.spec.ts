@@ -14,9 +14,14 @@ describe('fetch', () => {
     mockRoute({ url: '/' })
   })
 
+  beforeEach(() => {
+    // @ts-ignore
+    eventEmitter.removeAllListeners()
+  })
+
   test('should fetch works', async () => {
     const listener = jest.fn((payload) => payload.resolve({ response: 1 }))
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
     const resp = await fetch('/')
     const data = await resp.text()
 
@@ -27,7 +32,7 @@ describe('fetch', () => {
 
   test('should fetch works with status', async () => {
     const listener = jest.fn((payload) => payload.resolve({ status: 400 }))
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
     const resp = await fetch('/')
 
     expect(resp.status).toEqual(400)
@@ -38,7 +43,7 @@ describe('fetch', () => {
     const listener = jest.fn((payload) =>
       payload.resolve({ headers: { status: 204 } })
     )
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
     const resp = await fetch('/')
 
     expect(resp.headers.get('status')).toEqual('204')
@@ -47,7 +52,7 @@ describe('fetch', () => {
 
   test('should fetch works with empty response', async () => {
     const listener = jest.fn((payload) => payload.resolve({}))
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
     const resp = await fetch('/')
     const data = await resp.text()
 
@@ -58,7 +63,7 @@ describe('fetch', () => {
   test('should fetch works with json', async () => {
     const data = { code: 1, msg: 'success' }
     const listener = jest.fn((payload) => payload.resolve({ response: data }))
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
 
     expect((await fetch('/')).json()).resolves.toEqual(data)
     expect(listener).toBeCalledTimes(1)
@@ -67,7 +72,7 @@ describe('fetch', () => {
   test('should fetch works with array json', async () => {
     const data = [{ data: 1, msg: 'success' }, { data: 2 }]
     const listener = jest.fn((payload) => payload.resolve({ response: data }))
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
 
     expect((await fetch('/')).json()).resolves.toEqual(data)
     expect(listener).toBeCalledTimes(1)
@@ -75,7 +80,7 @@ describe('fetch', () => {
 
   test('should fetch works when reject', async () => {
     const listener = jest.fn((payload) => payload.reject())
-    eventEmitter.once('Run/network/before', listener)
+    eventEmitter.on('Run/network/before', listener)
 
     expect(fetch('/')).rejects.toThrowError('Failed to fetch')
     expect(listener).toBeCalledTimes(1)
@@ -107,7 +112,6 @@ describe('snapshot test', () => {
   })
 
   test('should network before event match snapshot', async () => {
-    mockRoute({ url: '/' })
     const listener = jest.fn((payload) => expect(payload).toMatchSnapshot())
     eventEmitter.on('Run/network/before', listener)
 
