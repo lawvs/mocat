@@ -2,6 +2,7 @@
 
 exports[`snapshot test should network before event match snapshot 1`] = `
 Object {
+  "scenarios": Array [],
   "timeStamp": 0,
   "type": "Register/networkRoute",
   "url": "/",
@@ -50,6 +51,7 @@ Object {
   "requestType": "fetch",
   "resolve": [Function],
   "rule": Object {
+    "scenarios": Array [],
     "timeStamp": 0,
     "type": "Register/networkRoute",
     "url": "/",

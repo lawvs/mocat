@@ -14,13 +14,13 @@ export const initialState = {
     /** drawer open state */
     open: false,
   },
-  eventEmitter: new EventEmitter2() as MockEventEmitter,
   disablePass: false,
   autoResponder: {
     enable: false,
     mode: 'Scenario' as 'Scenario' | 'Pass' | 'Reject',
     delay: 0,
   },
+  eventEmitter: new EventEmitter2() as MockEventEmitter,
   /**
    * @internal
    */

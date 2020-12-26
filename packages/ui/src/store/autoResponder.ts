@@ -49,11 +49,17 @@ export const useAutoResponder = () => {
   )
 
   const delayScenario = [100, 1000, 5000]
-  const toggleDelay = () =>
+  const toggleDelay = (newDelay?: number) => {
+    if (newDelay !== undefined) {
+      updateAutoResponder({
+        delay: newDelay,
+      })
+      return
+    }
     updateAutoResponder({
       delay: delayScenario.find((i) => i > delay) ?? 0,
     })
-
+  }
   return {
     enable,
     mode,

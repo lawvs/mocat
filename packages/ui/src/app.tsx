@@ -1,4 +1,4 @@
-import { StrictMode, useState } from 'react'
+import { StrictMode, useCallback, useState } from 'react'
 import {
   Box,
   Grid,
@@ -48,15 +48,23 @@ const ToolBar = () => {
   const classes = useStyles({ deg: btnDeg })
   const { t } = useTranslation()
 
-  const handleMode = (
-    event: React.MouseEvent<HTMLElement>,
-    newMode: AutoResponderState['mode'] | null
-  ) => {
-    if (newMode === null) {
-      return
-    }
-    switchMode(newMode)
-  }
+  const handleMode = useCallback(
+    (
+      event: React.MouseEvent<HTMLElement>,
+      newMode: AutoResponderState['mode'] | null
+    ) => {
+      if (newMode === null) {
+        return
+      }
+      switchMode(newMode)
+    },
+    [switchMode]
+  )
+
+  const handleDelay = useCallback(() => {
+    setBtnDeg(btnDeg + 180)
+    toggleDelay()
+  }, [btnDeg, toggleDelay])
 
   return (
     <Box className={classes.toolBar} sx={{ padding: 1, whiteSpace: 'nowrap' }}>
@@ -86,10 +94,7 @@ const ToolBar = () => {
       <Tooltip title={t('Delay', { millisecond: delay })} placement="top">
         <IconButton
           className={classes.delayBtn}
-          onClick={() => {
-            setBtnDeg(btnDeg + 180)
-            toggleDelay()
-          }}
+          onClick={handleDelay}
           size="small"
         >
           <HourglassEmptyIcon />
@@ -100,18 +105,13 @@ const ToolBar = () => {
 }
 
 const Mock = () => {
-  const [state, setState] = useMockState()
+  const [state] = useMockState()
 
   return (
     <Grid container direction="column" alignItems="stretch" spacing={2}>
       {state.map((e) => (
         <Grid item key={e.timeStamp} xs={12}>
-          <ActionCard
-            event={e}
-            afterHandle={() => {
-              setState(state.filter((i) => i !== e))
-            }}
-          ></ActionCard>
+          <ActionCard event={e}></ActionCard>
         </Grid>
       ))}
     </Grid>

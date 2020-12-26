@@ -4,6 +4,7 @@ import type { MockEvent } from '@mocat/interceptor'
 import { useDispatch, useStore } from './store'
 import { useAutoResponder } from './autoResponder'
 import { useDrawer } from './drawer'
+import { NOOP } from '../utils'
 
 const useEventState = <T extends MockEvent['type']>(eventName: T) => {
   const { mockEvent: state } = useStore()
@@ -47,3 +48,28 @@ export const useMockState = () => {
 }
 
 export const useMockEventLength = () => useMockState()[0].length
+
+export const useMockEvent = (event: MockEvent) => {
+  const { disablePass } = useStore()
+  const [state, setState] = useMockState()
+  const withHandleState = useCallback(
+    <T extends (...args: any[]) => void>(fn: T) => (...args: Parameters<T>) => {
+      fn(...args)
+      setState(state.filter((i) => i !== event))
+    },
+    [event, setState, state]
+  )
+
+  const passEvent =
+    'pass' in event && !disablePass ? withHandleState(event.pass) : null
+  const rejectEvent = 'reject' in event ? withHandleState(event.reject) : null
+  const resolveEvent =
+    'resolve' in event ? withHandleState(event.resolve) : null
+
+  return {
+    passEvent,
+    // returnEvent,
+    rejectEvent,
+    resolveEvent,
+  }
+}

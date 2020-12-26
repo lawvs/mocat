@@ -5,9 +5,10 @@ import type {
   AsyncFnRegister,
 } from './types'
 
-type PartialKeys<T, K extends keyof T> = {
-  [P in K]?: T[P]
-}
+type PartialKeys<T, K extends keyof T> = Omit<T, K> &
+  {
+    [P in K]?: T[P]
+  }
 
 export const mockAsyncFn = (
   mock: PartialKeys<

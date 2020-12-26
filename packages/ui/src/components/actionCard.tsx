@@ -18,9 +18,8 @@ import {
   Delete as DeleteIcon,
   ExpandMore as ExpandMoreIcon,
 } from '@material-ui/icons'
-import type { MockEvent, Scenario } from '@mocat/interceptor'
-import { NOOP } from '../utils'
-import { useStore } from '../store'
+import type { MockEvent } from '@mocat/interceptor'
+import { useMockEvent } from '../store'
 import { useTranslation } from '../i18n'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -50,10 +49,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const TagsHeader: React.FC<{
   event: MockEvent
-  afterHandle?: () => void
-}> = ({ event, afterHandle = NOOP }) => {
-  const { disablePass } = useStore()
+}> = ({ event }) => {
   const { t } = useTranslation()
+  const { passEvent, rejectEvent } = useMockEvent(event)
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -78,29 +76,23 @@ const TagsHeader: React.FC<{
       </Box>
 
       <Box>
-        {'pass' in event && !disablePass && (
+        {passEvent && (
           <Tooltip title={t('Pass')} placement="top">
             <IconButton
               aria-label="pass"
               size="small"
-              onClick={() => {
-                event.pass()
-                afterHandle()
-              }}
+              onClick={() => passEvent()}
             >
               <SendIcon fontSize="small" />
             </IconButton>
           </Tooltip>
         )}
-        {'reject' in event && (
+        {rejectEvent && (
           <Tooltip title={t('Reject')} placement="top">
             <IconButton
               aria-label="reject"
               size="small"
-              onClick={() => {
-                event.reject()
-                afterHandle()
-              }}
+              onClick={() => rejectEvent()}
             >
               <DeleteIcon fontSize="small" />
             </IconButton>
@@ -164,10 +156,10 @@ const CardDetail: React.FC<{
 
 export const ActionCard: React.FC<{
   event: MockEvent
-  afterHandle?: () => void
-}> = ({ event, afterHandle = NOOP }) => {
+}> = ({ event }) => {
   const classes = useStyles()
   const [expanded, setExpanded] = useState(false)
+  const { resolveEvent } = useMockEvent(event)
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
@@ -184,7 +176,7 @@ export const ActionCard: React.FC<{
   return (
     <Card elevation={3}>
       <CardContent>
-        <TagsHeader event={event} afterHandle={afterHandle} />
+        <TagsHeader event={event} />
         <Typography variant="h5" component="h2" noWrap>
           {title}
         </Typography>
@@ -194,9 +186,9 @@ export const ActionCard: React.FC<{
       </CardContent>
 
       <CardActions className={classes.cardActions} disableSpacing>
-        {'rule' in event &&
-          event.rule.scenarios &&
-          (event.rule.scenarios as Scenario[]).map((scenario) => (
+        {resolveEvent &&
+          'rule' in event &&
+          Array.from(event.rule.scenarios).map((scenario) => (
             <Tooltip
               title={scenario.desc ?? ''}
               placement="top"
@@ -205,10 +197,7 @@ export const ActionCard: React.FC<{
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => {
-                  event.resolve(scenario)
-                  afterHandle()
-                }}
+                onClick={() => resolveEvent(scenario)}
               >
                 {scenario.name}
               </Button>
