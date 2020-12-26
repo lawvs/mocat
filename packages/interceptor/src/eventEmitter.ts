@@ -56,11 +56,6 @@ export const registerMock = (rule: RegisterEvent) => {
   eventEmitter.emit(rule.type, rule)
 }
 
-const defaultRoute: Omit<NetWorkRegister, 'timeStamp'> = {
-  type: 'Register/networkRoute',
-  url: '',
-}
-
 const networkRules: NetWorkRegister[] = []
 
 export const matchNetworkRule = (
@@ -82,7 +77,7 @@ export const matchNetworkRule = (
 
 export const mockRoute = (route: MockRoute) => {
   const innerRoute: NetWorkRegister = {
-    ...defaultRoute,
+    scenarios: [],
     ...route,
     type: 'Register/networkRoute',
     timeStamp: new Date().getTime(),

@@ -5,10 +5,18 @@ import type {
   AsyncFnRegister,
 } from './types'
 
+type PartialKeys<T, K extends keyof T> = {
+  [P in K]?: T[P]
+}
+
 export const mockAsyncFn = (
-  mock: Omit<AsyncFnRegister, 'type' | 'target' | 'timeStamp'> = {}
+  mock: PartialKeys<
+    Omit<AsyncFnRegister, 'type' | 'target' | 'timeStamp'>,
+    'scenarios'
+  > = {}
 ) => <T extends (...args: unknown[]) => Promise<unknown>>(targetFn: T): T => {
   const rule: AsyncFnRegister = {
+    scenarios: [],
     ...mock,
     type: 'Register/asyncFn',
     target: targetFn,

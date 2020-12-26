@@ -78,15 +78,22 @@ export interface MockRoute extends Comment {
 
 export interface NetWorkRegister extends MockRoute, Event {
   type: 'Register/networkRoute'
+  scenarios: NetworkScenario[]
 }
 
+/**
+ * @private
+ */
 export interface AsyncFnRegister extends Comment, Event {
   type: 'Register/asyncFn'
   target: (...args: any) => Promise<any>
-  scenarios?: FnScenario[]
+  scenarios: FnScenario[]
 }
 
-export interface SyncFnRegister extends Comment, Event {
+/**
+ * @private
+ */
+interface SyncFnRegister extends Comment, Event {
   type: 'Register/syncFn'
   target: (...args: any) => any
   mockFn: {
@@ -94,9 +101,12 @@ export interface SyncFnRegister extends Comment, Event {
     mockReturnValue: (value: any) => void
     mockImplementation: (...args: any) => any
   }
-  scenarios?: FnScenario[]
+  scenarios: FnScenario[]
 }
 
+/**
+ * @private
+ */
 type FnRegister = AsyncFnRegister | SyncFnRegister
 
 export type RegisterEvent = NetWorkRegister | FnRegister
