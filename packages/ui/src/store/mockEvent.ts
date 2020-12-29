@@ -4,7 +4,6 @@ import type { MockEvent } from '@mocat/interceptor'
 import { useDispatch, useStore } from './store'
 import { useAutoResponder } from './autoResponder'
 import { useDrawer } from './drawer'
-import { NOOP } from '../utils'
 
 const useEventState = <T extends MockEvent['type']>(eventName: T) => {
   const { mockEvent: state } = useStore()

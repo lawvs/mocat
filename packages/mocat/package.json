@@ -16,6 +16,11 @@
     "tool",
     "ui"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lawvs/mocat.git",
+    "directory": "packages/mocat"
+  },
   "license": "MIT",
   "sideEffects": false,
   "main": "build/index.js",

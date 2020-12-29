@@ -2,15 +2,17 @@
   "name": "@mocat/interceptor",
   "version": "0.2.4",
   "description": "Interceptor for Mocat",
-  "main": "build/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lawvs/mocat.git",
+    "directory": "packages/interceptor"
+  },
   "license": "MIT",
   "sideEffects": false,
+  "main": "build/index.js",
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf build"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "dependencies": {
     "eventemitter2": "^6.4.3",
@@ -19,5 +21,8 @@
   },
   "devDependencies": {
     "@types/fetch-mock": "^7.3.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

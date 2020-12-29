@@ -31,7 +31,7 @@ jobs:
         run: yarn build
 
       - name: Lint
-        run: yarn lint
+        run: yarn lint --max-warnings=0
 
       - name: Type check
         run: yarn typecheck
