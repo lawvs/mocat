@@ -1,0 +1,15 @@
+{
+  "name": "mocat-webpack-plugin",
+  "version": "0.2.4",
+  "description": "Webpack Plugin for Mocat",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lawvs/mocat.git",
+    "directory": "packages/mocat-webpack-plugin"
+  },
+  "license": "MIT",
+  "main": "build/index.js",
+  "publishConfig": {
+    "access": "public"
+  }
+}

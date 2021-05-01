@@ -67,8 +67,10 @@ ReactDOM.render(<App />, document.getElementById('app'))
 // Or Vue
 createApp(App).mount('#app')
 
-if (process.env.NODE_ENV !== 'production') {
-  await import('./mock')
+const urlParams = new URLSearchParams(window.location.search)
+const enableMocat = urlParams.get('mocat')
+if (process.env.NODE_ENV !== 'production' && enableMocat !== 'false') {
+  import('./mock')
 }
 ```
 
@@ -136,6 +138,27 @@ export interface NetworkScenario {
 }
 ```
 
+## TODO
+
+- [x] Update bundled name
+- [ ] Use local storage
+- [ ] Webpack plugin
+- [x] Scenario mode
+- [x] ESM example
+- [x] e2e test
+- [ ] Search
+- [ ] Edit request
+- [ ] Intercept after
+- [ ] extension mode
+
+## Limitations and Trade-offs
+
+- Mocat is not a general-purpose test tool. It may not be suitable for large or complex applications.
+- Streaming
+- Resource loads
+- Websocket
+- Service Worker
+
 ## Other similar projects
 
 - [Mock](https://github.com/nuysoft/Mock)
@@ -144,6 +167,9 @@ export interface NetworkScenario {
 - [fetch-mock](https://github.com/wheresrhys/fetch-mock)
 - [cypress](https://github.com/cypress-io/cypress)
 - [nise](https://github.com/sinonjs/nise)
+- [unmock-js](https://github.com/meeshkan/unmock-js)
+- [prism](https://github.com/stoplightio/prism)
+- [pollyjs](https://github.com/Netflix/pollyjs)
 
 ## License
 
