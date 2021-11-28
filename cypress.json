@@ -1,4 +1,3 @@
 {
-  "experimentalNetworkStubbing": true,
   "testFiles": ["**/*.spec.ts"]
 }
