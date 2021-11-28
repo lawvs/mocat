@@ -21,7 +21,7 @@ describe('mockAsync should works', () => {
   })
 
   test('mockAsync should works with reject', async () => {
-    const asyncFn = () => Promise.reject(1)
+    const asyncFn = () => Promise.reject(new Error('1'))
     const mockFn = mockAsyncFn()(asyncFn)
     expect(await mockFn().catch((i) => i)).toEqual(
       await asyncFn().catch((i) => i)
