@@ -14,7 +14,7 @@ describe('fetch', () => {
     mockRoute({ url: '/' })
   })
 
-  beforeEach(() => {
+  afterEach(() => {
     // @ts-ignore
     eventEmitter.removeAllListeners()
   })

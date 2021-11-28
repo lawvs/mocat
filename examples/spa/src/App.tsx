@@ -13,7 +13,11 @@ const FetchCard = defineComponent({
         data.value = await (await fetch('/api/data.json')).json()
         btnText.value = 'Fetch Done!'
       } catch (error) {
-        data.value = error?.stack
+        if (error instanceof Error) {
+          data.value = error.stack
+        } else {
+          data.value = error
+        }
         btnText.value = 'Fetch Error!'
         throw error
       }
@@ -40,7 +44,11 @@ const AxiosCard = defineComponent({
         data.value = (await axios.get('/api/data.json')).data
         btnText.value = 'Axios Done!'
       } catch (error) {
-        data.value = error?.stack
+        if (error instanceof Error) {
+          data.value = error.stack
+        } else {
+          data.value = error
+        }
         btnText.value = 'Axios Error!'
         throw error
       }

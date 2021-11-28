@@ -40,7 +40,11 @@ export const mockAsyncFn = (
           try {
             originResult = await targetFn(...args)
           } catch (e) {
-            error = e
+            if (e instanceof Error) {
+              error = e
+            } else {
+              error = new Error(`Unknown error: ${e}`)
+            }
           }
 
           const passReturn = () => {

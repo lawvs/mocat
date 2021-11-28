@@ -56,7 +56,7 @@ export const baseTest = (target: { name: string; url: string }) =>
     })
 
     it('should SCENARIO works', () => {
-      cy.intercept('/api', () => {
+      cy.intercept('/api/**', () => {
         throw new Error('should not request network')
       })
 
@@ -66,7 +66,7 @@ export const baseTest = (target: { name: string; url: string }) =>
     })
 
     it('should PASS works', () => {
-      cy.intercept('/api', (req) => {
+      cy.intercept('/api/**', (req) => {
         expect(req.url).to.include('/data.json')
         req.reply((res) => res)
       }).as('api')
@@ -78,8 +78,15 @@ export const baseTest = (target: { name: string; url: string }) =>
     })
 
     it('should REJECT works', () => {
-      cy.intercept('/api', () => {
+      cy.intercept('/api/**', () => {
         throw new Error('should not request network')
+      })
+
+      cy.on('uncaught:exception', (err) => {
+        expect(err.message).to.include('Failed to fetch')
+        // returning false here prevents Cypress from
+        // failing the test
+        return false
       })
 
       getFetchBtn().click()
