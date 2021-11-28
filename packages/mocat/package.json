@@ -1,6 +1,6 @@
 {
   "name": "mocat",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "a development toolbar for mocking",
   "keywords": [
     "ajax",
@@ -31,8 +31,8 @@
     "clean": "rm -rf build"
   },
   "dependencies": {
-    "@mocat/interceptor": "^0.2.4",
-    "@mocat/ui": "^0.2.4"
+    "@mocat/interceptor": "^0.2.5",
+    "@mocat/ui": "^0.2.5"
   },
   "publishConfig": {
     "access": "public"

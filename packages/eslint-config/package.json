@@ -1,6 +1,6 @@
 {
   "name": "@mocat/eslint-config",
-  "version": "0.2.2",
+  "version": "0.2.5",
   "private": true,
   "description": "ESLint configuration",
   "author": "lawvs",
