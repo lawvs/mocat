@@ -30,7 +30,7 @@
     "build": "rollup --config",
     "clean": "rm -rf build"
   },
-  "dependencies": {
+  "devDependencies": {
     "@mocat/interceptor": "^0.2.5",
     "@mocat/ui": "^0.2.5"
   },
