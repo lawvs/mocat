@@ -1,6 +1,6 @@
 {
   "name": "mocat",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "a development toolbar for mocking",
   "keywords": [
     "ajax",
