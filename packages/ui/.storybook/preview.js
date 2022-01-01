@@ -1,6 +1,5 @@
 // @ts-check
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline'
+import { createTheme, ScopedCssBaseline, ThemeProvider } from '@mui/material'
 import { useEffect } from 'react'
 import { i18nInstance } from '../src/i18n'
 
@@ -35,14 +34,14 @@ export const globalTypes = {
 
 const withThemeProvider = (Story, context) => {
   const theme = context.globals.theme
+  const muiTheme = createTheme({
+    palette: {
+      mode: theme,
+    },
+  })
+
   return (
-    <ThemeProvider
-      theme={createMuiTheme({
-        palette: {
-          mode: theme,
-        },
-      })}
-    >
+    <ThemeProvider theme={muiTheme}>
       <ScopedCssBaseline>
         <Story {...context} />
       </ScopedCssBaseline>
