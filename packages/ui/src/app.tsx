@@ -1,38 +1,19 @@
-import { StrictMode, useCallback, useState } from 'react'
+import { HourglassEmpty as HourglassEmptyIcon } from '@mui/icons-material'
 import {
   Box,
-  Grid,
   Chip,
-  ToggleButtonGroup,
-  ToggleButton,
   IconButton,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
-  createStyles,
-  makeStyles,
-  Theme,
-} from '@material-ui/core'
-import { HourglassEmpty as HourglassEmptyIcon } from '@material-ui/icons'
-
-import { Drawer } from './components/drawer'
+} from '@mui/material'
+import { StrictMode, useCallback, useState } from 'react'
 import { ActionCard } from './components/actionCard'
-import { useMockState, useAutoResponder, useStore } from './store'
+import { Drawer } from './components/drawer'
+import { useTranslation } from './i18n'
+import { useAutoResponder, useMockState, useStore } from './store'
 import type { AutoResponderState } from './store/autoResponder'
 import { MaterialUI } from './store/theme'
-import { useTranslation } from './i18n'
-
-const useStyles = makeStyles<Theme, { deg?: number }>((theme: Theme) =>
-  createStyles({
-    toolBar: {
-      '& > *': {
-        margin: theme.spacing(0.5),
-      },
-    },
-    delayBtn: {
-      transform: ({ deg = 0 }) => `rotate(${deg}deg)`,
-      transition: `transform ${theme.transitions.duration.standard}ms ease`,
-    },
-  })
-)
 
 const ToolBar = () => {
   const {
@@ -45,7 +26,6 @@ const ToolBar = () => {
   } = useAutoResponder()
   const { disablePass } = useStore()
   const [btnDeg, setBtnDeg] = useState(0)
-  const classes = useStyles({ deg: btnDeg })
   const { t } = useTranslation()
 
   const handleMode = useCallback(
@@ -67,7 +47,15 @@ const ToolBar = () => {
   }, [btnDeg, toggleDelay])
 
   return (
-    <Box className={classes.toolBar} sx={{ padding: 1, whiteSpace: 'nowrap' }}>
+    <Box
+      sx={{
+        padding: 1,
+        whiteSpace: 'nowrap',
+        '& > *': {
+          margin: (theme) => theme.spacing(0.5),
+        },
+      }}
+    >
       <Chip
         label={t('Auto Response')}
         clickable
@@ -93,7 +81,11 @@ const ToolBar = () => {
 
       <Tooltip title={t('Delay', { millisecond: delay })} placement="top">
         <IconButton
-          className={classes.delayBtn}
+          sx={{
+            transform: `rotate(${btnDeg}deg)`,
+            transition: (theme) =>
+              `transform ${theme.transitions.duration.standard}ms ease`,
+          }}
           onClick={handleDelay}
           size="small"
         >
@@ -108,13 +100,16 @@ const Mock = () => {
   const [state] = useMockState()
 
   return (
-    <Grid container direction="column" alignItems="stretch" spacing={2}>
+    <>
       {state.map((e) => (
-        <Grid item key={e.timeStamp} xs={12}>
+        <Box
+          key={e.timeStamp}
+          sx={{ marginBottom: (theme) => theme.spacing(2) }}
+        >
           <ActionCard event={e}></ActionCard>
-        </Grid>
+        </Box>
       ))}
-    </Grid>
+    </>
   )
 }
 

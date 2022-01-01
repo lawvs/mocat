@@ -1,51 +1,24 @@
-import { useState, useEffect } from 'react'
+import type { MockEvent } from '@mocat/interceptor'
 import {
-  makeStyles,
-  Theme,
-  Box,
-  Card,
-  CardContent,
-  CardActions,
-  Chip,
-  Typography,
-  IconButton,
-  Button,
-  Tooltip,
-  Collapse,
-} from '@material-ui/core'
-import {
-  Send as SendIcon,
   Delete as DeleteIcon,
   ExpandMore as ExpandMoreIcon,
-} from '@material-ui/icons'
-import type { MockEvent } from '@mocat/interceptor'
-import { useMockEvent } from '../store'
+  Send as SendIcon,
+} from '@mui/icons-material'
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Chip,
+  Collapse,
+  IconButton,
+  Tooltip,
+  Typography,
+} from '@mui/material'
+import { useEffect, useState } from 'react'
 import { useTranslation } from '../i18n'
-
-const useStyles = makeStyles((theme: Theme) => ({
-  cardActions: {
-    flexWrap: 'wrap',
-    padding: theme.spacing(-0.5),
-    '& > *': {
-      margin: theme.spacing(0.5),
-    },
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  cardDetail: {
-    '& > * + *': {
-      marginTop: theme.spacing(1),
-    },
-  },
-}))
+import { useMockEvent } from '../store'
 
 const TagsHeader: React.FC<{
   event: MockEvent
@@ -103,7 +76,7 @@ const TagsHeader: React.FC<{
   )
 }
 
-const HeadersDetail: React.FC<{ headers: Headers }> = ({ headers }) => (
+const HeadersDetail = ({ headers }: { headers: Headers }) => (
   <Typography>
     {[...headers.entries()].map(([key, value]) => (
       <Typography key={key}>{`${key}: ${value}`}</Typography>
@@ -116,15 +89,13 @@ const BodyDetail: React.FC<{ body?: string }> = ({ body }) =>
 const NetworkDetail: React.FC<{
   reqOrResp: Request | Response
 }> = ({ reqOrResp }) => {
-  const classes = useStyles()
-
   const [body, setBody] = useState<string | undefined>()
   useEffect(() => {
     reqOrResp.clone().text().then(setBody)
   }, [reqOrResp])
 
   return (
-    <CardContent className={classes.cardDetail}>
+    <CardContent>
       <Typography>{`${
         'method' in reqOrResp ? reqOrResp.method : reqOrResp.status
       } ${reqOrResp.url}`}</Typography>
@@ -134,9 +105,7 @@ const NetworkDetail: React.FC<{
   )
 }
 
-const CardDetail: React.FC<{
-  event: MockEvent
-}> = ({ event }) => {
+const CardDetail = ({ event }: { event: MockEvent }) => {
   switch (event.type) {
     case 'Run/network/before':
       return <NetworkDetail reqOrResp={event.request}></NetworkDetail>
@@ -154,10 +123,7 @@ const CardDetail: React.FC<{
   }
 }
 
-export const ActionCard: React.FC<{
-  event: MockEvent
-}> = ({ event }) => {
-  const classes = useStyles()
+export const ActionCard = ({ event }: { event: MockEvent }) => {
   const [expanded, setExpanded] = useState(false)
   const { resolveEvent } = useMockEvent(event)
   const handleExpandClick = () => {
@@ -185,11 +151,18 @@ export const ActionCard: React.FC<{
         </Typography>
       </CardContent>
 
-      <CardActions className={classes.cardActions} disableSpacing>
+      <CardActions
+        sx={{
+          flexWrap: 'wrap',
+          padding: (theme) => theme.spacing(-0.5),
+        }}
+        disableSpacing
+      >
         {resolveEvent &&
           'rule' in event &&
           Array.from(event.rule.scenarios).map((scenario) => (
             <Tooltip
+              sx={{ margin: (theme) => theme.spacing(0.5) }}
               title={scenario.desc ?? ''}
               placement="top"
               key={scenario.name}
@@ -205,7 +178,17 @@ export const ActionCard: React.FC<{
           ))}
 
         <IconButton
-          className={`${classes.expand} ${expanded ? classes.expandOpen : ''}`}
+          sx={[
+            {
+              transform: 'rotate(0deg)',
+              marginLeft: 'auto',
+              transition: (theme) =>
+                theme.transitions.create('transform', {
+                  duration: theme.transitions.duration.shortest,
+                }),
+            },
+            expanded && { transform: 'rotate(180deg)' },
+          ]}
           onClick={handleExpandClick}
           aria-expanded={expanded}
           aria-label="show more"

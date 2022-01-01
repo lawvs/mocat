@@ -1,26 +1,24 @@
 import {
-  makeStyles,
-  useTheme,
-  Box,
-  Fab,
-  Badge,
-  Drawer as MUIDrawer,
-  Divider,
-  ClickAwayListener,
-  Zoom,
-  IconButton,
-} from '@material-ui/core'
-import type { Theme } from '@material-ui/core/styles/createMuiTheme'
-import {
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
-  Build as BuildIcon,
-  Lock as LockIcon,
-  LockOpen as LockOpenIcon,
   Brightness4 as DarkIcon,
   Brightness7 as LightIcon,
-} from '@material-ui/icons'
-
+  Build as BuildIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  Lock as LockIcon,
+  LockOpen as LockOpenIcon,
+} from '@mui/icons-material'
+import {
+  Badge,
+  Box,
+  ClickAwayListener,
+  Divider,
+  Drawer as MUIDrawer,
+  Fab,
+  GlobalStyles,
+  IconButton,
+  useTheme,
+  Zoom,
+} from '@mui/material'
 import {
   useAutoResponder,
   useDrawer,
@@ -31,39 +29,6 @@ import {
 
 const drawerWidth = 400
 
-const useStyles = makeStyles<Theme, { marginBody?: boolean }>(
-  (theme: Theme) => ({
-    '@global': {
-      html: {
-        marginRight: ({ marginBody = false }) => marginBody && drawerWidth,
-      },
-    },
-    fab: {
-      position: 'fixed',
-      bottom: theme.spacing(2),
-      right: theme.spacing(2),
-      zIndex: 999999,
-    },
-    fabExtendedIcon: {
-      marginRight: theme.spacing(1),
-    },
-    drawerPaper: {
-      overflowX: 'hidden',
-      width: drawerWidth,
-      maxWidth: '90vw',
-      flexShrink: 0,
-    },
-    drawerHeader: {
-      display: 'flex',
-      alignItems: 'center',
-      padding: theme.spacing(0, 1),
-      // necessary for content to be below app bar
-      ...theme.mixins.toolbar,
-      justifyContent: 'flex-start',
-    },
-  })
-)
-
 const FloatingActionButton = ({
   show,
   onClick,
@@ -72,21 +37,29 @@ const FloatingActionButton = ({
   onClick: () => void
 }) => {
   const { brandTitle } = useStore()
-  const classes = useStyles({})
   const { enable: autoResponseEnable } = useAutoResponder()
   const eventCnt = useMockEventLength()
 
   return (
     <Zoom in={show}>
       <Fab
-        className={classes.fab}
+        sx={{
+          position: 'fixed',
+          bottom: (theme) => theme.spacing(2),
+          right: (theme) => theme.spacing(2),
+          zIndex: 999999,
+        }}
         color={autoResponseEnable ? 'secondary' : 'primary'}
         variant="extended"
         aria-label="mock"
         onClick={onClick}
       >
         <Badge badgeContent={eventCnt} color="secondary">
-          <BuildIcon className={classes.fabExtendedIcon} />
+          <BuildIcon
+            sx={{
+              marginRight: (theme) => theme.spacing(1),
+            }}
+          />
         </Badge>
         {brandTitle}
       </Fab>
@@ -105,16 +78,23 @@ const ThemeSwitch = () => {
 }
 
 const DrawerHeader: React.FC<{
-  open: boolean
   pin: boolean
   closeDrawer: () => void
   togglePin: () => void
-}> = ({ open, pin, closeDrawer, togglePin }) => {
+}> = ({ pin, closeDrawer, togglePin }) => {
   const theme = useTheme()
-  const classes = useStyles({ marginBody: pin && open })
 
   return (
-    <div className={classes.drawerHeader}>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(0, 1),
+        // necessary for content to be below app bar
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-start',
+      }}
+    >
       <IconButton onClick={closeDrawer}>
         {theme.direction !== 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
       </IconButton>
@@ -124,39 +104,51 @@ const DrawerHeader: React.FC<{
       </IconButton>
 
       <ThemeSwitch />
-    </div>
+    </Box>
   )
 }
 
 export const Drawer: React.FC = ({ children }) => {
   const { open, pin, setOpen, togglePin, whenClickAway } = useDrawer()
-
-  const classes = useStyles({ marginBody: pin && open })
-
   return (
-    <ClickAwayListener onClickAway={whenClickAway}>
-      <Box>
-        <FloatingActionButton show={!open} onClick={() => setOpen()} />
+    <>
+      <GlobalStyles
+        styles={
+          {
+            html: {
+              marginRight: pin && open ? drawerWidth : null,
+            },
+          } as any
+        }
+      />
+      <ClickAwayListener onClickAway={whenClickAway}>
+        <Box>
+          <FloatingActionButton show={!open} onClick={() => setOpen()} />
 
-        <MUIDrawer
-          open={open}
-          anchor="right"
-          variant="persistent"
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <DrawerHeader
+          <MUIDrawer
             open={open}
-            pin={pin}
-            togglePin={togglePin}
-            closeDrawer={() => setOpen(false)}
-          />
+            anchor="right"
+            variant="persistent"
+            sx={{
+              '& .MuiDrawer-paper': {
+                overflowX: 'hidden',
+                width: drawerWidth,
+                maxWidth: '90vw',
+                flexShrink: 0,
+              },
+            }}
+          >
+            <DrawerHeader
+              pin={pin}
+              togglePin={togglePin}
+              closeDrawer={() => setOpen(false)}
+            />
 
-          <Divider />
-          {children}
-        </MUIDrawer>
-      </Box>
-    </ClickAwayListener>
+            <Divider />
+            {children}
+          </MUIDrawer>
+        </Box>
+      </ClickAwayListener>
+    </>
   )
 }

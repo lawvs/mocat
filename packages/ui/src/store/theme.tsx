@@ -1,10 +1,10 @@
 import {
   useTheme,
   useMediaQuery,
-  createMuiTheme,
+  createTheme,
   ThemeProvider,
   ScopedCssBaseline,
-} from '@material-ui/core'
+} from '@mui/material'
 import { useMemo } from 'react'
 import { useDispatch, useStore } from './store'
 
@@ -16,7 +16,7 @@ export const MaterialUI: React.FC = ({ children }) => {
 
   const theme = useMemo(
     () =>
-      createMuiTheme({
+      createTheme({
         palette: {
           mode: themeType,
         },
