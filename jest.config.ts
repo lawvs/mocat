@@ -1,13 +1,14 @@
 import type { Config } from '@jest/types'
+import { defaults as tsjPreset } from 'ts-jest/presets'
 
 const config: Config.InitialOptions = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
+  transform: {
+    ...tsjPreset.transform,
+  },
   clearMocks: true,
   coverageDirectory: 'coverage',
-  transform: {
-    '^.+\\.(ts)$': 'ts-jest',
-  },
   moduleFileExtensions: ['js', 'json', 'ts', 'tsx'],
   testMatch: ['**/__tests__/**/*.ts', '**/?(*.)+(spec|test).ts'],
   testPathIgnorePatterns: ['<rootDir>/cypress'],
