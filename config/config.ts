@@ -24,6 +24,9 @@ export default defineConfig({
   targets: {
     ie: 11,
   },
+  // base: '/mocat/',
+  publicPath: '/mocat/',
+  history: { type: 'hash' },
   // umi routes: https://umijs.org/docs/routing
   routes: [
     {

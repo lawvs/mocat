@@ -4,6 +4,8 @@ import React from 'react';
 import { useIntl } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 
+import './mock';
+
 const { pwa } = defaultSettings;
 const isHttps = document.location.protocol === 'https:';
 
