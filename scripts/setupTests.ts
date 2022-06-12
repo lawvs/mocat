@@ -2,7 +2,7 @@
 // https://github.com/node-fetch/node-fetch
 import * as nodeFetch from 'node-fetch'
 
-jest.useFakeTimers('modern')
+jest.useFakeTimers()
 jest.setSystemTime(0)
 
 if (!globalThis.fetch) {
