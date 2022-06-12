@@ -1,7 +1,7 @@
 import { baseTest } from './base'
 
 const target = {
-  name: 'global',
+  name: 'esm',
   url: 'localhost:3001',
 }
 

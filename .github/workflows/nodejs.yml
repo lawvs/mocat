@@ -45,7 +45,9 @@ jobs:
         run: pnpm run test --coverage
 
       - name: Test E2E
-        run: pnpm run test:e2e-ci
+        run: |
+          pnpm exec cypress install
+          pnpm run test:e2e-ci
         env:
           WAIT_ON_TIMEOUT: 60000 # 60s
 

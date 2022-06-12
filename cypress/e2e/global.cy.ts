@@ -1,8 +1,8 @@
 import { baseTest } from './base'
 
 const target = {
-  name: 'esm',
-  url: 'localhost:3003',
+  name: 'global',
+  url: 'localhost:3002',
 }
 
 baseTest(target)
