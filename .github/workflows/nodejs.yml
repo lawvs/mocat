@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [17.x]
         os: [ubuntu-latest]
 
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
@@ -19,28 +19,33 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 'latest'
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
-      - name: Install node modules
-        uses: bahmutov/npm-install@v1
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Build
-        run: yarn build
+        run: pnpm run build
 
       - name: Lint
-        run: yarn lint --max-warnings=0
+        run: pnpm run lint --max-warnings=0
 
       - name: Type check
-        run: yarn typecheck
+        run: pnpm run typecheck
 
       - name: Test
-        run: yarn test --coverage
+        run: pnpm run test --coverage
 
       - name: Test E2E
-        run: yarn test:e2e-ci
+        run: pnpm run test:e2e-ci
         env:
           WAIT_ON_TIMEOUT: 60000 # 60s
 

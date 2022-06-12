@@ -15,8 +15,11 @@ To install and save in your package.json dev dependencies, run:
 # With npm
 npm install --save-dev mocat
 
-# Or with Yarn
+# Or with yarn
 yarn add --dev mocat
+
+# Or with pnpm
+pnpm add --save-dev mocat
 ```
 
 ## Usage

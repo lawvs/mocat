@@ -3,5 +3,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "npm.packageManager": "yarn"
+  "npm.packageManager": "pnpm"
 }

@@ -16,34 +16,38 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - uses: pnpm/action-setup@v2
         with:
-          node-version: 16
-          registry-url: https://registry.npmjs.org
+          version: 'latest'
 
-      - name: Install node modules
-        uses: bahmutov/npm-install@v1
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 17.x
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Build
-        run: yarn build
+        run: pnpm run build
 
       - name: Lint
-        run: yarn lint --max-warnings=0
+        run: pnpm run lint --max-warnings=0
 
       - name: Type check
-        run: yarn typecheck
+        run: pnpm run typecheck
 
       - name: Test
-        run: yarn test
+        run: pnpm run test
 
       - name: Test E2E
-        run: yarn test:e2e-ci
+        run: pnpm run test:e2e-ci
 
       - name: Copy README
         run: cp README.md packages/mocat
 
       - name: Publish
-        run: yarn lerna publish from-package --yes
+        run: pnpm exec lerna publish from-package --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

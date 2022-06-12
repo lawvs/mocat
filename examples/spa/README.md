@@ -2,17 +2,17 @@
 
 ## Project setup
 ```
-yarn install
+pnpm install
 ```
 
 ### Compiles and hot-reloads for development
 ```
-yarn dev
+pnpm run dev
 ```
 
 ### Compiles and minifies for production
 ```
-yarn build
+pnpm run build
 ```
 
 ### Customize configuration
