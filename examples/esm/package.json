@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "private": true,
   "scripts": {
-    "dev": "browser-sync start --server --serveStatic '../../packages/mocat/build/' --no-open --no-ui --port 3003 --watch",
+    "dev": "browser-sync start --server --serveStatic '../../packages/mocat/build/' --no-open --no-ui --port 3001 --watch",
     "build": "mkdir -p dist && cp -r index.html api ../../packages/mocat/build/index.js dist",
     "clean": "rm -rf dist"
   },
