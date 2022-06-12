@@ -19,6 +19,7 @@ import {
   useTheme,
   Zoom,
 } from '@mui/material'
+import type { ReactNode } from 'react'
 import {
   useAutoResponder,
   useDrawer,
@@ -77,11 +78,15 @@ const ThemeSwitch = () => {
   )
 }
 
-const DrawerHeader: React.FC<{
+const DrawerHeader = ({
+  pin,
+  closeDrawer,
+  togglePin,
+}: {
   pin: boolean
   closeDrawer: () => void
   togglePin: () => void
-}> = ({ pin, closeDrawer, togglePin }) => {
+}) => {
   const theme = useTheme()
 
   return (
@@ -108,7 +113,7 @@ const DrawerHeader: React.FC<{
   )
 }
 
-export const Drawer: React.FC = ({ children }) => {
+export const Drawer = ({ children }: { children: ReactNode }) => {
   const { open, pin, setOpen, togglePin, whenClickAway } = useDrawer()
   return (
     <>

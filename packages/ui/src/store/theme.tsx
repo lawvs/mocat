@@ -1,14 +1,15 @@
 import {
-  useTheme,
-  useMediaQuery,
   createTheme,
-  ThemeProvider,
   ScopedCssBaseline,
+  ThemeProvider,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
+import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import { useDispatch, useStore } from './store'
 
-export const MaterialUI: React.FC = ({ children }) => {
+export const MaterialUI = ({ children }: { children: ReactNode }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
   const { theme: themeConfig } = useStore()
   const themeType =

@@ -20,9 +20,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from '../i18n'
 import { useMockEvent } from '../store'
 
-const TagsHeader: React.FC<{
-  event: MockEvent
-}> = ({ event }) => {
+const TagsHeader = ({ event }: { event: MockEvent }) => {
   const { t } = useTranslation()
   const { passEvent, rejectEvent } = useMockEvent(event)
 
@@ -83,12 +81,10 @@ const HeadersDetail = ({ headers }: { headers: Headers }) => (
     ))}
   </Typography>
 )
-const BodyDetail: React.FC<{ body?: string }> = ({ body }) =>
+const BodyDetail = ({ body }: { body?: string }) =>
   body ? <Typography>{body}</Typography> : <></>
 
-const NetworkDetail: React.FC<{
-  reqOrResp: Request | Response
-}> = ({ reqOrResp }) => {
+const NetworkDetail = ({ reqOrResp }: { reqOrResp: Request | Response }) => {
   const [body, setBody] = useState<string | undefined>()
   useEffect(() => {
     reqOrResp.clone().text().then(setBody)

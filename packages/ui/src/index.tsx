@@ -1,4 +1,4 @@
-import { render, unmountComponentAtNode } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import merge from 'lodash/merge'
 import { App } from './app'
 import { createStoreProvider, rootReducer, initialState } from './store'
@@ -34,17 +34,18 @@ export const create = ({ el, ...options }: UIOptions = {}) => {
     merge(initialState, options)
   )
 
-  render(
+  const root = createRoot(el)
+
+  root.render(
     <StoreProvider>
       <App />
-    </StoreProvider>,
-    el
+    </StoreProvider>
   )
 
   const app = {
     hook: options?.eventEmitter || initialState.eventEmitter,
     unmount: () => {
-      unmountComponentAtNode(el as any)
+      root.unmount()
     },
   }
   return app
