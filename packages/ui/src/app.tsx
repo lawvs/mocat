@@ -16,14 +16,8 @@ import type { AutoResponderState } from './store/autoResponder'
 import { MaterialUI } from './store/theme'
 
 const ToolBar = () => {
-  const {
-    enable,
-    mode,
-    delay,
-    toggleDelay,
-    toggleEnable,
-    switchMode,
-  } = useAutoResponder()
+  const { enable, mode, delay, toggleDelay, toggleEnable, switchMode } =
+    useAutoResponder()
   const { disablePass } = useStore()
   const [btnDeg, setBtnDeg] = useState(0)
   const { t } = useTranslation()

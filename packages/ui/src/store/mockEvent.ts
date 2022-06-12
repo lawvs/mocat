@@ -52,10 +52,11 @@ export const useMockEvent = (event: MockEvent) => {
   const { disablePass } = useStore()
   const [state, setState] = useMockState()
   const withHandleState = useCallback(
-    <T extends (...args: any[]) => void>(fn: T) => (...args: Parameters<T>) => {
-      fn(...args)
-      setState(state.filter((i) => i !== event))
-    },
+    <T extends (...args: any[]) => void>(fn: T) =>
+      (...args: Parameters<T>) => {
+        fn(...args)
+        setState(state.filter((i) => i !== event))
+      },
     [event, setState, state]
   )
 

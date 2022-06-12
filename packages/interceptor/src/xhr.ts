@@ -11,28 +11,28 @@ import type { NetworkBeforeEvent, NetworkScenario } from './types'
 
 let originalXHR: typeof XMLHttpRequest | null = null
 
-const withResolveResponse = (
-  resolve: (response: MockResponse) => void,
-  resp: MockResponse
-) => async (result: Response) => {
-  const headers: MockHeaders = {}
-  result.headers.forEach((value: string, key: string) => (headers[key] = value))
-  resolve(
-    resp
-      .status(result.status)
-      .reason(result.statusText)
-      .headers(headers)
-      .body(await result.text())
-  )
-}
+const withResolveResponse =
+  (resolve: (response: MockResponse) => void, resp: MockResponse) =>
+  async (result: Response) => {
+    const headers: MockHeaders = {}
+    result.headers.forEach(
+      (value: string, key: string) => (headers[key] = value)
+    )
+    resolve(
+      resp
+        .status(result.status)
+        .reason(result.statusText)
+        .headers(headers)
+        .body(await result.text())
+    )
+  }
 
-const withResolveScenario = (
-  resolve: (response: MockResponse) => void,
-  resp: MockResponse
-) => async (scenario: NetworkScenario) => {
-  const scenarioResp = networkScenarioToResponse(scenario)
-  withResolveResponse(resolve, resp)(scenarioResp)
-}
+const withResolveScenario =
+  (resolve: (response: MockResponse) => void, resp: MockResponse) =>
+  async (scenario: NetworkScenario) => {
+    const scenarioResp = networkScenarioToResponse(scenario)
+    withResolveResponse(resolve, resp)(scenarioResp)
+  }
 
 export const setupXHR = () => {
   if (originalXHR) {

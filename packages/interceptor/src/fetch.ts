@@ -10,9 +10,9 @@ let originalFetch: typeof fetch | null = null
 export const realFetch = (...args: Parameters<typeof fetch>) =>
   (originalFetch || fetch)(...args)
 
-const withResolveScenario = (resolve: (response: Response) => void) => (
-  scenario: NetworkScenario
-) => resolve(networkScenarioToResponse(scenario))
+const withResolveScenario =
+  (resolve: (response: Response) => void) => (scenario: NetworkScenario) =>
+    resolve(networkScenarioToResponse(scenario))
 
 export const setupFetch = () => {
   if (originalFetch) {
