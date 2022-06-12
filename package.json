@@ -32,8 +32,10 @@
     "typecheck": "lerna exec --parallel --ignore @mocat/eslint-config --ignore global-example --ignore esm-example -- tsc --noEmit --project ."
   },
   "devDependencies": {
+    "@jest/types": "^28.1.1",
     "@types/jest": "^28.1.1",
     "@types/node": "^17.0.42",
+    "@types/node-fetch": "^2.6.1",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.1.1",
     "jest-environment-jsdom": "^28.1.1",
