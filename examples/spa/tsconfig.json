@@ -12,14 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["webpack-env"],
-    "paths": {
-      "@/*": ["src/*"],
-      // Disable react type definitions
-      // https://github.com/microsoft/TypeScript/issues/17042
-      "react" : ["src/shims-vue.d.ts"]
-    },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "lib": ["esnext", "dom"]
   },
   "include": [
     "src/**/*.ts",
