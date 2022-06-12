@@ -47,7 +47,7 @@
     "start-server-and-test": "^1.14.0"
   },
   "engines": {
-    "node": ">=17.0.0",
+    "node": ">=16.0.0",
     "npm": "please-use-pnpm",
     "pnpm": ">=7.0.0",
     "yarn": "please-use-pnpm"
