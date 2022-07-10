@@ -1,5 +1,5 @@
 const getFromMocat = (...selectors: Parameters<typeof cy.get>) =>
-  cy.get('#mocat-root').get(...selectors)
+  cy.get('#mocat-root').find(...selectors)
 const getMocatBtn = () => getFromMocat('button').contains('Mocat')
 const getFetchBtn = () => cy.get('button').contains('Fetch')
 const getFetchTextarea = () => cy.get('[data-testid=fetch-textarea]')
