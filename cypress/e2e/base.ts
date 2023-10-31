@@ -10,6 +10,7 @@ export const baseTest = (target: { name: string; url: string }) =>
   describe(`base on ${target.name}`, () => {
     beforeEach(() => {
       cy.visit(target.url)
+      cy.wait(1000)
     })
 
     it('should mocat loaded', () => {
