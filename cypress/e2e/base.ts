@@ -68,7 +68,7 @@ export const baseTest = (target: { name: string; url: string }) =>
     it('should PASS works', () => {
       cy.intercept('/api/**', (req) => {
         expect(req.url).to.include('/data.json')
-        req.reply((res) => res)
+        req.reply((res: unknown) => res)
       }).as('api')
 
       getFetchBtn().click()
