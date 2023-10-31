@@ -1,5 +1,5 @@
 import { action } from '@storybook/addon-actions'
-import type { Story } from '@storybook/react/types-6-0'
+import type { StoryFn } from '@storybook/react'
 import { Drawer } from '../components/drawer'
 
 export default {
@@ -15,6 +15,6 @@ export default {
   },
 }
 
-export const Basic: Story<Parameters<typeof Drawer>[0]> = (args) => (
+export const Basic: StoryFn<Parameters<typeof Drawer>[0]> = (args) => (
   <Drawer {...args} />
 )

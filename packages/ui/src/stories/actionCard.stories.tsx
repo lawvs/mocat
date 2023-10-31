@@ -1,5 +1,5 @@
 import { action } from '@storybook/addon-actions'
-import type { Story } from '@storybook/react/types-6-0'
+import type { StoryFn } from '@storybook/react'
 import { ActionCard } from '../components/actionCard'
 
 export default {
@@ -8,7 +8,7 @@ export default {
   argTypes: {},
 }
 
-export const Basic: Story<Parameters<typeof ActionCard>[0]> = (args) => (
+export const Basic: StoryFn<Parameters<typeof ActionCard>[0]> = (args) => (
   <ActionCard {...args}></ActionCard>
 )
 
@@ -50,7 +50,7 @@ Basic.args = {
   },
 }
 
-export const PostCard: Story<Parameters<typeof ActionCard>[0]> = (args) => (
+export const PostCard: StoryFn<Parameters<typeof ActionCard>[0]> = (args) => (
   <ActionCard {...args}></ActionCard>
 )
 
