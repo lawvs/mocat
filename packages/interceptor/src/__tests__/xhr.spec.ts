@@ -57,7 +57,7 @@ describe('xhr', () => {
 
   test('should xhr works with header', async () => {
     const listener = jest.fn((payload) =>
-      payload.resolve({ headers: { 'Content-Type': 'application/json' } })
+      payload.resolve({ headers: { 'Content-Type': 'application/json' } }),
     )
     eventEmitter.on('Run/network/before', listener)
     const xhr = await xhrRequest('/')

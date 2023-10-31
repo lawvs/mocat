@@ -45,7 +45,7 @@ export const useAutoResponder = () => {
           throw new Error('Unknown response mode! mode: ' + mode)
       }
     },
-    [delay, mode]
+    [delay, mode],
   )
 
   const delayScenario = [100, 1000, 5000]

@@ -14,18 +14,18 @@ export interface MockEventEmitter {
 
   on<T extends keyof MockEventMap>(
     event: T,
-    listener: (value: MockEventMap[T]) => void
+    listener: (value: MockEventMap[T]) => void,
   ): void
   once<T extends keyof MockEventMap>(
     event: T,
-    listener: (value: MockEventMap[T]) => void
+    listener: (value: MockEventMap[T]) => void,
   ): void
   onAny<T extends keyof MockEventMap>(
-    listener: (event: T, value: MockEventMap[T]) => void
+    listener: (event: T, value: MockEventMap[T]) => void,
   ): void
   off<T extends keyof MockEventMap>(
     event: T,
-    listener: (...values: any[]) => void
+    listener: (...values: any[]) => void,
   ): this
   offAny(listener: (value: any[]) => void): this
 }
@@ -41,7 +41,7 @@ export const log = () => {
       'background: rgba(0, 255, 255, 0.6); color: black; padding: 0px 6px; border-radius: 4px;',
       '',
       'text-decoration: underline',
-      payload
+      payload,
     )
   eventEmitter.onAny(logListener)
   return () => eventEmitter.offAny(logListener)
@@ -60,7 +60,7 @@ const networkRules: NetWorkRegister[] = []
 
 export const matchNetworkRule = (
   targetUrl: string,
-  opts: { method?: string }
+  opts: { method?: string },
 ): NetWorkRegister | undefined =>
   networkRules.find(({ url, method: ruleMethod }) => {
     if (ruleMethod && opts.method !== ruleMethod) {

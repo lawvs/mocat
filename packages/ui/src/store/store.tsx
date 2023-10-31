@@ -66,7 +66,7 @@ const DispatchContext = createContext<React.Dispatch<Action>>(NOOP)
 
 export const createStoreProvider = (
   reducer: Reducer<State, Action>,
-  initialState: State = (reducer as any)(undefined, { type: undefined })
+  initialState: State = (reducer as any)(undefined, { type: undefined }),
 ) => {
   const StoreProvider = ({ children }: { children: JSX.Element }) => {
     const [state, dispatch] = useReducer(reducer, initialState)

@@ -24,12 +24,12 @@ export const useDrawer = () => {
       // wait click away
       setTimeout(() => updateState({ open: newState }), 0)
     },
-    [updateState]
+    [updateState],
   )
 
   const setPin = useCallback(
     (newState: boolean) => updateState({ pin: newState }),
-    [updateState]
+    [updateState],
   )
 
   const togglePin = () => setPin(!pin)

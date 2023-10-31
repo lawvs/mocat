@@ -5,9 +5,11 @@ import { onRun, matchNetworkRule } from './eventEmitter'
 import { networkScenarioToResponse, NOOP, passRequest } from './utils'
 import type { NetworkBeforeEvent, NetworkScenario } from './types'
 
-
 // See lib.dom.d.ts
-type WindowFetch = (input: RequestInfo | URL, init?: RequestInit)=> Promise<Response>;
+type WindowFetch = (
+  input: RequestInfo | URL,
+  init?: RequestInit,
+) => Promise<Response>
 
 let originalFetch: WindowFetch | null = null
 
@@ -64,12 +66,12 @@ export const setupFetch = () => {
               {
                 resolveResponse: resolve,
                 intercept,
-              }
+              },
             )
           },
         }
         onRun(detail)
-      })
+      }),
   )
   return () => resetFetch()
 }
@@ -79,6 +81,6 @@ export const resetFetch = () => {
     console.warn('please setupFetch before resetFetch.')
     return
   }
-  globalThis.fetch = (originalFetch as any)
+  globalThis.fetch = originalFetch as any
   originalFetch = null
 }

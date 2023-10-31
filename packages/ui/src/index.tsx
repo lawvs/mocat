@@ -34,7 +34,7 @@ export const create = ({ el, ...options }: UIOptions = {}) => {
   root.render(
     <StoreProvider>
       <App />
-    </StoreProvider>
+    </StoreProvider>,
   )
 
   const app = {

@@ -10,7 +10,7 @@ const useEventState = <T extends MockEvent['type']>(eventName: T) => {
   const dispatch = useDispatch()
   const setState = useCallback(
     (payload: MockEvent[]) => dispatch({ type: 'MOCK_EVENT/UPDATE', payload }),
-    [dispatch]
+    [dispatch],
   )
   const { eventEmitter } = useStore()
   useEffect(() => {
@@ -57,7 +57,7 @@ export const useMockEvent = (event: MockEvent) => {
         fn(...args)
         setState(state.filter((i) => i !== event))
       },
-    [event, setState, state]
+    [event, setState, state],
   )
 
   const passEvent =
