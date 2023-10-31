@@ -4,9 +4,6 @@ import { defaults as tsjPreset } from 'ts-jest/presets'
 const config: Config.InitialOptions = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  transform: {
-    ...tsjPreset.transform,
-  },
   clearMocks: true,
   coverageDirectory: 'coverage',
   moduleFileExtensions: ['js', 'json', 'ts', 'tsx'],
