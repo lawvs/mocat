@@ -8,12 +8,8 @@ const clickMocat = () => getMocatBtn().click()
 
 export const baseTest = (target: { name: string; url: string }) =>
   describe(`base on ${target.name}`, () => {
-    before(() => {
-      cy.visit(target.url)
-    })
-
     beforeEach(() => {
-      cy.reload()
+      cy.visit(target.url)
     })
 
     it('should mocat loaded', () => {

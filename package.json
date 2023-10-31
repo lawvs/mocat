@@ -28,7 +28,7 @@
     "server-examples": "lerna run dev --parallel --scope *-example",
     "test": "jest",
     "test:e2e": "cypress run",
-    "test:e2e-ci": "start-server-and-test server-examples '3001|3002' test:e2e",
+    "test:e2e-ci": "WAIT_ON_TIMEOUT=5000 start-server-and-test server-examples '3001|3002|3003' test:e2e",
     "typecheck": "lerna exec --parallel --ignore @mocat/eslint-config --ignore global-example --ignore esm-example -- tsc --noEmit --project ."
   },
   "devDependencies": {
@@ -44,8 +44,8 @@
     "typescript": "^5.2.2"
   },
   "optionalDependencies": {
-    "cypress": "^10.3.0",
-    "start-server-and-test": "^1.14.0"
+    "cypress": "^13.4.0",
+    "start-server-and-test": "^2.0.1"
   },
   "packageManager": "pnpm@8.8.0",
   "engines": {
