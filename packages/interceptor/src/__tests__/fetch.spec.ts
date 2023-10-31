@@ -41,7 +41,7 @@ describe('fetch', () => {
 
   test('should fetch works with header', async () => {
     const listener = jest.fn((payload) =>
-      payload.resolve({ headers: { status: 204 } })
+      payload.resolve({ headers: { status: 204 } }),
     )
     eventEmitter.on('Run/network/before', listener)
     const resp = await fetch('/')

@@ -37,8 +37,8 @@ const options: RollupOptions = {
           ...acc,
           [`process.env.${key}`]: JSON.stringify(value),
         }),
-        {}
-      )
+        {},
+      ),
     ),
     // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
     commonjs(),

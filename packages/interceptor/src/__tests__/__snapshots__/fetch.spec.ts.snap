@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`snapshot test should network before event match snapshot 1`] = `
-Object {
+{
   "pass": [Function],
   "reject": [Function],
   "request": Request {
@@ -11,14 +11,14 @@ Object {
     "follow": 20,
     "size": 0,
     "timeout": 0,
-    Symbol(Body internals): Object {
+    Symbol(Body internals): {
       "body": null,
       "disturbed": false,
       "error": null,
     },
-    Symbol(Request internals): Object {
+    Symbol(Request internals): {
       "headers": Headers {
-        Symbol(map): Object {},
+        Symbol(map): {},
       },
       "method": "GET",
       "parsedURL": Url {
@@ -41,8 +41,8 @@ Object {
   },
   "requestType": "fetch",
   "resolve": [Function],
-  "rule": Object {
-    "scenarios": Array [],
+  "rule": {
+    "scenarios": [],
     "timeStamp": 0,
     "type": "Register/networkRoute",
     "url": "/",
@@ -53,21 +53,21 @@ Object {
 `;
 
 exports[`snapshot test should register route match snapshot 1`] = `
-Object {
+{
   "desc": "login api",
   "name": "login",
-  "scenarios": Array [
-    Object {
+  "scenarios": [
+    {
       "name": "login success",
-      "response": Object {
+      "response": {
         "code": 0,
         "username": "admin",
       },
     },
-    Object {
+    {
       "desc": "password incorrect",
       "name": "login failure",
-      "response": Object {
+      "response": {
         "code": 1,
         "message": "password incorrect",
       },

@@ -1,24 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`snapshot test event match snapshot 1`] = `
-Array [
-  Object {
+[
+  {
     "desc": "it is a mock api",
     "name": "login api",
-    "scenarios": Array [
-      Object {
+    "scenarios": [
+      {
         "desc": "login success",
         "name": "scenario 1",
-        "return": Object {
+        "return": {
           "code": 0,
-          "data": Object {
+          "data": {
             "username": "admin",
           },
         },
       },
-      Object {
+      {
         "desc": "login failure",
-        "error": Object {
+        "error": {
           "code": 1,
           "message": "password incorrect",
         },
@@ -33,28 +33,28 @@ Array [
 `;
 
 exports[`snapshot test event match snapshot 2`] = `
-Array [
-  Object {
+[
+  {
     "pass": [Function],
     "reject": [Function],
     "resolve": [Function],
-    "rule": Object {
+    "rule": {
       "desc": "it is a mock api",
       "name": "login api",
-      "scenarios": Array [
-        Object {
+      "scenarios": [
+        {
           "desc": "login success",
           "name": "scenario 1",
-          "return": Object {
+          "return": {
             "code": 0,
-            "data": Object {
+            "data": {
               "username": "admin",
             },
           },
         },
-        Object {
+        {
           "desc": "login failure",
-          "error": Object {
+          "error": {
             "code": 1,
             "message": "password incorrect",
           },

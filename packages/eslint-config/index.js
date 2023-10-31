@@ -15,6 +15,7 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
     'prettier',
   ],
@@ -35,7 +36,5 @@ module.exports = {
     'prefer-const': 'error',
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'prettier/prettier': 'warn',
-    // fix https://github.com/yannickcr/eslint-plugin-react/issues/2834
-    'react/react-in-jsx-scope': 'off',
   },
 }

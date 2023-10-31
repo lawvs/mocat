@@ -25,14 +25,14 @@ const ToolBar = () => {
   const handleMode = useCallback(
     (
       event: React.MouseEvent<HTMLElement>,
-      newMode: AutoResponderState['mode'] | null
+      newMode: AutoResponderState['mode'] | null,
     ) => {
       if (newMode === null) {
         return
       }
       switchMode(newMode)
     },
-    [switchMode]
+    [switchMode],
   )
 
   const handleDelay = useCallback(() => {

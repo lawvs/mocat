@@ -17,7 +17,7 @@ function needStringify(input: unknown): input is Record<string, any> | any[] {
 }
 
 export const networkScenarioToResponse = (
-  scenario: NetworkScenario
+  scenario: NetworkScenario,
 ): Response => {
   const data = needStringify(scenario.response)
     ? JSON.stringify(scenario.response)
@@ -36,7 +36,7 @@ export const passRequest = async (
   }: {
     intercept: boolean
     resolveResponse: (result: Response) => void
-  }
+  },
 ) => {
   try {
     const response = await realFetch(partialEvent.request)

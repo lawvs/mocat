@@ -1,6 +1,6 @@
 import type { MockEvent } from '@mocat/interceptor'
 import { useCallback } from 'react'
-import { State, useDispatch, useStore } from './store'
+import { type State, useDispatch, useStore } from './store'
 
 export type AutoResponderState = State['autoResponder']
 
@@ -45,7 +45,7 @@ export const useAutoResponder = () => {
           throw new Error('Unknown response mode! mode: ' + mode)
       }
     },
-    [delay, mode]
+    [delay, mode],
   )
 
   const delayScenario = [100, 1000, 5000]

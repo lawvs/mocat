@@ -1,6 +1,4 @@
-import { Button } from '@storybook/react/demo'
 import { action } from '@storybook/addon-actions'
-import merge from 'lodash/merge'
 import { createStoreProvider, rootReducer, initialState } from '../store'
 import { App } from '../app'
 import { create } from '..'
@@ -10,10 +8,10 @@ export default {
 }
 
 export const DefaultPin = () => {
-  const StoreProvider = createStoreProvider(
-    rootReducer,
-    merge(initialState, { drawer: { pin: true, open: true } })
-  )
+  const StoreProvider = createStoreProvider(rootReducer, {
+    ...initialState,
+    ...{ drawer: { pin: true, open: true } },
+  })
 
   const dispatch = () => {
     const eventName = 'Run/network/before' as const
@@ -46,7 +44,7 @@ export const DefaultPin = () => {
 
   return (
     <>
-      <Button onClick={dispatch}>Dispatch</Button>
+      <button onClick={dispatch}>Dispatch</button>
       <StoreProvider>
         <App />
       </StoreProvider>
@@ -55,7 +53,7 @@ export const DefaultPin = () => {
 }
 
 export const Instance = () => {
-  let app
+  let app: ReturnType<typeof create>
   const unmount = () => app.unmount()
 
   const mount = () => {
@@ -99,9 +97,9 @@ export const Instance = () => {
 
   return (
     <>
-      <Button onClick={mount}>Create</Button>
-      <Button onClick={unmount}>Unmount</Button>
-      <Button onClick={dispatch}>Dispatch</Button>
+      <button onClick={mount}>Create</button>
+      <button onClick={unmount}>Unmount</button>
+      <button onClick={dispatch}>Dispatch</button>
     </>
   )
 }

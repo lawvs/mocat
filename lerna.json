@@ -1,7 +1,6 @@
 {
   "version": "0.3.0",
   "npmClient": "pnpm",
-  "useWorkspaces": true,
   "command": {
     "version": {
       "message": "chore(release): publish %s"

@@ -22,7 +22,7 @@ export const MaterialUI = ({ children }: { children: ReactNode }) => {
           mode: themeType,
         },
       }),
-    [themeType]
+    [themeType],
   )
 
   return (

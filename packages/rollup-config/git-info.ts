@@ -23,7 +23,7 @@ const isRepository = () => {
 export const getGitVersion = () => {
   if (!hasGit() || !isRepository()) {
     console.error(
-      "You haven't installed git or it does not exist in your PATH."
+      "You haven't installed git or it does not exist in your PATH.",
     )
     return null
   }

@@ -33,7 +33,7 @@ const LOCALES = [
 
 const resources = LOCALES.reduce(
   (acc, { tag, res }) => ({ ...acc, [tag]: { translation: res } }),
-  {} as { [lng: string]: { translation: Record<string, string> } }
+  {} as { [lng: string]: { translation: Record<string, string> } },
 )
 
 const standardizeLocale = (language: string) => {
@@ -131,20 +131,20 @@ export function I18nProvider({
       i18n,
       defaultNS,
     }),
-    [i18n, defaultNS]
+    [i18n, defaultNS],
   )
   return createElement(
     I18nContext.Provider,
     {
       value,
     },
-    children
+    children,
   )
 }
 
 export function useTranslation(
   ns?: string,
-  props: { i18n?: I18nInstance } = {}
+  props: { i18n?: I18nInstance } = {},
 ) {
   // assert we have the needed i18nInstance
   const { i18n: i18nFromProps } = props

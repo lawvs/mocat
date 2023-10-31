@@ -14,7 +14,7 @@ export const mockAsyncFn =
     mock: PartialKeys<
       Omit<AsyncFnRegister, 'type' | 'target' | 'timeStamp'>,
       'scenarios'
-    > = {}
+    > = {},
   ) =>
   <T extends (...args: unknown[]) => Promise<unknown>>(targetFn: T): T => {
     const rule: AsyncFnRegister = {

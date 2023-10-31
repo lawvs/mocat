@@ -16,14 +16,14 @@ const withResolveResponse =
   async (result: Response) => {
     const headers: MockHeaders = {}
     result.headers.forEach(
-      (value: string, key: string) => (headers[key] = value)
+      (value: string, key: string) => (headers[key] = value),
     )
     resolve(
       resp
         .status(result.status)
         .reason(result.statusText)
         .headers(headers)
-        .body(await result.text())
+        .body(await result.text()),
     )
   }
 
@@ -79,12 +79,12 @@ export const setupXHR = () => {
               {
                 resolveResponse: withResolveResponse(resolve, resp),
                 intercept,
-              }
+              },
             ),
         }
 
         onRun(detail)
-      })
+      }),
   )
 
   return () => resetXHR()

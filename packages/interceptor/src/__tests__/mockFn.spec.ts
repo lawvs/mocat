@@ -24,7 +24,7 @@ describe('mockAsync should works', () => {
     const asyncFn = () => Promise.reject(new Error('1'))
     const mockFn = mockAsyncFn()(asyncFn)
     expect(await mockFn().catch((i) => i)).toEqual(
-      await asyncFn().catch((i) => i)
+      await asyncFn().catch((i) => i),
     )
   })
 })

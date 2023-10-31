@@ -8,12 +8,9 @@ const clickMocat = () => getMocatBtn().click()
 
 export const baseTest = (target: { name: string; url: string }) =>
   describe(`base on ${target.name}`, () => {
-    before(() => {
-      cy.visit(target.url)
-    })
-
     beforeEach(() => {
-      cy.reload()
+      cy.visit(target.url)
+      cy.wait(1000)
     })
 
     it('should mocat loaded', () => {
@@ -68,7 +65,7 @@ export const baseTest = (target: { name: string; url: string }) =>
     it('should PASS works', () => {
       cy.intercept('/api/**', (req) => {
         expect(req.url).to.include('/data.json')
-        req.reply((res) => res)
+        req.reply((res: unknown) => res)
       }).as('api')
 
       getFetchBtn().click()

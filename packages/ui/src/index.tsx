@@ -1,16 +1,11 @@
 import { createRoot } from 'react-dom/client'
-import merge from 'lodash/merge'
 import { App } from './app'
 import { createStoreProvider, rootReducer, initialState } from './store'
 import type { State } from './store'
 import { i18nInstance } from './i18n'
 // import './service'
 
-type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<T[P]>
-}
-
-export interface UIOptions extends DeepPartial<State> {
+export interface UIOptions extends Partial<State> {
   el?: string | Element
 }
 
@@ -29,17 +24,17 @@ export const create = ({ el, ...options }: UIOptions = {}) => {
     i18nInstance.changeLanguage(language)
   }
 
-  const StoreProvider = createStoreProvider(
-    rootReducer,
-    merge(initialState, options)
-  )
+  const StoreProvider = createStoreProvider(rootReducer, {
+    ...initialState,
+    ...options,
+  })
 
   const root = createRoot(el)
 
   root.render(
     <StoreProvider>
       <App />
-    </StoreProvider>
+    </StoreProvider>,
   )
 
   const app = {
