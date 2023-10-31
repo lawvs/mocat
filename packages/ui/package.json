@@ -1,6 +1,6 @@
 {
   "name": "@mocat/ui",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "User Interface for Mocat",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@mocat/interceptor": "^0.3.0",
+    "@mocat/interceptor": "^0.3.1",
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.5",
     "eventemitter2": "^6.4.3",

@@ -49,7 +49,7 @@ importers:
   examples/esm:
     dependencies:
       mocat:
-        specifier: ^0.3.0
+        specifier: ^0.3.1
         version: link:../../packages/mocat
     devDependencies:
       browser-sync:
@@ -59,7 +59,7 @@ importers:
   examples/global:
     dependencies:
       mocat:
-        specifier: ^0.3.0
+        specifier: ^0.3.1
         version: link:../../packages/mocat
     devDependencies:
       browser-sync:
@@ -82,7 +82,7 @@ importers:
         specifier: ^1.3.10
         version: 1.3.10
       mocat:
-        specifier: ^0.3.0
+        specifier: ^0.3.1
         version: link:../../packages/mocat
       vite:
         specifier: ^2.9.12
@@ -137,14 +137,14 @@ importers:
   packages/mocat:
     dependencies:
       '@mocat/interceptor':
-        specifier: ^0.3.0
+        specifier: ^0.3.1
         version: link:../interceptor
       '@mocat/ui':
-        specifier: ^0.3.0
+        specifier: ^0.3.1
         version: link:../ui
     devDependencies:
       '@mocat/rollup-config':
-        specifier: ^0.3.0
+        specifier: ^0.3.1
         version: link:../rollup-config
       rollup:
         specifier: ^2.26.11
@@ -180,7 +180,7 @@ importers:
         specifier: ^11.6.0
         version: 11.9.3(@babel/core@7.18.2)(@emotion/react@11.9.3)(@types/react@18.0.12)(react@18.1.0)
       '@mocat/interceptor':
-        specifier: ^0.3.0
+        specifier: ^0.3.1
         version: link:../interceptor
       '@mui/icons-material':
         specifier: ^5.2.5
