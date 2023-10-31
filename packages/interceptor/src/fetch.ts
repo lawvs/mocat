@@ -5,9 +5,13 @@ import { onRun, matchNetworkRule } from './eventEmitter'
 import { networkScenarioToResponse, NOOP, passRequest } from './utils'
 import type { NetworkBeforeEvent, NetworkScenario } from './types'
 
-let originalFetch: typeof fetch | null = null
 
-export const realFetch = (...args: Parameters<typeof fetch>) =>
+// See lib.dom.d.ts
+type WindowFetch = (input: RequestInfo | URL, init?: RequestInit)=> Promise<Response>;
+
+let originalFetch: WindowFetch | null = null
+
+export const realFetch = (...args: Parameters<WindowFetch>) =>
   (originalFetch || fetch)(...args)
 
 const withResolveScenario =
@@ -16,7 +20,7 @@ const withResolveScenario =
 
 export const setupFetch = () => {
   if (originalFetch) {
-    console.warn('Already setup fetch！')
+    console.warn('Already setup fetch!')
     return NOOP
   }
   originalFetch = globalThis.fetch.bind(window)
@@ -75,6 +79,6 @@ export const resetFetch = () => {
     console.warn('please setupFetch before resetFetch.')
     return
   }
-  globalThis.fetch = originalFetch
+  globalThis.fetch = (originalFetch as any)
   originalFetch = null
 }

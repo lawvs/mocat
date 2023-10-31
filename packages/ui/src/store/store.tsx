@@ -1,4 +1,4 @@
-import { createContext, useReducer, useContext, Reducer } from 'react'
+import { createContext, useReducer, useContext, type Reducer } from 'react'
 import { EventEmitter2 } from 'eventemitter2'
 import type { MockEventEmitter, MockEvent } from '@mocat/interceptor'
 import { NOOP } from '../utils'
