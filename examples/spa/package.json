@@ -9,7 +9,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^1.6.0",
     "vue": "^3.2.37"
   },
   "devDependencies": {
