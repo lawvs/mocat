@@ -52,10 +52,9 @@ jobs:
 
       - name: Upload artifacts
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-artifacts
           path: |
             cypress/images
             cypress/videos
-          if-no-files-found: ignore
