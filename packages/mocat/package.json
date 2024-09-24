@@ -39,6 +39,6 @@
   },
   "devDependencies": {
     "@mocat/rollup-config": "^0.3.1",
-    "rollup": "^2.26.11"
+    "rollup": "^3.29.5"
   }
 }
